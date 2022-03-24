@@ -9,16 +9,15 @@
 
     <TextView
         android:id="@+id/title"
-        android:textSize="30dp"
-        android:layout_gravity="center"
+        android:textSize="40dp"
+        android:layout_gravity="top"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         android:text="Sign up as Parents"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp" />
+        android:background="@drawable/blue_bg" />
 
     <TextView
         android:id="@+id/subtitle"
@@ -29,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Step 1: Basic information"
+        android:layout_marginTop="-26dp"
         android:layout_marginBottom="40dp" />
 
     <EditText
@@ -38,9 +38,13 @@
         android:inputType="phone"
         android:hint="Enter your ID"
         android:maxLength="9"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="17dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
         />
 
     <EditText
@@ -48,9 +52,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="17dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
         android:hint="Enter your first name" />
 
     <EditText
@@ -58,9 +66,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="17dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
         android:hint="Enter your last name" />
 
     <EditText
@@ -68,10 +80,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="phone"
-        android:layout_marginBottom="7dp"
         android:maxLength="10"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="17dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
         android:hint="Enter your phone number" />
 
     <EditText
@@ -79,9 +95,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter your email"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginBottom="7dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:paddingLeft="17dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
         android:inputType="textEmailAddress" />
 
     <Button
@@ -92,6 +112,8 @@
         android:layout_gravity="center"
         android:textAllCaps="false"
         android:textSize="20sp"
+        android:background="#4B60E1"
+        android:textColor="@color/white"
         android:text="Next step" />
 
 
