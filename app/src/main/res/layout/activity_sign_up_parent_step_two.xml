@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".signUpParentStepTwo">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="Sign up as Parents"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:text="Step 2: Sign up for the application"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
+
+    <EditText
+        android:id="@+id/cityParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:hint="Enter your city name" />
+
+    <EditText
+        android:id="@+id/streetNameParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:hint="Enter your street name" />
+
+    <EditText
+        android:id="@+id/houseNumberParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:maxLength="5"
+        android:hint="Enter your house number" />
+
+    <TextView
+        android:id="@+id/subtitleForQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:textColor="@color/black"
+        android:text="How many children you want to join them to the system?" />
+
+    <EditText
+        android:id="@+id/amountOfKids"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your choice here"
+        android:maxLength="1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/agesOfChildren"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:hint="Enter your children birthday years" />
+
+    <TextView
+        android:id="@+id/subtitleForSpecialDemands"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:textColor="@color/black"
+        android:text="If you have any special demands, please let us know!" />
+
+    <EditText
+        android:id="@+id/specialDemandsParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        android:hint="Enter your demands" />
+
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="150dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:text="Finish!" />
+
+</LinearLayout>

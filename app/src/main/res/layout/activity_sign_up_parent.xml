@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".signUpParent">
+
+    <TextView
+        android:id="@+id/title"
+        android:textSize="30dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign up as Parents"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Step 1: Basic information"
+        android:layout_marginBottom="40dp" />
+
+    <EditText
+        android:id="@+id/idOfParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="Enter your ID"
+        android:maxLength="9"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="7dp"
+        />
+
+    <EditText
+        android:id="@+id/firstNameParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:hint="Enter your first name" />
+
+    <EditText
+        android:id="@+id/lastNameParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:hint="Enter your last name" />
+
+    <EditText
+        android:id="@+id/phoneNumberParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:layout_marginBottom="7dp"
+        android:maxLength="10"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:hint="Enter your phone number" />
+
+    <EditText
+        android:id="@+id/emailParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your email"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="150dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:text="Next step" />
+
+
+</LinearLayout>
