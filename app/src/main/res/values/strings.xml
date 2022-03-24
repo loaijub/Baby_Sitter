@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Baby Sitter</string>
+    <string name="title_activity_main_google_map">mainGoogleMap</string>
 </resources>
