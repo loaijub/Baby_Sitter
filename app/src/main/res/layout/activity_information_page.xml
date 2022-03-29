@@ -1,9 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".informationPage">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/title"
+        android:textSize="45sp"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:text="BabySitter Finder"
+        android:layout_marginTop="-30dp"
+        android:background="@drawable/blue_bg"/>
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-65dp"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        android:text="version 1.1" />
+
+    <TextView
+        android:id="@+id/aboutUs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginBottom="35dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:text="Hey there! Thank you for using our application!\n We are student in our final year and this is our graduation project." />
+
+
+
+
+    <TextView
+        android:id="@+id/textBeforeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:text="We would like to hear your feedback about the app." />
+
+    <Button
+        android:id="@+id/contactUs"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:background="#344DE4"
+        android:textColor="@color/white"
+        android:onClick="sendFeedbackViaEmail"
+        android:text="Send Feedback" />
+
+    <Button
+        android:id="@+id/shareBtn"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:background="#344DE4"
+        android:textColor="@color/white"
+        android:onClick="shareApp"
+        android:text="Share" />
+</LinearLayout>

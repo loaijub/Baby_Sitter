@@ -112,7 +112,7 @@
         android:layout_gravity="center"
         android:textAllCaps="false"
         android:textSize="20sp"
-        android:background="#4B60E1"
+        android:background="#344DE4"
         android:textColor="@color/white"
         android:text="Next step" />
 
