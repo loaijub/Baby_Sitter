@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 public class Splash extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +19,7 @@ public class Splash extends AppCompatActivity {
             public void run(){
 
                 try{
-                    sleep(4000);
+                    sleep(1000);
                 }catch (Exception e){
 
                 }finally {
