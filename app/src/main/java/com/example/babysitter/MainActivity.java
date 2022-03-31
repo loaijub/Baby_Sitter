@@ -2,6 +2,7 @@ package com.example.babysitter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -22,31 +23,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void nextStepEmployeeSignUp(View view) {
+        int stepToGo;
+        if(current_step == 3)
+            stepToGo = 1;
+        else
+            stepToGo = current_step + 1;
 
-        showStep(view.getId());
+        showStep(findViewById(getResources().getIdentifier("step" + stepToGo, "id", getPackageName())));
+
+        Intent i = new Intent(MainActivity.this, mainGoogleMap.class);
+        startActivity(i);
 
     }
 
-    public void showStep(int step_id){
-        TextView step;
+    public void showStep(View view){
 
-        String step_number =getResources().getResourceName(step_id);
-        Toast.makeText(this, step_number.substring(step_number.length()-1), Toast.LENGTH_SHORT).show();
+        String s =  getResources().getResourceName(view.getId());
+        int step_number = Integer.parseInt(s.substring(s.length()-1));
+
         //making all the steps default font
+        TextView step;
         for (int i=1; i<=3;i++) {
             step = findViewById(getResources().getIdentifier("step" + i, "id", getPackageName()));
             step.setTypeface(Typeface.DEFAULT);
         }
 
         //making the chosen step bold
-        TextView stepToGo = findViewById(step_id);
+        TextView stepToGo = findViewById(view.getId());
         stepToGo.setTypeface(Typeface.DEFAULT_BOLD);
 
-
-
-
-
-/*
         switch(step_number){
             case 1:
                 current_step = 1;
@@ -54,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 current_step = 2;
-                ((TextView )findViewById(R.id.next)).setText("finish");
                 getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).commit();
                 break;
             case 3:
@@ -62,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 current_step = 3;
 
         }
-        */
-
     }
 
 
