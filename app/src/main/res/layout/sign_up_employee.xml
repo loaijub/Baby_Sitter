@@ -46,6 +46,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="20dp"
                     android:text="Step 1"
+                    android:onClick="nextStepEmployeeSignUp"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -55,12 +56,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="20dp"
+                    android:onClick="nextStepEmployeeSignUp"
                     android:text="Step 2"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/step3"
                     android:layout_width="wrap_content"
+                    android:onClick="nextStepEmployeeSignUp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Step 3"

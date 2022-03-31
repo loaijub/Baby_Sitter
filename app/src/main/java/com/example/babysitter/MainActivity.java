@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    int step = 1;
+    int current_step = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,26 +23,51 @@ public class MainActivity extends AppCompatActivity {
 
     public void nextStepEmployeeSignUp(View view) {
 
-        switch(step){
-            case 1:
-                step = 2;
-                ((TextView )findViewById(R.id.step2)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView )findViewById(R.id.step1)).setTypeface(Typeface.DEFAULT);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).commit();
-                break;
-            case 2:
-                step = 3;
-                ((TextView )findViewById(R.id.next)).setText("finish");
-                ((TextView )findViewById(R.id.step3)).setTypeface(Typeface.DEFAULT_BOLD);
-                ((TextView )findViewById(R.id.step2)).setTypeface(Typeface.DEFAULT);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep3()).commit();
-                break;
-            case 3:
-                step = -1;
-
-        }
+        showStep(view.getId());
 
     }
+
+    public void showStep(int step_id){
+        TextView step;
+
+        String step_number =getResources().getResourceName(step_id);
+        Toast.makeText(this, step_number.substring(step_number.length()-1), Toast.LENGTH_SHORT).show();
+        //making all the steps default font
+        for (int i=1; i<=3;i++) {
+            step = findViewById(getResources().getIdentifier("step" + i, "id", getPackageName()));
+            step.setTypeface(Typeface.DEFAULT);
+        }
+
+        //making the chosen step bold
+        TextView stepToGo = findViewById(step_id);
+        stepToGo.setTypeface(Typeface.DEFAULT_BOLD);
+
+
+
+
+
+/*
+        switch(step_number){
+            case 1:
+                current_step = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).commit();
+                break;
+            case 2:
+                current_step = 2;
+                ((TextView )findViewById(R.id.next)).setText("finish");
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).commit();
+                break;
+            case 3:
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep3()).commit();
+                current_step = 3;
+
+        }
+        */
+
+    }
+
+
+
 
 
     //aaa
