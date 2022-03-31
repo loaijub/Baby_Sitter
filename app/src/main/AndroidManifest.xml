@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BabySitter">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".informationPage"
             android:exported="false" />
         <!--
@@ -42,7 +45,7 @@
             android:name=".signUpParent"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
