@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 public class signupEmployeeStep1 extends Fragment {
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.signup_employee_step1,container,false);
+        view = inflater.inflate(R.layout.signup_employee_step1,container,false);
+        return view;
     }
+
 }

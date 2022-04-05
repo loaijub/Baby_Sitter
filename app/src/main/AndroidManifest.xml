@@ -34,7 +34,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAFKlvDuzxbXElHWNJ8a8w-CrV-4KQ8WmA" />
 
-        <activity
+        <!-- <activity
             android:name=".mainGoogleMap"
             android:exported="false"
             android:label="@string/title_activity_main_google_map" />
@@ -43,7 +43,7 @@
             android:exported="false" />
         <activity
             android:name=".signUpParent"
-            android:exported="false" />
+            android:exported="false" /> -->
         <activity
             android:name=".Splash"
             android:exported="true">

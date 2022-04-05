@@ -1,14 +1,18 @@
 package com.example.babysitter;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class signUpParentStepTwo extends AppCompatActivity {
+import androidx.fragment.app.Fragment;
 
+public class signUpParentStepTwo extends Fragment {
+    View view;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up_parent_step_two);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_sign_up_parent_step_two,container,false);
+        return view;
     }
+
 }

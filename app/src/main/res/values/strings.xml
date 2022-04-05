@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Baby Sitter</string>
     <string name="title_activity_main_google_map">mainGoogleMap</string>
+    <string name="app_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a ornare purus. Donec quis ante nisi. Nam tristique sollicitudin purus, vestibulum commodo dolor porttitor vitae. </string>
 </resources>
