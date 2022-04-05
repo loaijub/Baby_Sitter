@@ -15,6 +15,8 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
 
+
+
         Thread thread = new Thread(){
             public void run(){
 
