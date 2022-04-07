@@ -31,13 +31,15 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/uid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/username_icon"
                 android:background="@android:color/transparent"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
+                android:hint="Your id"
                 android:maxLines="1"
+                android:inputType="number"
+                android:maxLength="9"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
@@ -60,6 +62,7 @@
             android:layout_marginTop="12.7dp"
             android:layout_marginRight="62dp"
             android:background="@drawable/blue_border_rounded_cornwe">
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,8 +74,9 @@
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
+                android:id="@+id/password"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="17sp"/>
+                android:textSize="17sp" />
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="14.7dp"
@@ -87,6 +91,7 @@
 
         <TextView
             android:layout_gravity="center"
+            android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="62dp"
