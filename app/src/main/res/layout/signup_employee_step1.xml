@@ -22,6 +22,8 @@
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
+                android:maxLength="9"
+                android:inputType="number"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textSize="17sp" />
 
@@ -115,6 +117,7 @@
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
+                android:inputType="date"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textSize="17sp" />
 
@@ -178,6 +181,7 @@
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
+                android:inputType="date"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textSize="17sp" />
 

@@ -22,5 +22,4 @@ public class signUpParent extends Fragment {
     }
 
 
-
 }
