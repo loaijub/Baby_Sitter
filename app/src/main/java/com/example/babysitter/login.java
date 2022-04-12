@@ -93,7 +93,6 @@ public class login extends Fragment {
         StringRequest request = new StringRequest(Request.Method.POST, url+"?action=login", new Response.Listener<String>() {
 
             @Override
-
             public void onResponse(String response) {
                 dialogLoading.dismiss();
                 //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
