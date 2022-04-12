@@ -13,17 +13,18 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/employeeId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/id_icon"
                 android:background="@android:color/transparent"
                 android:hint="Your ID"
+                android:inputType="number"
+                android:maxLength="9"
                 android:maxLines="1"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:maxLength="9"
-                android:inputType="number"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textSize="17sp" />
 
@@ -46,6 +47,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/employeeFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/first_name_icon"
@@ -77,6 +79,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/employeeLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/last_name_icon"
@@ -108,16 +111,17 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/employeeBirthdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/birth_date_icon"
                 android:background="@android:color/transparent"
                 android:hint="Birth date (DD/MM/YYYY)"
+                android:inputType="date"
                 android:maxLines="1"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:inputType="date"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textSize="17sp" />
 
@@ -140,6 +144,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/employeeEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/email_icon"
@@ -172,16 +177,17 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
+                android:id="@+id/employeePhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/phone_number_icon"
                 android:background="@android:color/transparent"
-                android:hint="Birth date (DD/MM/YYYY)"
+                android:hint="Phone Number"
+                android:inputType="phone"
                 android:maxLines="1"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:inputType="date"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textSize="17sp" />
 
