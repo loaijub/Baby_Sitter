@@ -1,4 +1,61 @@
 package com.example.babysitter.Classes;
 
-public class Parent {
+public class Parent extends User {
+
+    private String status; // 0- active parent account, 1- inactive account.
+    private String rate; // the rate that other employees give to parent.
+    private String specialDemands; // the special demands of the parent regarding their children and working with them.
+    private int numberOfChildren; // the number of children that will take part in the system.
+
+    public Parent(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String email, String role, String status, String rate, String specialDemands, int numberOfChildren) {
+        super(id, fName, lName, phoneNumber, birthDate, password, role, email);
+        this.status = status;
+        this.rate = rate;
+        this.specialDemands = specialDemands;
+        this.numberOfChildren = numberOfChildren;
+    }
+
+    // getters and setters
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getSpecialDemands() {
+        return specialDemands;
+    }
+
+    public void setSpecialDemands(String specialDemands) {
+        this.specialDemands = specialDemands;
+    }
+
+    public int getNumberOfChildren() {
+        return numberOfChildren;
+    }
+
+    public void setNumberOfChildren(int numberOfChildren) {
+        this.numberOfChildren = numberOfChildren;
+    }
+
+    // toString
+    @Override
+    public String toString() {
+        return "Parent{" + super.toString() +
+                "status='" + status + '\'' +
+                ", rate='" + rate + '\'' +
+                ", specialDemands='" + specialDemands + '\'' +
+                ", numberOfChildren=" + numberOfChildren +
+                '}';
+    }
 }
