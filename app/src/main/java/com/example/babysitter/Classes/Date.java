@@ -2,12 +2,12 @@ package com.example.babysitter.Classes;
 
 public class Date {
     // attributes
-    private int day;
-    private int month;
-    private int year;
+    private String day;
+    private String month;
+    private String year;
 
     // constructor
-    public Date(int day, int month, int year) {
+    public Date(String day, String month, String year) {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -21,53 +21,30 @@ public class Date {
     }
 
     // getters and setters
-    public int getYear() {
+    public String getYear() {
         return this.year;
     }
 
-    public int getMonth() {
+    public String getMonth() {
         return this.month;
     }
 
-    public int getDay() {
+    public String getDay() {
         return this.day;
     }
 
-    public void setYear(int yearToSet) {
+    public void setYear(String yearToSet) {
         this.year = yearToSet;
     }
 
-    public void setMonth(int monthToSet) {
+    public void setMonth(String monthToSet) {
         this.month = monthToSet;
     }
 
-    public void setDay(int dayToSet) {
+    public void setDay(String dayToSet) {
         this.day = dayToSet;
     }
 
-    // methods
-    public int compareTo(Date other) { // function gets another date and returns a positive number if current date closer to current date, a negative number if the other date is closer, otherwise it returns 0.
-
-        if (this.year > other.year)
-            return 1;
-
-        if (this.year < other.year)
-            return -1;
-        // we have the same years
-        if (this.month > other.month)
-            return 1;
-
-        if (this.month < other.month)
-            return -1;
-        // we have the same month
-        if (this.day > other.day)
-            return 1;
-
-        if (this.day < other.day)
-            return -1;
-        // it is the same date
-        return 0;
-    }
 
     public String toString() {
         return this.day + "." + this.month + "." + this.year;
