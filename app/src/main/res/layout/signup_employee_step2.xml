@@ -13,12 +13,12 @@
         android:background="@drawable/blue_border_rounded_cornwe">
 
         <EditText
+            android:id="@+id/employeeAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/city_icon"
             android:background="@android:color/transparent"
-            android:hint="City"
-            android:maxLines="1"
+            android:hint="City, street and house number"
             android:paddingLeft="17dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -46,6 +46,7 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <TextView
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Did you worked\nas babysitter?"
@@ -58,6 +59,7 @@
             android:textSize="18sp" />
 
         <Switch
+            android:id="@+id/employeeExperience"
             android:layout_weight="2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
@@ -83,6 +85,7 @@
             android:textSize="17sp" />
 
         <EditText
+            android:id="@+id/employeeSpecialDemands"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_below="@id/sd"
