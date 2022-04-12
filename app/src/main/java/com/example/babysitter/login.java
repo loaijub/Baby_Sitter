@@ -48,7 +48,7 @@ public class login extends Fragment {
                 // if the login success
                 if(login(id.getText().toString(),password.getText().toString())){
                     // if the user is admin
-                    if(currentUser != null && currentUser.getRole() == 0)
+                    if(currentUser != null && currentUser.getRole().equals("0"))
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new admin()).commit();
 
                 }
