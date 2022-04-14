@@ -3,51 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".signUpParentStepTwo">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_gravity="top"
-                android:background="@drawable/blue_bg"
-                android:gravity="center"
-                android:text="Sign up as Parents"
-                android:textColor="@color/white"
-                android:textSize="40dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="-21dp"
-                android:layout_marginBottom="40dp"
-                android:gravity="center"
-                android:text="Step 2: sign up for the application"
-                android:textColor="@color/black"
-                android:textSize="20dp" />
-
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
             <EditText
                 android:id="@+id/cityParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Enter your city name"
                 android:paddingLeft="17dp"
@@ -58,9 +25,9 @@
                 android:id="@+id/streetNameParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Enter your street name"
                 android:paddingLeft="17dp"
@@ -71,9 +38,9 @@
                 android:id="@+id/houseNumberParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Enter your house number"
                 android:maxLength="5"
@@ -85,9 +52,9 @@
                 android:id="@+id/subtitleForQuestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
@@ -99,9 +66,9 @@
                 android:id="@+id/amountOfKids"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Enter your choice here"
                 android:inputType="number"
@@ -114,9 +81,9 @@
                 android:id="@+id/agesOfChildren"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Enter your children birthday years"
                 android:paddingLeft="17dp"
@@ -127,9 +94,9 @@
                 android:id="@+id/subtitleForSpecialDemands"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
@@ -141,29 +108,14 @@
                 android:id="@+id/specialDemandsParent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="62dp"
+                android:layout_marginRight="62dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Enter your demands"
                 android:paddingLeft="17dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp" />
 
-            <Button
-                android:id="@+id/nextBtn"
-                android:layout_width="150dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:background="#4B60E1"
-                android:text="Finish!"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-
-        </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>

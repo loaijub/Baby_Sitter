@@ -1,7 +1,9 @@
 package com.example.babysitter;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +108,11 @@ public class login extends Fragment {
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new admin()).commit();
                     }
                     else{
-                        Toast.makeText(getContext(), result.getString("cause"), Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Login failed..")
+                                .setMessage(result.getString("cause"))
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                     }
 
 

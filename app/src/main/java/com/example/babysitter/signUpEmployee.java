@@ -21,14 +21,27 @@ public class signUpEmployee extends Fragment {
         view.findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextStepEmployeeSignUp();
+                nextStepEmployeeSignUp(v);
             }
         });
+
+        for (int i=1; i<=3;i++) {
+            TextView steps = view.findViewById(getResources().getIdentifier("step" + i, "id", getActivity().getPackageName()));
+            steps.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showStep(v);
+                }
+            });
+        }
+
 
         return view;
     }
 
-    public void nextStepEmployeeSignUp() {
+    public void nextStepEmployeeSignUp(View v) {
+        if(v.getTag() != null && v.getTag().equals("Finish"))
+            return;
         int stepToGo;
         if(current_step == 3)
             stepToGo = 1;
@@ -42,6 +55,8 @@ public class signUpEmployee extends Fragment {
 
     }
 
+
+    //the function change step according to view clicked (step 1 or 2 or 3)
     public void showStep(View view){
 
         String s =  getResources().getResourceName(view.getId());
@@ -61,15 +76,22 @@ public class signUpEmployee extends Fragment {
         switch(step_number){
             case 1:
                 current_step = 1;
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).commit();
+                ((Button)this.view.findViewById(R.id.next)).setText("Next");
+                this.view.findViewById(R.id.next).setTag(null);
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).addToBackStack(null).commit();
                 break;
             case 2:
                 current_step = 2;
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).commit();
+                ((Button)this.view.findViewById(R.id.next)).setText("Next");
+                this.view.findViewById(R.id.next).setTag(null);
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).addToBackStack(null).commit();
                 break;
             case 3:
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep3()).commit();
                 ((Button)this.view.findViewById(R.id.next)).setText("Finish");
+                this.view.findViewById(R.id.next).setTag("Finish");
                 current_step = 3;
 
         }
