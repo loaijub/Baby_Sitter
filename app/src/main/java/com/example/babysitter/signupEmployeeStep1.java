@@ -24,6 +24,7 @@ public class signupEmployeeStep1 extends Fragment {
     specialDemands,
     address;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.signup_employee_step1,container,false);
