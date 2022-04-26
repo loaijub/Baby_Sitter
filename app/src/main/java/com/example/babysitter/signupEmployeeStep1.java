@@ -27,11 +27,6 @@ public class signupEmployeeStep1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.signup_employee_step1,container,false);
-        return view;
-    }
-
-    public static String[] getInputFromEmployee()
-    { // function puts the information we got from employee in a array and returns it.
 
         id = view.findViewById(R.id.employeeId);
         firstName = view.findViewById(R.id.employeeFirstName);
@@ -40,16 +35,35 @@ public class signupEmployeeStep1 extends Fragment {
         email = view.findViewById(R.id.employeeEmail);
         phoneNumber = view.findViewById(R.id.employeePhoneNumber);
 
-        String[] arr = new String[9];
+        loadPreviousStepState();
 
-        arr[0] = id.getText().toString();
-        arr[1] = firstName.getText().toString();
-        arr[2] = lastName.getText().toString();
-        arr[3] = birthdate.getText().toString();
-        arr[4] = email.getText().toString();
-        arr[5] = phoneNumber.getText().toString();
+        return view;
+    }
 
-        return arr;
+    public static void getInputFromEmployee()
+    { // function puts the information we got from employee in a array and returns it.
+
+        signUpEmployee.fields = new String[9];
+        for(int i=0;i<signUpEmployee.fields.length;i++)
+            signUpEmployee.fields[i] = "";
+
+        signUpEmployee.fields[0] = id.getText().toString();
+        signUpEmployee.fields[1] = firstName.getText().toString();
+        signUpEmployee.fields[2] = lastName.getText().toString();
+        signUpEmployee.fields[3] = birthdate.getText().toString();
+        signUpEmployee.fields[4] = email.getText().toString();
+        signUpEmployee.fields[5] = phoneNumber.getText().toString();
+
+    }
+
+    private void loadPreviousStepState() {
+        id.setText(signUpParent.fields[0]);
+        firstName.setText(signUpParent.fields[1]);
+        lastName.setText(signUpParent.fields[2]);
+        birthdate.setText(signUpParent.fields[3]);
+        email.setText(signUpParent.fields[4]);
+        phoneNumber.setText(signUpParent.fields[5]);
+
     }
 
 }

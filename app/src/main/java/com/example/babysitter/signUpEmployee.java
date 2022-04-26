@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +16,13 @@ import androidx.fragment.app.Fragment;
 public class signUpEmployee extends Fragment {
     View view;
     int current_step = 1;
+    public static String[] fields;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.sign_up_employee,container,false);
+
+
+
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).commit();
         view.findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,20 +79,21 @@ public class signUpEmployee extends Fragment {
         TextView stepToGo = this.view.findViewById(view.getId());
         stepToGo.setTypeface(Typeface.DEFAULT_BOLD);
 
+        //saving the state of edit texts
+        saveStep(current_step);
+
         switch(step_number){
             case 1:
                 current_step = 1;
                 ((Button)this.view.findViewById(R.id.next)).setText("Next");
                 this.view.findViewById(R.id.next).setTag(null);
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).commit();
                 break;
             case 2:
                 current_step = 2;
                 ((Button)this.view.findViewById(R.id.next)).setText("Next");
                 this.view.findViewById(R.id.next).setTag(null);
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep2()).commit();
                 break;
             case 3:
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep3()).commit();
@@ -97,5 +104,13 @@ public class signUpEmployee extends Fragment {
         }
     }
 
+    private void saveStep(int stepNumberToSave){
+        if(stepNumberToSave == 1)
+            signupEmployeeStep1.getInputFromEmployee();
+
+        if (stepNumberToSave == 2)
+            signupEmployeeStep2.getInputFromEmployee();
+
+    }
 
 }

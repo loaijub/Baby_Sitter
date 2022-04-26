@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,9 +15,13 @@ import androidx.fragment.app.Fragment;
 public class signUpParent extends Fragment {
     View view;
     int current_step = 1;
+    public static String[] fields = new String[11];
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.sign_up_parent,container,false);
+        for (int i=0; i<fields.length; i++)
+            fields[i] = "";
+
 
       // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutParent,new signUpParentStepOne()).commit();
 
@@ -65,9 +70,6 @@ public class signUpParent extends Fragment {
     public void showStep(View view){
 
         String s =  getResources().getResourceName(view.getId());
-
-
-
         int step_number = Integer.parseInt(s.substring(s.length()-1));
 
         //making all the steps default font
@@ -79,28 +81,53 @@ public class signUpParent extends Fragment {
         TextView stepToGo = this.view.findViewById(view.getId());
         stepToGo.setTypeface(Typeface.DEFAULT_BOLD);
 
+        //saving the state of edit texts
+        saveStep(current_step);
+
         switch(step_number){
             case 1:
                 current_step = 1;
                 ((Button)this.view.findViewById(R.id.next)).setText("Next");
                 (this.view.findViewById(R.id.next)).setTag(null);
-                if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-                else
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutParent,new signUpParentStepOne()).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutParent,new signUpParentStepOne()).commit();
 
                 break;
             case 2:
                 current_step = 2;
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutParent,new signUpParentStepTwo()).addToBackStack(null).commit();
-
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutParent,new signUpParentStepTwo()).commit();
                 ((Button)this.view.findViewById(R.id.next)).setText("Finish");
                 (this.view.findViewById(R.id.next)).setTag("Finish");
 
+        }
+        //loading the state of the choosen step
 
+
+    }
+
+
+
+
+    private void saveStep(int stepNumberToSave){
+        if(stepNumberToSave == 1)
+        {
+            fields[0] = ((EditText)view.findViewById(R.id.idOfParent)).getText().toString();
+            fields[1] = ((EditText)view.findViewById(R.id.firstNameParent)).getText().toString();
+            fields[2] = ((EditText)view.findViewById(R.id.lastNameParent)).getText().toString();
+            fields[3] = ((EditText)view.findViewById(R.id.phoneNumberParent)).getText().toString();
+            fields[4] = ((EditText)view.findViewById(R.id.emailParent)).getText().toString();
+        }
+        if (stepNumberToSave == 2)
+        {
+            fields[5] = ((EditText)view.findViewById(R.id.cityParent)).getText().toString();
+            fields[6] = ((EditText)view.findViewById(R.id.streetNameParent)).getText().toString();
+            fields[7] = ((EditText)view.findViewById(R.id.houseNumberParent)).getText().toString();
+            fields[8] = ((EditText)view.findViewById(R.id.amountOfKids)).getText().toString();
+            fields[9] = ((EditText)view.findViewById(R.id.agesOfChildren)).getText().toString();
+            fields[10] = ((EditText)view.findViewById(R.id.specialDemandsParent)).getText().toString();
 
         }
+
     }
+
 
 }
