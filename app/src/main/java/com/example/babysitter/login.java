@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -34,9 +37,21 @@ public class login extends Fragment {
     User currentUser = null;
     ProgressDialog dialogLoading;
 
+    TextView forgetPassword;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.login,container,false);
+        view = inflater.inflate(R.layout.login, container, false);
+
+        forgetPassword = view.findViewById(R.id.forgetPassword);
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgetPassword();
+            }
+        });
+
         //if signup pressed
         view.findViewById(R.id.signUp).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,17 +61,16 @@ public class login extends Fragment {
         });
 
 
-
         //if login pressed
 
         view.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText id,password;
+                EditText id, password;
                 id = view.findViewById(R.id.uid);
                 password = view.findViewById(R.id.password);
                 // login request
-                login(id.getText().toString(),password.getText().toString());
+                login(id.getText().toString(), password.getText().toString());
             }
         });
 
@@ -65,21 +79,38 @@ public class login extends Fragment {
 
     }
 
+    private void forgetPassword() { // function send an email for admin that the user has forgot his password and he needs to restore it
+
+        EditText userId = view.findViewById(R.id.uid);
+
+        Intent sendemail = new Intent(Intent.ACTION_SEND);
+        sendemail.setData(Uri.parse("mailto:"));
+        sendemail.setType("message/rfc822");
+        sendemail.putExtra(Intent.EXTRA_EMAIL, new String[]{
+                "jow.isaac@gmail.com", "lo2ay.2000@gmail.com"
+        });
+        sendemail.putExtra(Intent.EXTRA_SUBJECT, "Restore password");
+        sendemail.putExtra(Intent.EXTRA_TEXT, "User with id number: " + userId.getText().toString() + " forgot the password. Please contact the user to restore!");
+        startActivity(sendemail);
+
+
+    }
+
     private void showDialog() {
-        dialog= new Dialog(getContext());
+        dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.custom_dialog);
         dialog.show();
         dialog.findViewById(R.id.signUpAsEmployee).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new signUpEmployee()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new signUpEmployee()).commit();
                 dialog.dismiss();
             }
         });
         dialog.findViewById(R.id.signUpAsParent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new signUpParent()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new signUpParent()).commit();
                 dialog.dismiss();
             }
         });
@@ -87,27 +118,25 @@ public class login extends Fragment {
     }
 
 
-
-    private void login(String id,String pass){
+    private void login(String id, String pass) {
         dialogLoading = ProgressDialog.show(getContext(), "",
                 "Logging in. Please wait...", true);
 
-        StringRequest request = new StringRequest(Request.Method.POST, url+"?action=login", new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=login", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 dialogLoading.dismiss();
                 //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
-                try{
+                try {
                     JSONObject result = new JSONObject(response);
                     String success = result.getString("success");
-                    if(success.equals("true")) {
+                    if (success.equals("true")) {
                         JSONObject userDetails = result.getJSONObject("user");
                         buildUser(userDetails);
-                        if(currentUser.getRole().equals("0"))
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new admin()).commit();
-                    }
-                    else{
+                        if (currentUser.getRole().equals("0"))
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
+                    } else {
                         new AlertDialog.Builder(getContext())
                                 .setTitle("Login failed..")
                                 .setMessage(result.getString("cause"))
@@ -116,9 +145,8 @@ public class login extends Fragment {
                     }
 
 
-
-                }catch(Exception e){
-                    Toast.makeText(getContext(), "Json parse error"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -139,8 +167,8 @@ public class login extends Fragment {
             protected Map<String, String> getParams() {
 
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("uid",id);
-                map.put("pass",pass);
+                map.put("uid", id);
+                map.put("pass", pass);
                 return map;
 
             }
@@ -154,7 +182,7 @@ public class login extends Fragment {
     }
 
     private void buildUser(JSONObject userDetails) {
-        String id,fName,lName,phoneNum,birthDate,pass,role,email;
+        String id, fName, lName, phoneNum, birthDate, pass, role, email;
         try {
             id = userDetails.getString("id");
             fName = userDetails.getString("first_name");
@@ -166,9 +194,9 @@ public class login extends Fragment {
             email = userDetails.getString("email");
 
             String[] s = birthDate.split("-");
-            currentUser = new User(id,fName,lName,phoneNum,new Date(s[2],s[1],s[0]),pass,role,email);
-        }catch(Exception e){
-            Toast.makeText(getContext(), "error parsing" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            currentUser = new User(id, fName, lName, phoneNum, new Date(s[2], s[1], s[0]), pass, role, email);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "error parsing" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
 
