@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new homePage()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new admin()).commit();
 
     }
 
