@@ -79,4 +79,17 @@
         android:paddingBottom="15dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:inputType="textEmailAddress" />
+    <EditText
+        android:id="@+id/passwordParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your password"
+        android:layout_marginLeft="62dp"
+        android:layout_marginRight="62dp"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="17dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:inputType="textPassword" />
 </LinearLayout>

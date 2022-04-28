@@ -21,12 +21,12 @@ public class signUpParentStepTwo extends Fragment {
 
     private void loadPreviousStepState() {
 
-            ((EditText)view.findViewById(R.id.cityParent)).setText(signUpParent.fields[5]);
-            ((EditText)view.findViewById(R.id.streetNameParent)).setText(signUpParent.fields[6]);
-            ((EditText)view.findViewById(R.id.houseNumberParent)).setText(signUpParent.fields[7]);
-            ((EditText)view.findViewById(R.id.amountOfKids)).setText(signUpParent.fields[8]);
-            ((EditText)view.findViewById(R.id.agesOfChildren)).setText(signUpParent.fields[9]);
-            ((EditText)view.findViewById(R.id.specialDemandsParent)).setText(signUpParent.fields[10]);
+            ((EditText)view.findViewById(R.id.cityParent)).setText(signUpParent.fields[6]);
+            ((EditText)view.findViewById(R.id.streetNameParent)).setText(signUpParent.fields[7]);
+            ((EditText)view.findViewById(R.id.houseNumberParent)).setText(signUpParent.fields[8]);
+            ((EditText)view.findViewById(R.id.amountOfKids)).setText(signUpParent.fields[9]);
+            ((EditText)view.findViewById(R.id.agesOfChildren)).setText(signUpParent.fields[10]);
+            ((EditText)view.findViewById(R.id.specialDemandsParent)).setText(signUpParent.fields[11]);
 
     }
 

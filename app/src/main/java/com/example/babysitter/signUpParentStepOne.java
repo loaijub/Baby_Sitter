@@ -33,6 +33,8 @@ public class signUpParentStepOne extends Fragment {
         ((EditText)view.findViewById(R.id.lastNameParent)).setText(signUpParent.fields[2]);
         ((EditText)view.findViewById(R.id.phoneNumberParent)).setText(signUpParent.fields[3]);
         ((EditText)view.findViewById(R.id.emailParent)).setText(signUpParent.fields[4]);
+        ((EditText)view.findViewById(R.id.passwordParent)).setText(signUpParent.fields[5]);
+
 
     }
 
