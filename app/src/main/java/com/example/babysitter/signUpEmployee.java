@@ -16,11 +16,12 @@ import androidx.fragment.app.Fragment;
 public class signUpEmployee extends Fragment {
     View view;
     int current_step = 1;
-    public static String[] fields;
+    public static String[] fields = new String[9];
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.sign_up_employee,container,false);
-
+        for (int i=0; i<fields.length; i++)
+            fields[i] = "";
 
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new signupEmployeeStep1()).commit();
@@ -106,10 +107,22 @@ public class signUpEmployee extends Fragment {
 
     private void saveStep(int stepNumberToSave){
         if(stepNumberToSave == 1)
-            signupEmployeeStep1.getInputFromEmployee();
-
+        {
+            fields[0] = ((EditText)view.findViewById(R.id.employeeId)).getText().toString();
+            fields[1] = ((EditText)view.findViewById(R.id.employeeFirstName)).getText().toString();
+            fields[2] = ((EditText)view.findViewById(R.id.employeeLastName)).getText().toString();
+            fields[3] = ((EditText)view.findViewById(R.id.employeeBirthdate)).getText().toString();
+            fields[4] = ((EditText)view.findViewById(R.id.employeeEmail)).getText().toString();
+            fields[5] = ((EditText)view.findViewById(R.id.employeePhoneNumber)).getText().toString();
+        }
         if (stepNumberToSave == 2)
-            signupEmployeeStep2.getInputFromEmployee();
+        {
+            fields[6] = ((EditText)view.findViewById(R.id.employeeAddress)).getText().toString();
+            fields[7] = ((Switch)view.findViewById(R.id.employeeExperience)).isChecked()?"checked":"notChecked";
+            fields[8] = ((EditText)view.findViewById(R.id.employeeSpecialDemands)).getText().toString();
+
+
+        }
 
     }
 

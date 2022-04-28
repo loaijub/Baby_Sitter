@@ -99,8 +99,6 @@ public class signUpParent extends Fragment {
                 (this.view.findViewById(R.id.next)).setTag("Finish");
 
         }
-        //loading the state of the choosen step
-
 
     }
 
