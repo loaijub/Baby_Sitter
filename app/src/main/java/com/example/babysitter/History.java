@@ -30,9 +30,16 @@ public class History extends Fragment {
 
 
     String tutorials[]
-            = {"Algorithms", "Data Structures",
-            "Languages", "Interview Corner",
-            "GATE", "ISRO CS",
+            = {"Algorithms",
+            "Data Structures",
+            "Languages",
+            "Languages",
+            "Languages",
+            "Interview Corner",
+            "GATE",
+            "ISRO CS",
+            "ISRO CS",
+            "ISRO CS",
             "UGC NET CS", "CS Subjects",
             "UGC NET CS", "CS Subjects",
             "UGC NET CS", "CS Subjects",
