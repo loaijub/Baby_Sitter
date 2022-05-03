@@ -3,14 +3,12 @@ package com.example.babysitter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class login extends Fragment {
-    public static String url = "http://172.16.5.244/babysitter/dbMain.php";
+    public static String url = "https://loaijubran.000webhostapp.com/babysitter/dbMain.php";
     View view;
     Dialog dialog;
     User currentUser = null;
@@ -62,7 +60,6 @@ public class login extends Fragment {
 
 
         //if login pressed
-
         view.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,21 +76,74 @@ public class login extends Fragment {
 
     }
 
-    private void forgetPassword() { // function send an email for admin that the user has forgot his password and he needs to restore it
-
+    private void forgetPassword() {
+        // function send an email for admin that the user has forgot his password and he needs to restore it
         EditText userId = view.findViewById(R.id.uid);
 
-        Intent sendemail = new Intent(Intent.ACTION_SEND);
-        sendemail.setData(Uri.parse("mailto:"));
-        sendemail.setType("message/rfc822");
-        sendemail.putExtra(Intent.EXTRA_EMAIL, new String[]{
-                "jow.isaac@gmail.com", "lo2ay.2000@gmail.com"
-        });
-        sendemail.putExtra(Intent.EXTRA_SUBJECT, "Restore password");
-        sendemail.putExtra(Intent.EXTRA_TEXT, "User with id number: " + userId.getText().toString() + " forgot the password. Please contact the user to restore!");
-        startActivity(sendemail);
+        dialogLoading = ProgressDialog.show(getContext(), "",
+                "Checking... Please wait", true);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=checkUser", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                dialogLoading.dismiss();
+
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("exists");
+
+                    // user is found in system
+                    if (success.equals("true")) {
+
+                        // if the user is in the system, it can send the admin a request to restore the password
+                        Intent sendEmail = new Intent(Intent.ACTION_SEND);
+                        sendEmail.setData(Uri.parse("mailto:"));
+                        sendEmail.setType("message/rfc822");
+                        sendEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{
+                                "jow.isaac@gmail.com", "lo2ay.2000@gmail.com"
+                        });
+                        sendEmail.putExtra(Intent.EXTRA_SUBJECT, "Restore password");
+                        sendEmail.putExtra(Intent.EXTRA_TEXT, "User with id number: " + userId.getText().toString() + " forgot the password. Please contact the user to restore!");
+                        startActivity(sendEmail);
+                    }
+
+                    // user is not found in system
+                    else {
+                        Toast.makeText(getContext(), "You are not registered in the system.\nPlease check if you signed up.", Toast.LENGTH_LONG).show();
+                    }
 
 
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", userId.getText().toString());
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(request);
     }
 
     private void showDialog() {
