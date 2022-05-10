@@ -57,7 +57,7 @@ public class adminAddEmployee extends Fragment {
         dialogLoading = ProgressDialog.show(getContext(), "",
                 "Loading... Please wait", true);
 
-        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllReports", new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllWorkApplications", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
