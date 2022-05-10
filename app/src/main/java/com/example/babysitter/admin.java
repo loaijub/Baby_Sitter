@@ -84,34 +84,8 @@ public class admin extends Fragment {
 
 
     private void createNewEmployee() {
-
-        String id, fName, lName, phoneNumber, password, email, role, status, rate, specialDemands, experience;
-        Date birthDate;
-        double workingHoursInMonth;
-
-        // after getting all info from work application
-        // replace values from the database
-
-        id = "123";
-        fName = "stam";
-        lName = "to try";
-        phoneNumber = "059812345";
-        birthDate = new Date("23", "1", "2020");
-        password = "123";
-        email = "stam@totest.com";
-        specialDemands = "qwewqwqw";
-        experience = "true";
-
-        // the automatic values
-        role = "1"; // 1 - stands for employee
-        status = "0"; // 0 - stands for active
-        rate = "0";
-        workingHoursInMonth = 0;
-
-
-        Employee empToAdd = new Employee(id, fName, lName, phoneNumber, birthDate, password, role, email, status, rate, specialDemands, workingHoursInMonth, experience);
-
-
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new adminAddEmployee()).commit();
+        
         Toast.makeText(getContext(), "createNewEmployee function will work", Toast.LENGTH_SHORT).show();
 
     }
