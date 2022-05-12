@@ -10,8 +10,9 @@ public class WorkApplication {
     private String employeeEmail; // the email of the applicant.
     private String employeeExperience; // the experience of the applicant.
     private String employeeSpecialDemands; // the special demands of the applicant.
+    private String status; // 0- denied 1- approved 2- hasn't been checked
 
-    public WorkApplication(String employeeId, String employeeFirstName, String employeeLastName, String employeePhoneNumber, Date employeeBirthDate, String employeeEmail, String employeeExperience, String employeeSpecialDemands) {
+    public WorkApplication(String employeeId, String employeeFirstName, String employeeLastName, String employeePhoneNumber, Date employeeBirthDate, String employeeEmail, String employeeExperience, String employeeSpecialDemands, String status) {
         this.employeeId = employeeId;
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
@@ -20,6 +21,7 @@ public class WorkApplication {
         this.employeeEmail = employeeEmail;
         this.employeeExperience = employeeExperience;
         this.employeeSpecialDemands = employeeSpecialDemands;
+        this.status = status;
     }
 
     // getters and setters
@@ -79,19 +81,36 @@ public class WorkApplication {
         this.employeeSpecialDemands = employeeSpecialDemands;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // toString
 
     @Override
     public String toString() {
-        return "WorkApplication{" +
-                "employeeId='" + employeeId + '\'' +
-                ", employeeFirstName='" + employeeFirstName + '\'' +
-                ", employeeLastName='" + employeeLastName + '\'' +
-                ", employeePhoneNumber='" + employeePhoneNumber + '\'' +
-                ", employeeBirthDate=" + employeeBirthDate +
-                ", employeeEmail='" + employeeEmail + '\'' +
-                ", employeeExperience='" + employeeExperience + '\'' +
-                ", employeeSpecialDemands='" + employeeSpecialDemands + '\'' +
-                '}';
+
+        String statusOfApp = "Hasn't been checked yet!";
+        // checking the status of the work application
+        if (this.status.equals("0"))
+            statusOfApp = "DENIED";
+        else
+            if (this.status.equals("1"))
+                statusOfApp = "APPROVED";
+
+
+        return "Id: " + employeeId + '\n' +
+                "First Name: " + employeeFirstName + '\n' +
+                "Last Name: " + employeeLastName + '\n' +
+                "Phone Number: " + employeePhoneNumber + '\n' +
+                "Birthdate: " + employeeBirthDate + "\n" +
+                "Email: " + employeeEmail + '\n' +
+                "Experience: " + employeeExperience + '\n' +
+                "Special Demands: " + employeeSpecialDemands + '\n' +
+                "Status: " + statusOfApp;
     }
 }
