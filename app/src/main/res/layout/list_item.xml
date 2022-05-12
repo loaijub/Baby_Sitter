@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:layout_marginVertical="10dp"
             android:orientation="horizontal">
 
@@ -34,31 +35,45 @@
                     android:layout_height="wrap_content"
                     android:text="Christopher"
                     android:textColor="@color/black"
-                    android:textSize="26sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/lastMessage"
+                    android:id="@+id/role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Hi, How Are you"/>
+                    android:text="Parent or employee"/>
 
             </LinearLayout>
 
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/msgtime"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:layout_alignParentRight="true"
-            android:text="8:35 pm"/>
+            android:gravity="center"
+            android:layout_weight="4"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="15dp"
+                android:text="Edit" />
+            <TextView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="15dp"
+                android:textColor="#f54242"
+                android:text="Delete" />
+        </LinearLayout>
 
 
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

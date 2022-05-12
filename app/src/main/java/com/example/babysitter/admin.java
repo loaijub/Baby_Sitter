@@ -69,12 +69,11 @@ public class admin extends Fragment {
 
     private void viewAllReports() {
 
-        Toast.makeText(getContext(), "viewAllReports function will work", Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllReports()).commit();
     }
 
     private void viewAllUsers() {
-
-        Toast.makeText(getContext(), "viewAllUsers function will work", Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllUsers()).commit();
     }
 
     private void viewAllWorkApplications() {
@@ -85,8 +84,6 @@ public class admin extends Fragment {
 
     private void createNewEmployee() {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new adminAddEmployee()).commit();
-        
-        Toast.makeText(getContext(), "createNewEmployee function will work", Toast.LENGTH_SHORT).show();
 
     }
 }

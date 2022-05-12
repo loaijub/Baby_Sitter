@@ -2,7 +2,7 @@ package com.example.babysitter.Classes;
 
 public class Report {
 
-    private final int reportId; // a unique number for each report.
+    private final String reportId; // a unique number for each report.
     private final String applicantId; // id of the user who applied the report.
     private final String reportedUserId; // id of the user who was reported.
     private final Date dateOfSub; // date of the submitting the report to the system.
@@ -12,7 +12,7 @@ public class Report {
     private boolean hasChecked; // if the admin checked the report or not yet.
     private String outcome; // the result of the decision of the admin.
 
-    public Report(int reportId, String applicantId, String reportedUserId, Date dateOfSub, Date dateOfAccident, String accidentDetails) {
+    public Report(String reportId, String applicantId, String reportedUserId, Date dateOfSub, Date dateOfAccident, String accidentDetails) {
         this.reportId = reportId;
         this.applicantId = applicantId;
         this.reportedUserId = reportedUserId;
@@ -25,7 +25,7 @@ public class Report {
     }
 
     // getters and setters
-    public int getReportId() {
+    public String getReportId() {
         return reportId;
     }
 
