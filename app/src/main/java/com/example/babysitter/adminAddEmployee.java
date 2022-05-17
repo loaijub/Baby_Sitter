@@ -249,6 +249,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
         String experience = chosenEmployee.getEmployeeExperience();
 
 
+
         // generating a default password for the new employee
         String password = generateDefaultPassword();
 
