@@ -1,6 +1,9 @@
 package com.example.babysitter;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,8 +13,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.io.OutputStream;
+import java.util.Map;
 
 public class signUpEmployee extends Fragment {
     View view;
@@ -47,8 +60,18 @@ public class signUpEmployee extends Fragment {
     }
 
     public void nextStepEmployeeSignUp(View v) {
-        if(v.getTag() != null && v.getTag().equals("Finish"))
+        if (v.getTag() != null && v.getTag().equals("Finish")) {
+            saveStep(3);
+            for (int i = 0; i < fields.length; i++)
+                if (fields[i].equals("")) {
+                    Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            //createParentUser();
             return;
+        }
+
+
         int stepToGo;
         if(current_step == 3)
             stepToGo = 1;
@@ -121,9 +144,15 @@ public class signUpEmployee extends Fragment {
             fields[7] = ((Switch)view.findViewById(R.id.employeeExperience)).isChecked()?"checked":"notChecked";
             fields[8] = ((EditText)view.findViewById(R.id.employeeSpecialDemands)).getText().toString();
 
-
+        }
+        if (stepNumberToSave == 3)
+        {
+            fields[9] = "File location";
         }
 
     }
+
+
+
 
 }

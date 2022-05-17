@@ -62,6 +62,14 @@ public class admin extends Fragment {
             }
         });
 
+        view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login.currentUser = null;
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new login()).commit();
+            }
+        });
+
 
         return view;
     }
@@ -69,11 +77,11 @@ public class admin extends Fragment {
 
     private void viewAllReports() {
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllReports()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllReports()).addToBackStack(null).commit();
     }
 
     private void viewAllUsers() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllUsers()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllUsers()).addToBackStack(null).commit();
     }
 
     private void viewAllWorkApplications() {
@@ -83,7 +91,7 @@ public class admin extends Fragment {
 
 
     private void createNewEmployee() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new adminAddEmployee()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new adminAddEmployee()).addToBackStack(null).commit();
 
     }
 }

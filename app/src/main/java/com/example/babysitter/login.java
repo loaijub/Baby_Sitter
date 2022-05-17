@@ -29,10 +29,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class login extends Fragment {
-    public static String url = "http://192.168.200.137/babysitter/dbMain.php";
+    public static String url = "http://192.168.7.137/babysitter/dbMain.php";
     View view;
     Dialog dialog;
-    User currentUser = null;
+    public static User currentUser = null;
     ProgressDialog dialogLoading;
 
     TextView forgetPassword;
@@ -153,14 +153,14 @@ public class login extends Fragment {
         dialog.findViewById(R.id.signUpAsEmployee).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new signUpEmployee()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new signUpEmployee()).addToBackStack(null).commit();
                 dialog.dismiss();
             }
         });
         dialog.findViewById(R.id.signUpAsParent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new signUpParent()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new signUpParent()).addToBackStack(null).commit();
                 dialog.dismiss();
             }
         });
