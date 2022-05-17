@@ -1,8 +1,10 @@
 package com.example.babysitter;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,11 @@ import com.example.babysitter.Classes.WorkApplication;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class adminAddEmployee extends Fragment {
@@ -79,26 +85,31 @@ public class adminAddEmployee extends Fragment {
                         JSONObject application = allWorkApplications.getJSONObject(i);
 
 
+                        // first we check the status, only if the status is 3 (admin hasn't checked it yet) it displays it.
+                        String status = application.getString("status");
+
                         // splitting the fields of the object to variables to create WorkApplication object
                         String employeeId = application.getString("employee_id");
                         String employeeFirstName = application.getString("employee_fname");
                         String employeeLastName = application.getString("employee_lname");
+                        String address = application.getString("address");
                         String employeePhoneNumber = application.getString("employee_phone_num");
                         String employeeBirthDate = application.getString("employee_birthdate");
                         String employeeEmail = application.getString("employee_email");
                         String employeeExperience = application.getString("employee_experience");
                         String employeeSpecialDemands = application.getString("employee_special_demands");
-                        String status = application.getString("status");
+
 
                         // converting the birthdate from String to date
                         String[] fieldsOfDate = employeeBirthDate.split("-");
                         Date actualEmployeeBirthdate = new Date(fieldsOfDate[0], fieldsOfDate[1], fieldsOfDate[2]);
 
                         // creating the WorkApplication object
-                        WorkApplication tempApplicationObj = new WorkApplication(employeeId, employeeFirstName, employeeLastName, employeePhoneNumber, actualEmployeeBirthdate, employeeEmail, employeeExperience, employeeSpecialDemands, status);
+                        WorkApplication tempApplicationObj = new WorkApplication(employeeId, employeeFirstName, employeeLastName, address, employeePhoneNumber, actualEmployeeBirthdate, employeeEmail, employeeExperience, employeeSpecialDemands, status);
 
                         // adding the object to the array
                         workApplicationsAsObjectArr[j++] = tempApplicationObj;
+
                     }
 
                     // now workApplicationsAsObjectArr array has objects from WorkApplication type, and has all the information from the database.
@@ -136,7 +147,20 @@ public class adminAddEmployee extends Fragment {
 
     private void showListViewItems(WorkApplication[] allApplicationArr) { // function gets an array of WorkApplication objects and shows the information in it in ListView
 
-        ListAdapterForAddEmployee myAdapter = new ListAdapterForAddEmployee(allApplicationArr, getContext());
+        List<WorkApplication> onlyUncheckedApps = new ArrayList<>();
+        for (int i = 0; i < allApplicationArr.length; i++) {
+            if (allApplicationArr[i].getStatus().equals("3")) {
+                onlyUncheckedApps.add(allApplicationArr[i]);
+            }
+        }
+
+        // converting from a list to array
+        WorkApplication[] applicationsArr = new WorkApplication[onlyUncheckedApps.size()];
+        for (int i = 0; i < onlyUncheckedApps.size(); i++)
+            applicationsArr[i] = onlyUncheckedApps.get(i);
+
+
+        ListAdapterForAddEmployee myAdapter = new ListAdapterForAddEmployee(applicationsArr, getContext());
         list.setAdapter(myAdapter);
 
     }
@@ -193,8 +217,8 @@ class ListAdapterForAddEmployee extends BaseAdapter {
             }
         });
 
-
         applicationInfo.setText(applicationsArr[position].toString());
+
 
         return v;
     }
@@ -205,13 +229,94 @@ class ListAdapterForAddEmployee extends BaseAdapter {
     /////////////////////also fix the database and connect the tables/////////////
     ////////////////// continue from here ///////////////
     ///////////////////////////////////////////////////
+
     private void addEmployeeFromWorkApplication(String idOfEmployeeToAdd) {
         // function adds the employee from the current work application to the system.
 
 
+        WorkApplication chosenEmployee = null;
+        for (int i = 0; i < applicationsArr.length; i++)
+            if (applicationsArr[i].getEmployeeId().equals(idOfEmployeeToAdd))
+                chosenEmployee = applicationsArr[i];
+
+        String fname = chosenEmployee.getEmployeeFirstName();
+        String lname = chosenEmployee.getEmployeeLastName();
+        String phoneNumber = chosenEmployee.getEmployeePhoneNumber();
+        Date birthdate = chosenEmployee.getEmployeeBirthDate();
+        String email = chosenEmployee.getEmployeeEmail();
+        String address = chosenEmployee.getAddress();
+        String specialDemands = chosenEmployee.getEmployeeSpecialDemands();
+        String experience = chosenEmployee.getEmployeeExperience();
+
+
         // generating a default password for the new employee
         String password = generateDefaultPassword();
-        Toast.makeText(context, password, Toast.LENGTH_LONG).show();
+
+        ProgressDialog dialogLoading;
+        dialogLoading = ProgressDialog.show(context, "",
+                "Creating an Employee account... Please wait...", true);
+
+        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=createEmployeeUser", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                System.out.println(response);
+                Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+                dialogLoading.dismiss();
+
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        Toast.makeText(context, "User was added successfully!", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Creating user failed..")
+                                .setMessage(result.getString("cause"))
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                }
+
+
+                 catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", idOfEmployeeToAdd);
+                map.put("fname", fname);
+                map.put("lname", lname);
+                map.put("phoneNum", phoneNumber);
+                map.put("birthDate", birthdate.toString());
+                map.put("email", email);
+                map.put("pass", password);
+                map.put("city_name", address);
+                map.put("street_name", address);
+                map.put("house_number", address);
+                map.put("experience", experience);
+                map.put("demands", specialDemands);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
 
 
     }

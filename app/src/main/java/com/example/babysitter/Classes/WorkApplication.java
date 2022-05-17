@@ -11,11 +11,13 @@ public class WorkApplication {
     private String employeeExperience; // the experience of the applicant.
     private String employeeSpecialDemands; // the special demands of the applicant.
     private String status; // 0- denied 1- approved 2- hasn't been checked
+    private String address;
 
-    public WorkApplication(String employeeId, String employeeFirstName, String employeeLastName, String employeePhoneNumber, Date employeeBirthDate, String employeeEmail, String employeeExperience, String employeeSpecialDemands, String status) {
+    public WorkApplication(String employeeId, String employeeFirstName, String employeeLastName, String address ,String employeePhoneNumber, Date employeeBirthDate, String employeeEmail, String employeeExperience, String employeeSpecialDemands, String status) {
         this.employeeId = employeeId;
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
+        this.address = address;
         this.employeePhoneNumber = employeePhoneNumber;
         this.employeeBirthDate = employeeBirthDate;
         this.employeeEmail = employeeEmail;
@@ -89,8 +91,15 @@ public class WorkApplication {
         this.status = status;
     }
 
-    // toString
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    // toString
     @Override
     public String toString() {
 
@@ -111,6 +120,7 @@ public class WorkApplication {
                 "Email: " + employeeEmail + '\n' +
                 "Experience: " + employeeExperience + '\n' +
                 "Special Demands: " + employeeSpecialDemands + '\n' +
+                "Address: " + address + '\n' +
                 "Status: " + statusOfApp;
     }
 }
