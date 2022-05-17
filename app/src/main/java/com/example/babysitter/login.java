@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class login extends Fragment {
-    public static String url = "http://192.168.200.137/babysitter/dbMain.php";
+    public static String url = "http://192.168.7.137/babysitter/dbMain.php";
     View view;
     Dialog dialog;
     User currentUser = null;

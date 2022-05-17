@@ -47,7 +47,16 @@ public class Date {
 
 
     public String toString() {
-        return this.day + "." + this.month + "." + this.year;
+
+        String day = this.day;
+        String month = this.month;
+        if (Integer.parseInt(this.day) < 10)
+            day = "0" +this.day;
+        if (Integer.parseInt(this.month) < 10)
+            month = "0" + this.month;
+
+
+        return this.year + "_" + month + "_" + day;
     }
 
 
