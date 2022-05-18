@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class login extends Fragment {
-    public static String url = "http://photolike.eb2a.com/babysitter/dbMain.php";
+    public static String url = "https://loaijubran.000webhostapp.com/babysitter/dbMain.php";
     View view;
     Dialog dialog;
     public static User currentUser = null;
@@ -222,12 +221,6 @@ public class login extends Fragment {
                 map.put("pass", pass);
                 return map;
 
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Cookie", "__test=0dd272e9f89872f7888207de6a1058b1; expires=Friday, January 1, 2038 at 5:25:55 AM; path=/");
-                return map;
             }
 
         };
