@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class login extends Fragment {
-    public static String url = "https://loaijubran.000webhostapp.com/babysitter/dbMain.php";
+    public static String url = "http://192.168.7.137//babysitter/dbMain.php";
     View view;
     Dialog dialog;
     public static User currentUser = null;
@@ -184,15 +184,24 @@ public class login extends Fragment {
                     if (success.equals("true")) {
                         JSONObject userDetails = result.getJSONObject("user");
                         buildUser(userDetails);
+                        // admin is tyring to log in - it shows the admin panel
                         if (currentUser.getRole().equals("0"))
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
-                    } else {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle("Login failed..")
-                                .setMessage(result.getString("cause"))
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
+                    } else
+                        // employee is trying to log in - it shows the the employee interface
+                        if (currentUser.getRole().equals("1")) {
+                            Toast.makeText(getContext(), "logging in to employee", Toast.LENGTH_LONG).show();
+                        } else
+                            // employee is trying to log in - it shows the the parents interface
+                            if (currentUser.getRole().equals("2")) {
+                                Toast.makeText(getContext(), "logging in to parents", Toast.LENGTH_LONG).show();
+                            } else {
+                                new AlertDialog.Builder(getContext())
+                                        .setTitle("Login failed..")
+                                        .setMessage(result.getString("cause"))
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
+                            }
 
 
                 } catch (Exception e) {
