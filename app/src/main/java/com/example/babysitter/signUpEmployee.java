@@ -36,8 +36,9 @@ public class signUpEmployee extends Fragment {
     int current_step = 1;
     ProgressDialog progressDialog ;
     public static String[] fields = new String[9];
-    public static Bitmap bitmap;
-    String ImageData = "image_data" ;
+    public static Bitmap bitmapForCV,bitmapForPD;
+    String cvImageData = "cv_image_data" ;
+    String pdImageData = "pd_image_data" ;
     String ServerUploadPath =login.url+"?action=uploadFile" ;
     public static boolean isCVLoaded = false;
     public static boolean isPoliceDocLoaded = false;
@@ -168,24 +169,25 @@ public class signUpEmployee extends Fragment {
 
 
         ByteArrayOutputStream byteArrayOutputStreamObject ;
-
+        ByteArrayOutputStream byteArrayOutputStreamObject1 ;
         byteArrayOutputStreamObject = new ByteArrayOutputStream();
-
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
-
+        byteArrayOutputStreamObject1 = new ByteArrayOutputStream();
+        bitmapForCV.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+        bitmapForPD.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject1);
         byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+        byte[] byteArrayVar1 = byteArrayOutputStreamObject1.toByteArray();
 
 
-        //image to string
+        //image to string (cv)
         final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+        //image to string (pd)
+        final String ConvertImage1 = Base64.encodeToString(byteArrayVar1, Base64.DEFAULT);
 
         class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
 
             @Override
             protected void onPreExecute() {
-
                 super.onPreExecute();
-
                 progressDialog = ProgressDialog.show(getActivity(),"Image is Uploading","Please Wait",false,false);
             }
 
@@ -211,11 +213,23 @@ public class signUpEmployee extends Fragment {
 
                 ImageProcessClass imageProcessClass = new ImageProcessClass();
 
-                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+                HashMap<String,String> map = new HashMap<String,String>();
 
-                HashMapParams.put(ImageData, ConvertImage);
+                map.put(cvImageData, ConvertImage);
+                map.put(pdImageData, ConvertImage1);
+                map.put("uid", fields[0]);
+                map.put("fname", fields[1]);
+                map.put("lname", fields[2]);
+                map.put("birthdate", fields[3]);
+                map.put("email", fields[4]);
+                map.put("phone_number", fields[5]);
+                map.put("city_name", fields[6]);
+                map.put("street_name", fields[6]);
+                map.put("house_number", fields[6]);
+                map.put("worked_as_babysitter", fields[7]);
+                map.put("special_demands", fields[8]);
 
-                String FinalData = imageProcessClass.ImageHttpRequest(ServerUploadPath, HashMapParams);
+                String FinalData = imageProcessClass.ImageHttpRequest(ServerUploadPath, map);
 
                 return FinalData;
             }
