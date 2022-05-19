@@ -115,9 +115,7 @@ public class login extends Fragment {
 
 
                 } catch (Exception e) {
-
                     Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
-
                 }
 
             }

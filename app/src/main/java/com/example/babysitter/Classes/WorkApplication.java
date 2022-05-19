@@ -10,7 +10,7 @@ public class WorkApplication {
     private String employeeEmail; // the email of the applicant.
     private String employeeExperience; // the experience of the applicant.
     private String employeeSpecialDemands; // the special demands of the applicant.
-    private String status; // 0- denied 1- approved 2- hasn't been checked
+    private String status; // 1- denied 2- approved 3- hasn't been checked
     private String address;
 
     public WorkApplication(String employeeId, String employeeFirstName, String employeeLastName, String address ,String employeePhoneNumber, Date employeeBirthDate, String employeeEmail, String employeeExperience, String employeeSpecialDemands, String status) {
