@@ -78,10 +78,10 @@ public class ViewAllReports extends Fragment {
                     for (int i = 0; i < all_reports.length(); i++) {
                         JSONObject report = all_reports.getJSONObject(i);
                         String[] dateOfSubAsString = report.get("date_of_sub").toString().split("-");
-                        Date dateOfSub = new Date(dateOfSubAsString[0], dateOfSubAsString[1], dateOfSubAsString[2]);
+                        Date dateOfSub = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
                         String[] dateOfAccidentAsString = report.get("date_of_sub").toString().split("-");
-                        Date dateOfAccident = new Date(dateOfAccidentAsString[0], dateOfAccidentAsString[1], dateOfAccidentAsString[2]);
+                        Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
 
                         allReports.add(new Report("","","",dateOfSub,dateOfAccident,""));
                     }

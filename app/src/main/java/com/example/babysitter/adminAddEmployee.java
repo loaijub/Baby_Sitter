@@ -102,7 +102,7 @@ public class adminAddEmployee extends Fragment {
 
                         // converting the birthdate from String to date
                         String[] fieldsOfDate = employeeBirthDate.split("-");
-                        Date actualEmployeeBirthdate = new Date(fieldsOfDate[0], fieldsOfDate[1], fieldsOfDate[2]);
+                        Date actualEmployeeBirthdate = new Date(fieldsOfDate[2], fieldsOfDate[1], fieldsOfDate[0]);
 
                         // creating the WorkApplication object
                         WorkApplication tempApplicationObj = new WorkApplication(employeeId, employeeFirstName, employeeLastName, address, employeePhoneNumber, actualEmployeeBirthdate, employeeEmail, employeeExperience, employeeSpecialDemands, status);

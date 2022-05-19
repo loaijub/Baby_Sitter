@@ -50,13 +50,13 @@ public class Date {
 
         String day = this.day;
         String month = this.month;
-        if (Integer.parseInt(this.day) < 10)
+        /*if (Integer.parseInt(this.day) < 10)
             day = "0" +this.day;
         if (Integer.parseInt(this.month) < 10)
-            month = "0" + this.month;
+            month = "0" + this.month;*/
 
 
-        return this.year + "_" + month + "_" + day;
+        return this.year + "-" + month + "-" + day;
     }
 
 

@@ -66,7 +66,7 @@ public class ViewAllUsers extends Fragment {
                     for (int i = 0; i < allusers.length(); i++) {
                         JSONObject user = allusers.getJSONObject(i);
                         String[] dateOfSubAsString = user.get("birthdate").toString().split("-");
-                        Date dateOfbirth = new Date(dateOfSubAsString[0], dateOfSubAsString[1], dateOfSubAsString[2]);
+                        Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
                         users.add(new User(user.getString("id"),user.getString("first_name"),user.getString("last_name"),user.getString("phone_number"),dateOfbirth,"",user.getString("role"),user.getString("email")));
                     }
