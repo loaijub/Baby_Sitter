@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +24,24 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.babysitter.Classes.ImageProcessClass;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 public class signUpEmployee extends Fragment {
-    View view;
+    public static View view;
     int current_step = 1;
+    ProgressDialog progressDialog ;
     public static String[] fields = new String[9];
+    public static Bitmap bitmap;
+    String ImageData = "image_data" ;
+    String ServerUploadPath =login.url+"?action=uploadFile" ;
+    public static boolean isCVLoaded = false;
+    public static boolean isPoliceDocLoaded = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.sign_up_employee,container,false);
@@ -61,13 +73,16 @@ public class signUpEmployee extends Fragment {
 
     public void nextStepEmployeeSignUp(View v) {
         if (v.getTag() != null && v.getTag().equals("Finish")) {
-            saveStep(3);
-            for (int i = 0; i < fields.length; i++)
-                if (fields[i].equals("")) {
-                    Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+            for (int i = 0; i < signUpEmployee.fields.length; i++)
+                if (signUpEmployee.fields[i].equals("")) {
+                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            //createParentUser();
+            if(isCVLoaded)
+                ImageUploadToServerFunction();
+            else
+                Toast.makeText(getActivity(), "please choose files", Toast.LENGTH_SHORT).show();
+
             return;
         }
 
@@ -145,13 +160,70 @@ public class signUpEmployee extends Fragment {
             fields[8] = ((EditText)view.findViewById(R.id.employeeSpecialDemands)).getText().toString();
 
         }
-        if (stepNumberToSave == 3)
-        {
-            fields[9] = "File location";
-        }
+
 
     }
 
+    public void ImageUploadToServerFunction(){
+
+
+        ByteArrayOutputStream byteArrayOutputStreamObject ;
+
+        byteArrayOutputStreamObject = new ByteArrayOutputStream();
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+
+        byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+
+
+        //image to string
+        final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+
+        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+
+                super.onPreExecute();
+
+                progressDialog = ProgressDialog.show(getActivity(),"Image is Uploading","Please Wait",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String string1) {
+
+                super.onPostExecute(string1);
+
+                // Dismiss the progress dialog after done uploading.
+                progressDialog.dismiss();
+
+                // Printing uploading success message coming from server on android app.
+                Toast.makeText(getActivity(),string1,Toast.LENGTH_LONG).show();
+
+                // Setting image as transparent after done uploading.
+                //CVThumb.setImageResource(android.R.color.transparent);
+
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                ImageProcessClass imageProcessClass = new ImageProcessClass();
+
+                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+
+                HashMapParams.put(ImageData, ConvertImage);
+
+                String FinalData = imageProcessClass.ImageHttpRequest(ServerUploadPath, HashMapParams);
+
+                return FinalData;
+            }
+        }
+        AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
+
+        AsyncTaskUploadClassOBJ.execute();
+    }
 
 
 
