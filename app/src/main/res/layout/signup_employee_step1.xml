@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/birth_date_icon"
                 android:background="@android:color/transparent"
-                android:hint="Birth date (DD/MM/YYYY)"
+                android:hint="Birth date (YYYY-MM-DD)"
                 android:inputType="date"
                 android:maxLines="1"
                 android:paddingLeft="17dp"

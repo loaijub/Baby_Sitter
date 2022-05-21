@@ -157,7 +157,7 @@ public class signUpEmployee extends Fragment {
         if (stepNumberToSave == 2)
         {
             fields[6] = ((EditText)view.findViewById(R.id.employeeAddress)).getText().toString();
-            fields[7] = ((Switch)view.findViewById(R.id.employeeExperience)).isChecked()?"checked":"notChecked";
+            fields[7] = ((Switch)view.findViewById(R.id.employeeExperience)).isChecked()?"yes":"no";
             fields[8] = ((EditText)view.findViewById(R.id.employeeSpecialDemands)).getText().toString();
 
         }
