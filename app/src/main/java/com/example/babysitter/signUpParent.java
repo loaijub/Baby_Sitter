@@ -73,7 +73,7 @@ public class signUpParent extends Fragment {
                     Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            createParentUser();
+            login.dbClass.createParentUser();
             return;
         }
 
@@ -93,62 +93,7 @@ public class signUpParent extends Fragment {
 
     ProgressDialog dialogLoading;
 
-    private void createParentUser() {
-        Toast.makeText(getActivity(), "createUser()", Toast.LENGTH_SHORT).show();
 
-
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Signing up. Please wait...", true);
-
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=createParentUser", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
-
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-        }) {
-
-            @Override
-
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("uid", fields[0]);
-                map.put("fname", fields[1]);
-                map.put("lname", fields[2]);
-                map.put("phoneNum", fields[3]);
-                map.put("email", fields[4]);
-                map.put("pass", fields[5]);
-                map.put("city_name", fields[6]);
-                map.put("street_name", fields[7]);
-                map.put("house_number", fields[8]);
-                map.put("number_of_children", fields[9]);
-                map.put("children_birthdate", fields[10]);
-                map.put("demands", fields[11]);
-
-                return map;
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-
-
-    }
 
     public void showStep(View view) {
 

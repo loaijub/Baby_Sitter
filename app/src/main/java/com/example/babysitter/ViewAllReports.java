@@ -34,91 +34,27 @@ import java.util.Map;
 
 public class ViewAllReports extends Fragment {
 
-    ProgressDialog dialogLoading;
+    static ListView listView;
     View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         view = inflater.inflate(R.layout.admin_view_all_reports, container,false);
-
-        getAllReports();
+        listView = view.findViewById(R.id.listview_show_reports);
+        login.dbClass.getAllReports();
 
 
         return view;
     }
 
-    public void showListView(List<Report> allReports){
+    public static void showListViewForReports(List<Report> allReports,Context context){
         //showing the reports in the list
-        ListView listView = view.findViewById(R.id.listview_show_reports);
-        
-
-        ListAdapterForReports myAdapter = new ListAdapterForReports(allReports,getContext());
-        
-        
+        ListAdapterForReports myAdapter = new ListAdapterForReports(allReports,context);
         listView.setAdapter(myAdapter);
 
     }
 
-    private void getAllReports() {
-        List<Report> allReports = new ArrayList<>();
 
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Loading... Please wait", true);
-
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=getAllReports", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                dialogLoading.dismiss();
-                //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
-                try {
-                    JSONArray all_reports = new JSONArray(response);
-
-
-                    for (int i = 0; i < all_reports.length(); i++) {
-                        JSONObject report = all_reports.getJSONObject(i);
-                        String[] dateOfSubAsString = report.get("date_of_sub").toString().split("-");
-                        Date dateOfSub = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
-
-                        String[] dateOfAccidentAsString = report.get("date_of_sub").toString().split("-");
-                        Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
-
-                        allReports.add(new Report("","","",dateOfSub,dateOfAccident,""));
-                    }
-
-                    showListView(allReports);
-
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }) {
-
-            @Override
-
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                return map;
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-    }
 }
 
 class ListAdapterForReports extends BaseAdapter {

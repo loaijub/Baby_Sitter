@@ -29,24 +29,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class login extends Fragment {
-    public static String url = "http://87.69.227.67:131/babysitter/dbMain.php";
     View view;
     Dialog dialog;
-    public static User currentUser = null;
-    ProgressDialog dialogLoading;
-
+    static dbClass dbClass;
     TextView forgetPassword;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.login, container, false);
-
+        dbClass = new dbClass(getContext());
         forgetPassword = view.findViewById(R.id.forgetPassword);
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                forgetPassword();
+                dbClass.forgetPassword(((EditText)view.findViewById(R.id.uid)).getText().toString());
             }
         });
 
@@ -67,7 +64,8 @@ public class login extends Fragment {
                 id = view.findViewById(R.id.uid);
                 password = view.findViewById(R.id.password);
                 // login request
-                login(id.getText().toString(), password.getText().toString());
+
+                dbClass.login(id.getText().toString(), password.getText().toString());
             }
         });
 
@@ -76,76 +74,8 @@ public class login extends Fragment {
 
     }
 
-    private void forgetPassword() {
-        // function send an email for admin that the user has forgot his password and he needs to restore it
-        EditText userId = view.findViewById(R.id.uid);
 
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Checking... Please wait", true);
-
-        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=checkUser", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                dialogLoading.dismiss();
-
-                try {
-                    JSONObject result = new JSONObject(response);
-                    String success = result.getString("exists");
-
-                    // user is found in system
-                    if (success.equals("true")) {
-
-                        // if the user is in the system, it can send the admin a request to restore the password
-                        Intent sendEmail = new Intent(Intent.ACTION_SEND);
-                        sendEmail.setData(Uri.parse("mailto:"));
-                        sendEmail.setType("message/rfc822");
-                        sendEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{
-                                "jow.isaac@gmail.com", "lo2ay.2000@gmail.com"
-                        });
-                        sendEmail.putExtra(Intent.EXTRA_SUBJECT, "Restore password");
-                        sendEmail.putExtra(Intent.EXTRA_TEXT, "User with id number: " + userId.getText().toString() + " forgot the password. Please contact the user to restore!");
-                        startActivity(sendEmail);
-                    }
-
-                    // user is not found in system
-                    else {
-                        Toast.makeText(getContext(), "You are not registered in the system.\nPlease check if you signed up.", Toast.LENGTH_LONG).show();
-                    }
-
-
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }) {
-
-            @Override
-
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("uid", userId.getText().toString());
-                return map;
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-    }
-
+    //showing sign up dialog
     private void showDialog() {
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.custom_dialog);
@@ -168,89 +98,5 @@ public class login extends Fragment {
     }
 
 
-    private void login(String id, String pass) {
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Logging in. Please wait...", true);
 
-        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=login", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                dialogLoading.dismiss();
-                //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
-                try {
-                    JSONObject result = new JSONObject(response);
-                    String success = result.getString("success");
-                    if (success.equals("true")) {
-                        JSONObject userDetails = result.getJSONObject("user");
-                        buildUser(userDetails);
-                        if (currentUser.getRole().equals("0"))
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
-                        else if(currentUser.getRole().equals("2")) // parent ui
-                            getActivity().startActivity(new Intent(getActivity(),MapsActivity.class));
-                    } else {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle("Login failed..")
-                                .setMessage(result.getString("cause"))
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-
-
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-        }) {
-
-            @Override
-
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("uid", id);
-                map.put("pass", pass);
-                return map;
-
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-
-
-    }
-
-    private void buildUser(JSONObject userDetails) {
-        String id, fName, lName, phoneNum, birthDate, pass, role, email;
-        try {
-            id = userDetails.getString("id");
-            fName = userDetails.getString("first_name");
-            lName = userDetails.getString("last_name");
-            phoneNum = userDetails.getString("phone_number");
-            birthDate = userDetails.getString("birthdate");
-            pass = userDetails.getString("password");
-            role = userDetails.getString("role");
-            email = userDetails.getString("email");
-
-            String[] s = birthDate.split("-");
-            currentUser = new User(id, fName, lName, phoneNum, new Date(s[2], s[1], s[0]), pass, role, email);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "error parsing" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
 }

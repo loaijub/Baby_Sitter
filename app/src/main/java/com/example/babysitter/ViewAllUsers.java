@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.User;
+import com.example.babysitter.Classes.dbClass;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,83 +36,23 @@ import java.util.Map;
 public class ViewAllUsers extends Fragment {
 
     View view;
+    static ListView listView;
     ProgressDialog dialogLoading;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
 
         view = inflater.inflate(R.layout.admin_show_all_users, container,false);
-
-        getAllUsers();
+        listView = view.findViewById(R.id.listview_show_users);
+        login.dbClass.getAllUsers();
 
         return view;
     }
 
-    public void getAllUsers(){
-        List<User> users = new ArrayList<>();
 
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Loading... Please wait", true);
-
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=getAllUsers", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                dialogLoading.dismiss();
-                //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
-                try {
-                    JSONArray allusers = new JSONArray(response);
-
-
-                    for (int i = 0; i < allusers.length(); i++) {
-                        JSONObject user = allusers.getJSONObject(i);
-                        String[] dateOfSubAsString = user.get("birthdate").toString().split("-");
-                        Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
-
-                        users.add(new User(user.getString("id"),user.getString("first_name"),user.getString("last_name"),user.getString("phone_number"),dateOfbirth,"",user.getString("role"),user.getString("email")));
-                    }
-
-                    showListView(users);
-
-                } catch (Exception e) {
-                   Toast.makeText(getContext(), "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }) {
-
-            @Override
-
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                return map;
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-
-
-    }
-    public void showListView(List<User> users){
+    public static void showListView(List<User> users, Context context){
         //showing the users in the list
-        ListView listView = view.findViewById(R.id.listview_show_users);
-
-
-        MyAdapter myAdapter = new MyAdapter(users,getContext());
+        MyAdapter myAdapter = new MyAdapter(users,context);
         listView.setAdapter(myAdapter);
     }
 }

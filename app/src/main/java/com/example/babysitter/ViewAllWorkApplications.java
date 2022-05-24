@@ -25,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.WorkApplication;
+import com.example.babysitter.Classes.dbClass;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,7 +36,7 @@ import java.util.Map;
 
 public class ViewAllWorkApplications extends Fragment {
 
-    ListView list;
+    static ListView list;
     View view;
     ProgressDialog dialogLoading;
 
@@ -50,97 +51,14 @@ public class ViewAllWorkApplications extends Fragment {
 
 
         // calling function that gets all the work applications from the data base
-        getAllWorkApplications();
-
-
-
+        login.dbClass.getAllWorkApplications("allWorkApplications");
 
         return view;
     }
-    private void getAllWorkApplications() {
-        // function gets all the work applications from the data base
 
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Loading... Please wait", true);
+    public static void showAllWorkApplicationsInList(WorkApplication[] allWorkApplications, Context context) { // function gets an array of objects of all work applications and organize it in list view
 
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=getAllWorkApplications", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-                dialogLoading.dismiss();
-
-                try {
-                    JSONArray allWorkApplications = new JSONArray(response);
-                    WorkApplication[] workApplicationsAsObjectArr = new WorkApplication[allWorkApplications.length()];
-                    int j = 0; // an index to go over the workApplicationsAsObjectArr array
-
-                    for (int i = 0; i < allWorkApplications.length(); i++) {
-                        JSONObject application = allWorkApplications.getJSONObject(i);
-
-
-                        // first we check the status, only if the status is 3 (admin hasn't checked it yet) it displays it.
-                        String status = application.getString("status");
-
-                        // splitting the fields of the object to variables to create WorkApplication object
-                        String employeeId = application.getString("employee_id");
-                        String employeeFirstName = application.getString("employee_fname");
-                        String employeeLastName = application.getString("employee_lname");
-                        String address = application.getString("address");
-                        String employeePhoneNumber = application.getString("employee_phone_num");
-                        String employeeBirthDate = application.getString("employee_birthdate");
-                        String employeeEmail = application.getString("employee_email");
-                        String employeeExperience = application.getString("employee_experience");
-                        String employeeSpecialDemands = application.getString("employee_special_demands");
-
-
-                        // converting the birthdate from String to date
-                        String[] fieldsOfDate = employeeBirthDate.split("-");
-                        Date actualEmployeeBirthdate = new Date(fieldsOfDate[2], fieldsOfDate[1], fieldsOfDate[0]);
-
-                        // creating the WorkApplication object
-                        WorkApplication tempApplicationObj = new WorkApplication(employeeId, employeeFirstName, employeeLastName, address, employeePhoneNumber, actualEmployeeBirthdate, employeeEmail, employeeExperience, employeeSpecialDemands, status);
-
-                        // adding the object to the array
-                        workApplicationsAsObjectArr[j++] = tempApplicationObj;
-
-                    }
-
-                    // now workApplicationsAsObjectArr array has objects from WorkApplication type, and has all the information from the database.
-                    // we call showListViewItems function and we send the array of objects.
-                    showAllWorkApplicationsInList(workApplicationsAsObjectArr);
-
-
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                return map;
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-    }
-
-    private void showAllWorkApplicationsInList(WorkApplication[] allWorkappications) { // function gets an array of objects of all work applications and organize it in list view
-
-        ListAdapterForAllWorkApplications allWorkAppAdapter = new ListAdapterForAllWorkApplications(allWorkappications, getContext(), getActivity());
+        ListAdapterForAllWorkApplications allWorkAppAdapter = new ListAdapterForAllWorkApplications(allWorkApplications, context);
         list.setAdapter(allWorkAppAdapter);
 
     }
@@ -151,9 +69,9 @@ class ListAdapterForAllWorkApplications extends BaseAdapter {
     Context context;
     FragmentActivity activity;
 
-    public ListAdapterForAllWorkApplications(WorkApplication[] applicationsArr, Context context, FragmentActivity f) {
+    public ListAdapterForAllWorkApplications(WorkApplication[] applicationsArr, Context context ) {
         this.applicationsArr = applicationsArr;
-        this.activity = f;
+        this.activity = (FragmentActivity)context;
         this.context = context;
     }
 

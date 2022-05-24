@@ -23,6 +23,16 @@ public class User {
         this.role = role;
         this.email = email;
     }
+    public User(User other) {
+        this.id = other.id;
+        this.firstName = other.firstName;
+        this.lastName = other.lastName;
+        this.phoneNumber = other.phoneNumber;
+        this.birthDate = other.birthDate;
+        this.password = other.password;
+        this.role = other.role;
+        this.email = other.email;
+    }
 
     // getters and setters
     public String getId() {

@@ -43,7 +43,7 @@ import java.util.Map;
 public class adminAddEmployee extends Fragment {
 
 
-    ListView list;
+    static ListView list;
     View view;
     ProgressDialog dialogLoading;
 
@@ -55,98 +55,18 @@ public class adminAddEmployee extends Fragment {
 
         list = view.findViewById(R.id.listOfWorkApplications);
 
-
         // calling function that gets all the work applications from the data base
-        getAllWorkApplications();
 
+        login.dbClass.getAllWorkApplications("addEmployee");
 
         return view;
     }
 
 
-    private void getAllWorkApplications() {
-        // function gets all the work applications from the data base
-
-        dialogLoading = ProgressDialog.show(getContext(), "",
-                "Loading... Please wait", true);
-
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=getAllWorkApplications", new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                //Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
-                dialogLoading.dismiss();
-
-                try {
-                    JSONArray allWorkApplications = new JSONArray(response);
-                    WorkApplication[] workApplicationsAsObjectArr = new WorkApplication[allWorkApplications.length()];
-                    int j = 0; // an index to go over the workApplicationsAsObjectArr array
-
-                    for (int i = 0; i < allWorkApplications.length(); i++) {
-                        JSONObject application = allWorkApplications.getJSONObject(i);
 
 
-                        // first we check the status, only if the status is 3 (admin hasn't checked it yet) it displays it.
-                        String status = application.getString("status");
 
-                        // splitting the fields of the object to variables to create WorkApplication object
-                        String employeeId = application.getString("employee_id");
-                        String employeeFirstName = application.getString("employee_fname");
-                        String employeeLastName = application.getString("employee_lname");
-                        String address = application.getString("address");
-                        String employeePhoneNumber = application.getString("employee_phone_num");
-                        String employeeBirthDate = application.getString("employee_birthdate");
-                        String employeeEmail = application.getString("employee_email");
-                        String employeeExperience = application.getString("employee_experience");
-                        String employeeSpecialDemands = application.getString("employee_special_demands");
-
-
-                        // converting the birthdate from String to date
-                        String[] fieldsOfDate = employeeBirthDate.split("-");
-                        Date actualEmployeeBirthdate = new Date(fieldsOfDate[2], fieldsOfDate[1], fieldsOfDate[0]);
-
-                        // creating the WorkApplication object
-                        WorkApplication tempApplicationObj = new WorkApplication(employeeId, employeeFirstName, employeeLastName, address, employeePhoneNumber, actualEmployeeBirthdate, employeeEmail, employeeExperience, employeeSpecialDemands, status);
-
-                        // adding the object to the array
-                        workApplicationsAsObjectArr[j++] = tempApplicationObj;
-
-                    }
-
-                    // now workApplicationsAsObjectArr array has objects from WorkApplication type, and has all the information from the database.
-                    // we call showListViewItems function and we send the array of objects.
-                    showListViewItems(workApplicationsAsObjectArr);
-
-
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
-                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
-            }
-
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-
-                Map<String, String> map = new HashMap<String, String>();
-                return map;
-            }
-
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(request);
-    }
-
-
-    private void showListViewItems(WorkApplication[] allApplicationArr) { // function gets an array of WorkApplication objects and shows the information in it in ListView
+    public static void showListViewItems(WorkApplication[] allApplicationArr, Context context) { // function gets an array of WorkApplication objects and shows the information in it in ListView
 
         List<WorkApplication> onlyUncheckedApps = new ArrayList<>();
         for (int i = 0; i < allApplicationArr.length; i++) {
@@ -161,7 +81,7 @@ public class adminAddEmployee extends Fragment {
             applicationsArr[i] = onlyUncheckedApps.get(i);
 
 
-        ListAdapterForAddEmployee myAdapter = new ListAdapterForAddEmployee(applicationsArr, getContext(), getActivity());
+        ListAdapterForAddEmployee myAdapter = new ListAdapterForAddEmployee(applicationsArr, context);
         list.setAdapter(myAdapter);
 
     }
@@ -175,9 +95,9 @@ class ListAdapterForAddEmployee extends BaseAdapter {
     Context context;
     FragmentActivity activity;
 
-    public ListAdapterForAddEmployee(WorkApplication[] applicationsArr, Context context, FragmentActivity f) {
+    public ListAdapterForAddEmployee(WorkApplication[] applicationsArr, Context context) {
         this.applicationsArr = applicationsArr;
-        this.activity = f;
+        this.activity = (FragmentActivity) context;
         this.context = context;
     }
 
@@ -254,7 +174,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
         dialogLoading = ProgressDialog.show(context, "",
                 "Creating an Employee account... Please wait...", true);
 
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=createEmployeeUser", new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, login.dbClass.getUrl() + "?action=createEmployeeUser", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -361,7 +281,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
         dialogLoading = ProgressDialog.show(context, "",
                 "Deleting work application... Please wait...", true);
 
-        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=denyWorkapplication", new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, login.dbClass.getUrl() + "?action=denyWorkapplication", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

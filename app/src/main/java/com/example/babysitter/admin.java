@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.Employee;
+import com.example.babysitter.Classes.dbClass;
 
 
 public class admin extends Fragment {
@@ -65,7 +66,7 @@ public class admin extends Fragment {
         view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login.currentUser = null;
+                login.dbClass.setCurrentUser(null);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new login()).commit();
             }
         });
