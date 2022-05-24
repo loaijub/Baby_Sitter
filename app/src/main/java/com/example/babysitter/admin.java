@@ -86,7 +86,7 @@ public class admin extends Fragment {
 
     private void viewAllWorkApplications() {
 
-        Toast.makeText(getContext(), "viewAllWorkApplications function will work", Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllWorkApplications()).addToBackStack(null).commit();
     }
 
 

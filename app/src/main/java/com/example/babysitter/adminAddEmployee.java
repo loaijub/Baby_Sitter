@@ -47,7 +47,6 @@ public class adminAddEmployee extends Fragment {
     View view;
     ProgressDialog dialogLoading;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -168,6 +167,7 @@ public class adminAddEmployee extends Fragment {
     }
 
 
+
 }
 
 class ListAdapterForAddEmployee extends BaseAdapter {
@@ -217,7 +217,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
         deleteApplicationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                denyWorkApplication(applicationsArr[position].getEmployeeId());
+                denyWorkApplication(applicationsArr[position].getEmployeeId(), applicationsArr[position].getEmployeeEmail());
             }
         });
 
@@ -227,12 +227,6 @@ class ListAdapterForAddEmployee extends BaseAdapter {
         return v;
     }
 
-
-    ///////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    /////////////////////also fix the database and connect the tables/////////////
-    ////////////////// continue from here ///////////////
-    ///////////////////////////////////////////////////
 
     private void addEmployeeFromWorkApplication(String idOfEmployeeToAdd) {
         // function adds the employee from the current work application to the system.
@@ -275,21 +269,6 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                         String bodyOfText = "Dear babysitter, we are glad to inform you that your work application has been approved! \nYour temporary password is: " + password + "\nPlease make sure to change it the moment you log in.\nWelcome to our community! \n\n\nBabysitterFinder team";
 
                         // we send the user his temporary password
-
-                        // via sms
-                        /*
-                        final int SEND_SMS_PERMISSION_REQUEST_CODE = 1;
-                        if (checkPermission(Manifest.permission.SEND_SMS)) {
-                            SmsManager smgr = SmsManager.getDefault();
-                            //String phoneNumberToSend = "+972" + phoneNumber.substring(1);
-                            Toast.makeText(context, phoneNumber, Toast.LENGTH_LONG).show();
-                            smgr.sendTextMessage(phoneNumber, null, bodyOfText, null, null);
-
-                            Toast.makeText(context, "User was added successfully!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
-                        }*/
-
                         // via email
                         Intent sendEmail = new Intent(Intent.ACTION_SEND);
                         sendEmail.setData(Uri.parse("mailto:"));
@@ -303,13 +282,12 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                         Toast.makeText(context, "User was added successfully!", Toast.LENGTH_SHORT).show();
 
                         // now we delete the work application from the array, so it only shows the unchecked applications only
-                        deleteApprovedWorkApplication(applicationsArr , idOfEmployeeToAdd);
+                        deleteApprovedWorkApplication(applicationsArr, idOfEmployeeToAdd);
 
                         // now we refresh the page so the admin wouldn't see the employee he added
                         // Reload current fragment
                         activity.getSupportFragmentManager().popBackStack();
                         activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new adminAddEmployee()).addToBackStack(null).commit();
-
 
 
                     } else {
@@ -360,34 +338,99 @@ class ListAdapterForAddEmployee extends BaseAdapter {
 
     }
 
-    private void deleteApprovedWorkApplication(WorkApplication[] applicationsArr, String idOfEmployeeToDeleteWorkApp)
-    { // function gets an array of work applications and the id of the employee we want to delete his work application
+    // this function works when an admin approved a work application and we want to delete it from the list view
+    private void deleteApprovedWorkApplication(WorkApplication[] applicationsArr, String idOfEmployeeToDeleteWorkApp) { // function gets an array of work applications and the id of the employee we want to delete his work application
 
         int index = -1;
-        for (int i=0; i<applicationsArr.length; i++)
+        for (int i = 0; i < applicationsArr.length; i++)
             if (applicationsArr[i].getEmployeeId().equals(idOfEmployeeToDeleteWorkApp))
                 index = i;
 
         if (index != -1) // the application was found
         {
-            for (int i=index; i<applicationsArr.length-1; i++)
-                applicationsArr[i] = applicationsArr[i+1];
+            for (int i = index; i < applicationsArr.length - 1; i++)
+                applicationsArr[i] = applicationsArr[i + 1];
         }
-        applicationsArr[applicationsArr.length-1] = null;
+        applicationsArr[applicationsArr.length - 1] = null;
 
     }
 
-    private void denyWorkApplication(String idOfEmployeeToDeny) { // function deletes the work application from the list view and updates the data base status.
+    private void denyWorkApplication(String idOfEmployeeToDeny, String emailOfEmployeeToDeny) { // function deletes the work application from the list view and updates the data base status.
 
+        ProgressDialog dialogLoading;
+        dialogLoading = ProgressDialog.show(context, "",
+                "Deleting work application... Please wait...", true);
+
+        StringRequest request = new StringRequest(Request.Method.POST, login.url + "?action=denyWorkapplication", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        String bodyOfText = "Thank you for applying for our application.\n Sadly your work application was denied. \n \n \n Wishing you all the best, \n BabysitterFinder team";
+
+                        // we send the applicant that his work application was denied
+                        Intent sendEmail = new Intent(Intent.ACTION_SEND);
+                        sendEmail.setData(Uri.parse("mailto:"));
+                        sendEmail.setType("message/rfc822");
+                        sendEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{
+                                emailOfEmployeeToDeny
+                        });
+                        sendEmail.putExtra(Intent.EXTRA_SUBJECT, "Sorry, your work application was denied");
+                        sendEmail.putExtra(Intent.EXTRA_TEXT, bodyOfText);
+                        context.startActivity(sendEmail);
+                        Toast.makeText(context, "Work application was denied successfully", Toast.LENGTH_SHORT).show();
+
+                        // now we delete the work application from the array, so it only shows the unchecked applications only
+                        deleteApprovedWorkApplication(applicationsArr, idOfEmployeeToDeny);
+
+                        // now we refresh the page so the admin wouldn't see the employee he denied
+                        // Reload current fragment
+                        activity.getSupportFragmentManager().popBackStack();
+                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new adminAddEmployee()).addToBackStack(null).commit();
+
+
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Denying the work application failed..")
+                                .setMessage(result.getString("cause"))
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                   // Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", idOfEmployeeToDeny);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
 
     }
 
-    private boolean checkPermission(String permission) { // gets a string of permission and checks if there is a permission to send a sms
-
-        int check = ContextCompat.checkSelfPermission(context, permission);
-        return (check == PackageManager.PERMISSION_GRANTED);
-
-    }
 
     private String generateDefaultPassword() { // function generates a default password and returns it
 

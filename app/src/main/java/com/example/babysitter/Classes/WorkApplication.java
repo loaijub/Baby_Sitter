@@ -105,11 +105,12 @@ public class WorkApplication {
 
         String statusOfApp = "Hasn't been checked yet!";
         // checking the status of the work application
-        if (this.status.equals("0"))
+        if (this.status.equals("1"))
             statusOfApp = "DENIED";
         else
-            if (this.status.equals("1"))
+            if (this.status.equals("2"))
                 statusOfApp = "APPROVED";
+
 
 
         return "Id: " + employeeId + '\n' +

@@ -7,21 +7,20 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:text="All unchecked work applications"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:layout_height="55dp"
+        android:layout_marginBottom="20dp"
         android:background="#0A5DDF"
+        android:gravity="center"
+        android:text="All work applications"
+        android:textColor="@color/white"
         android:textSize="25dp"
-        android:layout_marginBottom="20dp"/>
+        android:textStyle="bold" />
 
     <ListView
-        android:id="@+id/listOfWorkApplications"
+        android:id="@+id/listOfAllWorkApplications"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@color/white"
-        android:dividerHeight="5sp"/>
-
+        android:dividerHeight="5sp" />
 
 </LinearLayout>
