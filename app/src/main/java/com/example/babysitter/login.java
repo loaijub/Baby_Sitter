@@ -186,6 +186,8 @@ public class login extends Fragment {
                         buildUser(userDetails);
                         if (currentUser.getRole().equals("0"))
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
+                        else if(currentUser.getRole().equals("2")) // parent ui
+                            getActivity().startActivity(new Intent(getActivity(),MapsActivity.class));
                     } else {
                         new AlertDialog.Builder(getContext())
                                 .setTitle("Login failed..")
