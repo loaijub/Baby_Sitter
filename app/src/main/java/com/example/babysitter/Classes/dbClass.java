@@ -84,8 +84,10 @@ public class dbClass {
                         buildUser(userDetails);
                         if (currentUser.getRole().equals("0"))
                             ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
-                        else if(currentUser.getRole().equals("2")) // parent ui
-                            ((FragmentActivity)context).startActivity(new Intent(((FragmentActivity)context), MapsActivity.class));
+                        else if(currentUser.getRole().equals("2")) { // parent ui
+                            ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
+                            ((Activity)context).finish();
+                        }
                     } else {
                         new AlertDialog.Builder(((FragmentActivity)context))
                                 .setTitle("Login failed..")

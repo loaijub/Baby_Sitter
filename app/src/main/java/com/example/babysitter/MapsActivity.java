@@ -1,8 +1,13 @@
 package com.example.babysitter;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,11 +17,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.babysitter.databinding.ActivityMapsBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    // for menu
+    BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // menu code
+        navigationView = findViewById(R.id.nav);
+        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()){
+                    case R.id.homeIcon:
+                            for(int i=0; i<getSupportFragmentManager().getBackStackEntryCount();i++)
+                                getSupportFragmentManager().popBackStack();
+                        break;
+
+                    case R.id.profileIcon:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, new Profile()).addToBackStack(null).commit();
+                        break;
+
+                    case R.id.infoIcon:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, new AboutUs()).addToBackStack(null).commit();
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+
+
+    }
+    @Override
+    public void onBackPressed() {
+        getSupportFragmentManager().popBackStack();
+
     }
 
     /**
