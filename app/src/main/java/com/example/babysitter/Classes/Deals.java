@@ -2,32 +2,32 @@ package com.example.babysitter.Classes;
 
 public class Deals {
 
-    private final int dealId;
+    private final String dealId;
     private final String employeeId;
     private final String parentId;
-    private boolean employeeAccepted;
-    private boolean hasDone;
-    private int parentRate;
+    private String employeeAccepted;
+    private String hasDone;
+    private double parentRate;
     private String feedbackAboutParent;
-    private int employeeRate;
+    private double employeeRate;
     private String feedbackAboutEmployee;
     private Date completedDealDate;
 
-    public Deals(int dealId, String employeeId, String parentId) {
+    public Deals(String dealId, String employeeId, String parentId, String employeeAccepted, String hasDone, Date completedDealDate) {
         this.dealId = dealId;
         this.employeeId = employeeId;
         this.parentId = parentId;
-        this.employeeAccepted = true; // we assume that the employee will accept.
-        this.hasDone = false; // we assume that the work wasn't done yet.
+        this.employeeAccepted = employeeAccepted;
+        this.hasDone = hasDone;
         this.parentRate = 0; // we assume that the rate is 0.
         this.feedbackAboutEmployee = ""; // we give it a default value that is an empty string.
         this.feedbackAboutParent = ""; // we give it a default value that is an empty string.
         this.employeeRate = 0; // we assume that the rate is 0.
-        this.completedDealDate = null; // the work is not done yet.
+        this.completedDealDate = completedDealDate;
     }
 
     // getters and setters
-    public int getDealId() {
+    public String getDealId() {
         return dealId;
     }
 
@@ -39,27 +39,27 @@ public class Deals {
         return parentId;
     }
 
-    public boolean isEmployeeAccepted() {
+    public String isEmployeeAccepted() {
         return employeeAccepted;
     }
 
-    public void setEmployeeAccepted(boolean employeeAccepted) {
+    public void setEmployeeAccepted(String employeeAccepted) {
         this.employeeAccepted = employeeAccepted;
     }
 
-    public boolean isHasDone() {
+    public String isHasDone() {
         return hasDone;
     }
 
-    public void setHasDone(boolean hasDone) {
+    public void setHasDone(String hasDone) {
         this.hasDone = hasDone;
     }
 
-    public int getParentRate() {
+    public double getParentRate() {
         return parentRate;
     }
 
-    public void setParentRate(int parentRate) {
+    public void setParentRate(double parentRate) {
         this.parentRate = parentRate;
     }
 
@@ -71,11 +71,11 @@ public class Deals {
         this.feedbackAboutParent = feedbackAboutParent;
     }
 
-    public int getEmployeeRate() {
+    public double getEmployeeRate() {
         return employeeRate;
     }
 
-    public void setEmployeeRate(int employeeRate) {
+    public void setEmployeeRate(double employeeRate) {
         this.employeeRate = employeeRate;
     }
 

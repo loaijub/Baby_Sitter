@@ -38,7 +38,6 @@ public class ViewAllWorkApplications extends Fragment {
 
     static ListView list;
     View view;
-    ProgressDialog dialogLoading;
 
 
     @Nullable

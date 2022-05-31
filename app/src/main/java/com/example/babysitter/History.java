@@ -1,17 +1,21 @@
 package com.example.babysitter;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,35 +23,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.babysitter.Classes.Deals;
+import com.example.babysitter.Classes.Report;
+import com.example.babysitter.Classes.WorkApplication;
+import com.example.babysitter.Classes.dbClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class History extends Fragment {
     View view;
     ListView list;
 
-
-    String tutorials[]
-            = {"Algorithms",
-            "Data Structures",
-            "Languages",
-            "Languages",
-            "Languages",
-            "Interview Corner",
-            "GATE",
-            "ISRO CS",
-            "ISRO CS",
-            "ISRO CS",
-            "UGC NET CS", "CS Subjects",
-            "UGC NET CS", "CS Subjects",
-            "UGC NET CS", "CS Subjects",
-            "UGC NET CS", "CS Subjects",
-            "UGC NET CS", "CS Subjects",
-            "UGC NET CS", "CS Subjects",
-            "UGC NET CS", "CS Subjects",
-            "Web Technologies"};
+    // array of all deals in database
+    public static List<Deals> allDeals;
 
 
     @Nullable
@@ -56,67 +49,53 @@ public class History extends Fragment {
         view = inflater.inflate(R.layout.history, container, false);
 
         list = view.findViewById(R.id.listOfHistory);
+        allDeals = new ArrayList<>();
+
+        login.dbClass.getAllDeals();
+
+        ListAdapterForDeals myAdapter = new ListAdapterForDeals(allDeals, getContext());
+        list.setAdapter(myAdapter);
 
 
 
-
-
-
-
-
-
-        // code for getting data from database
-
-        //cmd- > ipconfig -> Wireless LAN adapter -> copy IPv4 Address
-        String url = "http://172.16.0.67/?????????????????";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonResponse = jsonArray.getJSONObject(0);
-                            JSONArray jsonArray_users = jsonResponse.getJSONArray("main_course");
-
-
-                            int k = 0; // to run over all the arrays to get the info from the json array
-                            for (int i = 0; i < jsonArray_users.length(); i++) {
-
-                                JSONObject jsonObject = jsonArray_users.getJSONObject(i);
-
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-
-
-
-
-
-        ArrayAdapter<String> arr;
-        arr = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, tutorials);
-        list.setAdapter(arr);
 
         return view;
     }
 
-
 }
+
+class ListAdapterForDeals extends BaseAdapter {
+    List<Deals> dealsArr;
+    Context context;
+
+    public ListAdapterForDeals(List<Deals> dealsArr, Context context ) {
+        this.dealsArr = dealsArr;
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return dealsArr.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return dealsArr.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater ly = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = ly.inflate(R.layout.view_single_deal, null);
+
+        TextView applicationInfo = v.findViewById(R.id.singleDeal);
+        applicationInfo.setText(dealsArr.get(position).toString());
+        return v;
+    }
+}
+
