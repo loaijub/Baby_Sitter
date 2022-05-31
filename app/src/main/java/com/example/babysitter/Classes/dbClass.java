@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.babysitter.History;
 import com.example.babysitter.MapsActivity;
 import com.example.babysitter.R;
 import com.example.babysitter.admin;
@@ -46,25 +47,29 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://87.69.227.67:131/babysitter/dbMain.php" ;
+    private String url = "http://87.69.227.67:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser;
 
-    public String getUrl(){
+    public String getUrl() {
         return url;
     }
-    public User getCurrentUser(){
+
+    public User getCurrentUser() {
         return this.currentUser;
     }
-    public void setCurrentUser(User newUser){
-        if(newUser != null)
+
+    public void setCurrentUser(User newUser) {
+        if (newUser != null)
             this.currentUser = new User(newUser);
         else
             this.currentUser = null;
     }
-    public dbClass(Context context){
+
+    public dbClass(Context context) {
         this.context = context;
     }
+
     public void login(String id, String pass) {
 
         dialogLoading = ProgressDialog.show(context, "",
@@ -83,13 +88,13 @@ public class dbClass {
                         JSONObject userDetails = result.getJSONObject("user");
                         buildUser(userDetails);
                         if (currentUser.getRole().equals("0"))
-                            ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
-                        else if(currentUser.getRole().equals("2")) { // parent ui
+                            ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
+                        else if (currentUser.getRole().equals("2")) { // parent ui
                             ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
-                            ((Activity)context).finish();
+                            ((Activity) context).finish();
                         }
                     } else {
-                        new AlertDialog.Builder(((FragmentActivity)context))
+                        new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Login failed..")
                                 .setMessage(result.getString("cause"))
                                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -132,6 +137,7 @@ public class dbClass {
 
 
     }
+
     private void buildUser(JSONObject userDetails) {
         String id, fName, lName, phoneNum, birthDate, pass, role, email;
         try {
@@ -273,10 +279,10 @@ public class dbClass {
                     // now workApplicationsAsObjectArr array has objects from WorkApplication type, and has all the information from the database.
                     // we call showListViewItems function and we send the array of objects.
 
-                    if(clickedCategory.equals("allWorkApplications"))
-                        showAllWorkApplicationsInList(workApplicationsAsObjectArr,context);
+                    if (clickedCategory.equals("allWorkApplications"))
+                        showAllWorkApplicationsInList(workApplicationsAsObjectArr, context);
                     else
-                        showListViewItems(workApplicationsAsObjectArr,context);
+                        showListViewItems(workApplicationsAsObjectArr, context);
 
 
                 } catch (Exception e) {
@@ -306,7 +312,7 @@ public class dbClass {
         queue.add(request);
     }
 
-    public void getAllUsers(){
+    public void getAllUsers() {
         List<User> users = new ArrayList<>();
 
         dialogLoading = ProgressDialog.show(context, "",
@@ -327,10 +333,10 @@ public class dbClass {
                         String[] dateOfSubAsString = user.get("birthdate").toString().split("-");
                         Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
-                        users.add(new User(user.getString("id"),user.getString("first_name"),user.getString("last_name"),user.getString("phone_number"),dateOfbirth,"",user.getString("role"),user.getString("email")));
+                        users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, "", user.getString("role"), user.getString("email")));
                     }
 
-                    showListView(users,context);
+                    showListView(users, context);
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -390,10 +396,10 @@ public class dbClass {
                         String[] dateOfAccidentAsString = report.get("date_of_sub").toString().split("-");
                         Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
 
-                        allReports.add(new Report("","","",dateOfSub,dateOfAccident,""));
+                        allReports.add(new Report("", "", "", dateOfSub, dateOfAccident, ""));
                     }
 
-                    showListViewForReports(allReports,context);
+                    showListViewForReports(allReports, context);
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -484,11 +490,11 @@ public class dbClass {
 
     }
 
-    public void ImageUploadToServerFunction(String cvImageData, String pdImageData){
+    public void ImageUploadToServerFunction(String cvImageData, String pdImageData) {
 
 
-        ByteArrayOutputStream byteArrayOutputStreamObject ;
-        ByteArrayOutputStream byteArrayOutputStreamObject1 ;
+        ByteArrayOutputStream byteArrayOutputStreamObject;
+        ByteArrayOutputStream byteArrayOutputStreamObject1;
         byteArrayOutputStreamObject = new ByteArrayOutputStream();
         byteArrayOutputStreamObject1 = new ByteArrayOutputStream();
         bitmapForCV.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
@@ -502,12 +508,12 @@ public class dbClass {
         //image to string (pd)
         final String ConvertImage1 = Base64.encodeToString(byteArrayVar1, Base64.DEFAULT);
 
-        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+        class AsyncTaskUploadClass extends AsyncTask<Void, Void, String> {
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                dialogLoading = ProgressDialog.show(context,"Sending...","Please Wait",false,false);
+                dialogLoading = ProgressDialog.show(context, "Sending...", "Please Wait", false, false);
             }
 
             @Override
@@ -519,7 +525,7 @@ public class dbClass {
                 dialogLoading.dismiss();
 
                 // Printing uploading success message coming from server on android app.
-                Toast.makeText(context,"dsss" + string1,Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "dsss" + string1, Toast.LENGTH_LONG).show();
 
                 // Setting image as transparent after done uploading.
                 //CVThumb.setImageResource(android.R.color.transparent);
@@ -532,7 +538,7 @@ public class dbClass {
 
                 ImageProcessClass imageProcessClass = new ImageProcessClass();
 
-                HashMap<String,String> map = new HashMap<String,String>();
+                HashMap<String, String> map = new HashMap<String, String>();
 
                 map.put(cvImageData, ConvertImage);
                 map.put(pdImageData, ConvertImage1);
@@ -548,7 +554,7 @@ public class dbClass {
                 map.put("worked_as_babysitter", signUpEmployee.fields[7]);
                 map.put("special_demands", signUpEmployee.fields[8]);
 
-                String FinalData = imageProcessClass.ImageHttpRequest(url+"?action=uploadFile", map);
+                String FinalData = imageProcessClass.ImageHttpRequest(url + "?action=uploadFile", map);
 
                 return FinalData;
             }
@@ -556,6 +562,71 @@ public class dbClass {
         AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
 
         AsyncTaskUploadClassOBJ.execute();
+    }
+
+    public void getAllDeals() {
+
+        ////////////////////////////////////
+        ////////////////////////
+        ////// FIX THE PHP TO GET ONLY BY ID /////////////
+        ////////////////////////////////////////////////////
+        /////////////////////////////////////////////////
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDeals", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                try {
+                    JSONArray allDealsArr = new JSONArray(response);
+
+
+                    for (int i = 0; i < allDealsArr.length(); i++) {
+                        JSONObject deal = allDealsArr.getJSONObject(i);
+                        String dealId = deal.getString("deal_id");
+                        String dealEmployeeId = deal.getString("employee_id");
+                        String dealParentId = deal.getString("parent_id");
+                        String dealEmployeeAccepted = deal.getString("employee_accepted");
+                        String dealHasDone = deal.getString("has_done");
+                        String completedDealDate = deal.getString("completed_deal_date");
+
+                        String[] fieldsOfDate = completedDealDate.split("-");
+                        Date actualCompletedDealDate = new Date(fieldsOfDate[2], fieldsOfDate[1], fieldsOfDate[0]);
+
+                        Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
+                        History.allDeals.add(tempDeal);
+
+                    }
+
+
+                } catch (Exception e) {
+                   //Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
     }
 
 }
