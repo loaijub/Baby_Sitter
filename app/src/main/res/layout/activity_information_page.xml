@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".informationPage">
@@ -72,7 +73,6 @@
         android:textSize="20sp"
         android:background="#344DE4"
         android:textColor="@color/white"
-        android:onClick="sendFeedbackViaEmail"
         android:text="Send Feedback" />
 
     <Button
@@ -85,6 +85,5 @@
         android:textSize="20sp"
         android:background="#344DE4"
         android:textColor="@color/white"
-        android:onClick="shareApp"
         android:text="Share" />
 </LinearLayout>

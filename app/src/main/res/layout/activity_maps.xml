@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
+        android:id="@+id/title"
         android:text="Employees around you"
         android:textColor="@color/white"
         android:textSize="20sp" />

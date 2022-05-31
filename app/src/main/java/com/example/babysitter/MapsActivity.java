@@ -8,6 +8,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
     // for menu
     BottomNavigationView navigationView;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        title = findViewById(R.id.title);
+
         // menu code
         navigationView = findViewById(R.id.nav);
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -46,17 +51,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 switch (menuItem.getItemId()){
                     case R.id.homeIcon:
+                        title.setText("Employees around you");
                             for(int i=0; i<getSupportFragmentManager().getBackStackEntryCount();i++)
                                 getSupportFragmentManager().popBackStack();
                         break;
 
                     case R.id.profileIcon:
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new Profile()).addToBackStack(null).commit();
+                        title.setText("Profile");
                         break;
 
                     case R.id.infoIcon:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.map, new AboutUs()).addToBackStack(null).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, new informationPage()).addToBackStack(null).commit();
+                        title.setText("Info");
                         break;
+                    case R.id.historyIcon:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, new History()).addToBackStack(null).commit();
+                        title.setText("History");
                 }
 
                 return true;
