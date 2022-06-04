@@ -19,6 +19,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.babysitter.Classes.Date;
+import com.example.babysitter.Classes.Employee;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,8 +38,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.babysitter.databinding.ActivityMapsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,6 +53,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // for menu
     BottomNavigationView navigationView;
     TextView title;
+    static String[] cities;
+    Employee[] allLocationsForEmp;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +79,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 switch (menuItem.getItemId()) {
                     case R.id.homeIcon:
-                        title.setText("Employees around you");
+                        if (login.dbClass.getCurrentUser().getRole().equals("2"))
+                            title.setText("Employees around you");
+                        else if (login.dbClass.getCurrentUser().getRole().equals("1"))
+                            title.setText("Parents around you");
                         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++)
                             getSupportFragmentManager().popBackStack();
                         break;
@@ -107,21 +126,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        String location = "shefaram";
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        double[] cordinates = new double[2];
-        try {
-            cordinates = getLocationFromAddress(location);
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        LatLng haifa = new LatLng(cordinates[0], cordinates[1]);
+        getAllLocationsForEmp();
 
-        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.profile_icon);
-        Bitmap smallMarker = Bitmap.createScaledBitmap(bitmapdraw.getBitmap(), 170, 120, false);
 
-        mMap.addMarker(new MarkerOptions().position(haifa).title("David").icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(haifa, 16));
+
         mMap.getUiSettings().setAllGesturesEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -139,9 +148,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         // Add a marker in Sydney and move the camera
+        //getting all locations for the employees and show it on the map
+
 
     }
 
+    public void showAllEmployeesOnMap() {
+        cities = new String[allLocationsForEmp.length];
+        for (int i = 0; i < allLocationsForEmp.length; i++)
+            cities[i] = allLocationsForEmp[i].getAddress().getCity();
+        for(int i=0; i<cities.length;i++) {
+            double[] cordinates = new double[2];
+            try {
+                cordinates = getLocationFromAddress(cities[i]);
+            } catch (IOException e) {
+            }
+            LatLng location = new LatLng(cordinates[0], cordinates[1]);
+
+            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.profile_icon);
+            Bitmap smallMarker = Bitmap.createScaledBitmap(bitmapdraw.getBitmap(), 170, 120, false);
+
+            mMap.addMarker(new MarkerOptions().position(location).title(allLocationsForEmp[i].getFirstName()+allLocationsForEmp[i].getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+
+        }
+
+
+
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -153,24 +187,74 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public double[] getLocationFromAddress(String strAddress) throws IOException {
-        double[] point = new double[2];
+        double[] point = new double[2]; //index 0 is latitude, 1 is longitude
         Geocoder coder = new Geocoder(this);
         List<Address> address;
 
         try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
                 return null;
             }
-            Address location=address.get(0);
+            Address location = address.get(0);
             point[0] = location.getLatitude();
             point[1] = location.getLongitude();
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Toast.makeText(this, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         return point;
     }
+
+    public void getAllLocationsForEmp(){
+        StringRequest request = new StringRequest(Request.Method.POST, login.dbClass.getUrl() + "?action=getAllLocationsForEmp", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray allEmployees = new JSONArray(response);
+                    allLocationsForEmp = new Employee[allEmployees.length()];
+                    for (int i=0; i<allEmployees.length();i++){
+                        JSONObject emp = allEmployees.getJSONObject(i);
+
+                        String[] dateOfSubAsString = emp.getString("birthdate").split("-");
+                        Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
+                        com.example.babysitter.Classes.Address address = new com.example.babysitter.Classes.Address(emp.getString("city"),emp.getString("street"),emp.getString("house_number"));
+
+                        allLocationsForEmp[i] = new Employee(emp.getString("id"),emp.getString("first_name"), emp.getString("last_name"), emp.getString("phone_number"), dateOfbirth, emp.getString("password"), emp.getString("email"), emp.getString("role"), emp.getString("status"), emp.getString("rate"), emp.getString("special_demands"), emp.getString("working_hours_in_month"), emp.getString("experience"), address);
+                    }
+                    showAllEmployeesOnMap();
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+
 }
