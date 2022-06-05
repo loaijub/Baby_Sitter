@@ -9,9 +9,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -42,6 +44,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,10 +170,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             LatLng location = new LatLng(cordinates[0], cordinates[1]);
 
-            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.profile_icon);
-            Bitmap smallMarker = Bitmap.createScaledBitmap(bitmapdraw.getBitmap(), 170, 120, false);
+            new GetImageFromUrl(location).execute("https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_0.jpg");
 
-            mMap.addMarker(new MarkerOptions().position(location).title(allLocationsForEmp[i].getFirstName()+allLocationsForEmp[i].getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
 
         }
@@ -227,7 +230,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     showAllEmployeesOnMap();
 
                 } catch (Exception e) {
-                    Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Json parse error" + e.toString(), Toast.LENGTH_LONG).show();
                 }
 
 
@@ -255,6 +258,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
+    }
+
+
+    public class GetImageFromUrl extends AsyncTask<String, Void, Bitmap> {
+        LatLng location;
+        Bitmap bitmap;
+        public GetImageFromUrl(LatLng location){
+            this.location = location;
+        }
+        @Override
+        protected Bitmap doInBackground(String... url) {
+            String stringUrl = url[0];
+            bitmap = null;
+            InputStream inputStream;
+            try {
+                inputStream = new java.net.URL(stringUrl).openStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            for (int i = 0; i < cities.length; i++) {
+                Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
+                mMap.addMarker(new MarkerOptions().position(location).title(allLocationsForEmp[i].getFirstName() + allLocationsForEmp[i].getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
+            }
+        }
     }
 
 }
