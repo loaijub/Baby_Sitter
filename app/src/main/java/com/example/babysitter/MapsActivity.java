@@ -37,6 +37,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.babysitter.databinding.ActivityMapsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,20 +53,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     // for menu
     BottomNavigationView navigationView;
     TextView title;
-    static String[] cities;
     Employee[] allLocationsForEmp;
     Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -113,7 +114,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
-
     @Override
     public void onBackPressed() {
         getSupportFragmentManager().popBackStack();
@@ -156,10 +156,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         //getting all locations for the employees and show it on the map
 
-
+        mMap.setOnMarkerClickListener(this);
     }
 
-    ProfilePhoto[] profilePhoto;
     private void showAllEmployeesOnMap() {
         StringRequest request = new StringRequest(Request.Method.POST, login.dbClass.getUrl() + "?action=getAllProfilePhotos", new Response.Listener<String>() {
 
@@ -167,7 +166,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(String response) {
                 try {
                     JSONArray allUsersPhotos = new JSONArray(response);
-                    profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
+                    ProfilePhoto[] profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
                     for (int i=0;i<allUsersPhotos.length();i++) {
                         JSONObject userPhoto = allUsersPhotos.getJSONObject(i);
                         profilePhoto[i] = new ProfilePhoto(userPhoto.getString("id"), userPhoto.getString("profile_image_path"));
@@ -185,7 +184,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         for (int j = 0; j < profilePhoto.length; j++) {
                             if (allLocationsForEmp[i].getId().equals(profilePhoto[j].getUserId())) {
-                                new GetImageFromUrl(location).execute(profilePhoto[j].getImageUrl());
+                                allLocationsForEmp[i].setProfilePhoto(profilePhoto[j]);
+                                new GetImageFromUrl(location, allLocationsForEmp[i]).execute(profilePhoto[j].getImageUrl());
                             }
                         }
 
@@ -292,12 +292,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         queue.add(request);
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(context, ""+((Employee)marker.getTag()).getProfilePhoto().getImageUrl(), Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
+
+
 
     public class GetImageFromUrl extends AsyncTask<String, Void, Bitmap> {
         LatLng location;
         Bitmap bitmap;
-        public GetImageFromUrl(LatLng location){
+        Employee currentEmployee;
+        public GetImageFromUrl(LatLng location, Employee currentEmployee){
             this.location = location;
+            this.currentEmployee = currentEmployee;
         }
         @Override
         protected Bitmap doInBackground(String... url) {
@@ -315,12 +325,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            for (int i = 0; i < allLocationsForEmp.length; i++) {
                 Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
-               // System.out.println("Loaiii" + location.latitude +", "+ location.longitude);
-                mMap.addMarker(new MarkerOptions().position(location).title(allLocationsForEmp[i].getFirstName() + " " + allLocationsForEmp[i].getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
-            }
+                System.out.println("Loaiii" + location.latitude +", "+ location.longitude);
+
+                Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+                marker.showInfoWindow();
+                marker.setTag(currentEmployee);
+
+
         }
     }
+
 
 }
