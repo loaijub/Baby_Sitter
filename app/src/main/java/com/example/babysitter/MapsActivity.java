@@ -29,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.Employee;
+import com.example.babysitter.Classes.ProfilePhoto;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -158,27 +159,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void showAllEmployeesOnMap() {
-        cities = new String[allLocationsForEmp.length];
-        for (int i = 0; i < allLocationsForEmp.length; i++)
-            cities[i] = allLocationsForEmp[i].getAddress().getCity();
-        for(int i=0; i<cities.length;i++) {
-            double[] cordinates = new double[2];
-            try {
-                cordinates = getLocationFromAddress(cities[i]);
-            } catch (IOException e) {
+    ProfilePhoto[] profilePhoto;
+    private void showAllEmployeesOnMap() {
+        StringRequest request = new StringRequest(Request.Method.POST, login.dbClass.getUrl() + "?action=getAllProfilePhotos", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray allUsersPhotos = new JSONArray(response);
+                    profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
+                    for (int i=0;i<allUsersPhotos.length();i++) {
+                        JSONObject userPhoto = allUsersPhotos.getJSONObject(i);
+                        profilePhoto[i] = new ProfilePhoto(userPhoto.getString("id"), userPhoto.getString("profile_image_path"));
+                    }
+
+
+                    //adding marker on the map for all locations from db
+                    for (int i=0; i<allLocationsForEmp.length;i++) {
+                        double[] cordinates = new double[2];
+                        try {
+                            cordinates = getLocationFromAddress(allLocationsForEmp[i].getAddress().getCity());
+                        } catch (IOException e) {
+                        }
+                        LatLng location = new LatLng(cordinates[0], cordinates[1]);
+
+                        for (int j = 0; j < profilePhoto.length; j++) {
+                            if (allLocationsForEmp[i].getId().equals(profilePhoto[j].getUserId())) {
+                                new GetImageFromUrl(location).execute(profilePhoto[j].getImageUrl());
+                            }
+                        }
+
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error" + e.toString(), Toast.LENGTH_LONG).show();
+                }
             }
-            LatLng location = new LatLng(cordinates[0], cordinates[1]);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
 
-            new GetImageFromUrl(location).execute("https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_0.jpg");
+        }) {
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+        };
 
-        }
-
-
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -283,9 +315,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            for (int i = 0; i < cities.length; i++) {
+            for (int i = 0; i < allLocationsForEmp.length; i++) {
                 Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
-                mMap.addMarker(new MarkerOptions().position(location).title(allLocationsForEmp[i].getFirstName() + allLocationsForEmp[i].getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
+               // System.out.println("Loaiii" + location.latitude +", "+ location.longitude);
+                mMap.addMarker(new MarkerOptions().position(location).title(allLocationsForEmp[i].getFirstName() + " " + allLocationsForEmp[i].getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))).showInfoWindow();
             }
         }
     }
