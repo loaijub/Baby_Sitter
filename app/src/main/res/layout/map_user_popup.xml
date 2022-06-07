@@ -130,5 +130,4 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/buttonstyle"
         android:textColor="@color/white"/>
-
 </LinearLayout>
