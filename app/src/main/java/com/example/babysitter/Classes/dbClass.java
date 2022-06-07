@@ -565,41 +565,40 @@ public class dbClass {
     }
 
     public void getAllDeals() {
-
-        ////////////////////////////////////
-        ////////////////////////
-        ////// FIX THE PHP TO GET ONLY BY ID /////////////
-        ////////////////////////////////////////////////////
-        /////////////////////////////////////////////////
-        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDeals", new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray allDealsArr = new JSONArray(response);
-
-
                     for (int i = 0; i < allDealsArr.length(); i++) {
                         JSONObject deal = allDealsArr.getJSONObject(i);
+
                         String dealId = deal.getString("deal_id");
                         String dealEmployeeId = deal.getString("employee_id");
                         String dealParentId = deal.getString("parent_id");
+
                         String dealEmployeeAccepted = deal.getString("employee_accepted");
                         String dealHasDone = deal.getString("has_done");
                         String completedDealDate = deal.getString("completed_deal_date");
 
-                        String[] fieldsOfDate = completedDealDate.split("-");
-                        Date actualCompletedDealDate = new Date(fieldsOfDate[2], fieldsOfDate[1], fieldsOfDate[0]);
+                        // first we check if the date from the database is not null
+                        Date actualCompletedDealDate = null;
+                        if (!completedDealDate.equals("")) {
+                            String[] fieldsOfDate = completedDealDate.split("-");
+                            actualCompletedDealDate = new Date(fieldsOfDate[2], fieldsOfDate[1], fieldsOfDate[0]);
+                        }
 
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
                         History.allDeals.add(tempDeal);
 
                     }
-
+                    ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
+                    History.list.setAdapter(myAdapter);
 
                 } catch (Exception e) {
-                   //Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
 
@@ -608,7 +607,6 @@ public class dbClass {
         }, new Response.ErrorListener() {
 
             @Override
-
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
             }
@@ -616,10 +614,10 @@ public class dbClass {
         }) {
 
             @Override
-
             protected Map<String, String> getParams() {
 
                 Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", currentUser.getId());
                 return map;
             }
 
@@ -628,7 +626,6 @@ public class dbClass {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
     }
-
 
 
 }
