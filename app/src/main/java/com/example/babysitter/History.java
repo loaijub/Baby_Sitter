@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Deals;
+import com.example.babysitter.Classes.ListAdapterForDeals;
 import com.example.babysitter.Classes.Report;
 import com.example.babysitter.Classes.WorkApplication;
 import com.example.babysitter.Classes.dbClass;
@@ -37,7 +38,7 @@ import java.util.List;
 
 public class History extends Fragment {
     View view;
-    ListView list;
+    public static ListView list;
 
     // array of all deals in database
     public static List<Deals> allDeals;
@@ -53,8 +54,7 @@ public class History extends Fragment {
 
         login.dbClass.getAllDeals();
 
-        ListAdapterForDeals myAdapter = new ListAdapterForDeals(allDeals, getContext());
-        list.setAdapter(myAdapter);
+
 
 
 
@@ -64,38 +64,5 @@ public class History extends Fragment {
 
 }
 
-class ListAdapterForDeals extends BaseAdapter {
-    List<Deals> dealsArr;
-    Context context;
 
-    public ListAdapterForDeals(List<Deals> dealsArr, Context context ) {
-        this.dealsArr = dealsArr;
-        this.context = context;
-    }
-
-    @Override
-    public int getCount() {
-        return dealsArr.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return dealsArr.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater ly = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = ly.inflate(R.layout.view_single_deal, null);
-
-        TextView applicationInfo = v.findViewById(R.id.singleDeal);
-        applicationInfo.setText(dealsArr.get(position).toString());
-        return v;
-    }
-}
 

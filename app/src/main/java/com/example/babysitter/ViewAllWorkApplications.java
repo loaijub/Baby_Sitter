@@ -68,9 +68,9 @@ class ListAdapterForAllWorkApplications extends BaseAdapter {
     Context context;
     FragmentActivity activity;
 
-    public ListAdapterForAllWorkApplications(WorkApplication[] applicationsArr, Context context ) {
+    public ListAdapterForAllWorkApplications(WorkApplication[] applicationsArr, Context context) {
         this.applicationsArr = applicationsArr;
-        this.activity = (FragmentActivity)context;
+        this.activity = (FragmentActivity) context;
         this.context = context;
     }
 

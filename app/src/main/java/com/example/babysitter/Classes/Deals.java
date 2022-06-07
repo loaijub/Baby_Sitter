@@ -5,8 +5,8 @@ public class Deals {
     private final String dealId;
     private final String employeeId;
     private final String parentId;
-    private String employeeAccepted;
-    private String hasDone;
+    private String employeeAccepted; // 0 - denied   1 - accepted
+    private String hasDone; // 0 - is NOT done   1 - done
     private double parentRate;
     private String feedbackAboutParent;
     private double employeeRate;
@@ -98,17 +98,31 @@ public class Deals {
     // toString
     @Override
     public String toString() {
-        return "Deals{" +
-                "dealId=" + dealId +
-                ", employeeId='" + employeeId + '\'' +
-                ", parentId='" + parentId + '\'' +
-                ", employeeAccepted=" + employeeAccepted +
-                ", hasDone=" + hasDone +
-                ", parentRate=" + parentRate +
-                ", feedbackAboutParent='" + feedbackAboutParent + '\'' +
-                ", employeeRate=" + employeeRate +
-                ", feedbackAboutEmployee='" + feedbackAboutEmployee + '\'' +
-                ", completedDealDate=" + completedDealDate +
-                '}';
+
+        boolean employeeAcceptedTheDeal = false;
+        boolean dealIsDone = false;
+        String dateOfComplete = "";
+
+        if (this.employeeAccepted.equals("1"))
+            employeeAcceptedTheDeal = true;
+
+        if (this.hasDone.equals("1"))
+            dealIsDone = true;
+
+        if (this.completedDealDate == null)
+            dateOfComplete = "The deal is NOT completed yet!";
+        else
+            dateOfComplete = this.completedDealDate.toString();
+
+        return "Deal id: " + this.dealId + '\n' +
+                "Employee id: " + this.employeeId + '\n' +
+                "Parent id: " + this.parentId + '\n' +
+                "Has the employee accepted? : " + employeeAcceptedTheDeal + '\n' +
+                "Deal is done? : " + dealIsDone + "\n" +
+                "Parent rate: " + this.parentRate + '\n' +
+                "Employee rate: " + this.employeeRate + '\n' +
+                "Feedback about parents: " + this.feedbackAboutParent + '\n' +
+                "Feedback about employee: " + this.feedbackAboutEmployee + '\n' +
+                "Date of completing the deal: " + dateOfComplete;
     }
 }
