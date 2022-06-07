@@ -6,17 +6,22 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -294,9 +299,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(context, ""+((Employee)marker.getTag()).getProfilePhoto().getImageUrl(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, ""+((Employee)marker.getTag()).toString(), Toast.LENGTH_SHORT).show();
+        TextView txtclose;
+        Button btnFollow;
+        Dialog myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.map_user_popup);
+        txtclose =(TextView) myDialog.findViewById(R.id.txtclose);
+        btnFollow = (Button) myDialog.findViewById(R.id.btnfollow);
+        txtclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
 
-        return false;
+        return true;
     }
 
 
