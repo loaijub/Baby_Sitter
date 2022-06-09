@@ -5,6 +5,17 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/userId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="userId"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
     <TextView
         android:id="@+id/userFirstName"
         android:layout_width="wrap_content"
@@ -52,16 +63,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:text="userEmail"
-        android:textColor="@color/black"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/userPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:text="userPassword"
         android:textColor="@color/black"
         android:textSize="15sp" />
 
@@ -154,4 +155,12 @@
         android:text="userWorkingHoursInMonth"
         android:textColor="@color/black"
         android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/changePassword"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="change my password" />
 </LinearLayout>
