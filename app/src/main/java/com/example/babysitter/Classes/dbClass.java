@@ -30,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.History;
 import com.example.babysitter.MapsActivity;
+import com.example.babysitter.Profile;
 import com.example.babysitter.R;
 import com.example.babysitter.admin;
 import com.example.babysitter.login;
@@ -565,15 +566,18 @@ public class dbClass {
     }
 
     public void getAllDeals() {
-
+        // function gets all the deals related to the current user and displays it as ItemList of the screen for user.
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 try {
+                    // we get all the deals that are related to the user in an array.
                     JSONArray allDealsArr = new JSONArray(response);
                     for (int i = 0; i < allDealsArr.length(); i++) {
+
+                        // each item on array is an object
                         JSONObject deal = allDealsArr.getJSONObject(i);
 
                         String dealId = deal.getString("deal_id");
@@ -592,11 +596,14 @@ public class dbClass {
                         }
 
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
+
+                        // we add the deal object to the listView
                         History.allDeals.add(tempDeal);
 
 
                     }
-                    if(History.list != null) {
+                    // if the list is not empty, we show the deals for the user
+                    if (History.list != null) {
                         ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
                         History.list.setAdapter(myAdapter);
                     }
@@ -629,6 +636,65 @@ public class dbClass {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
     }
+
+
+    public void getUserDetailsFromDatabase() {
+        // function gets all the user details from the database and returns it as an array of strings
+
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getCurrentUserDetails", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                try {
+                    JSONArray allDetailsArr = new JSONArray(response);
+
+                    // to save the info about parent OR employee
+                    User user = null;
+                    JSONObject currentAddress = allDetailsArr.getJSONObject(0);
+                    Address userAddress = new Address(currentAddress.getString("city") , currentAddress.getString("street") , currentAddress.getString("house_number"));
+                    if (currentUser.getRole().equals("1")){
+                        JSONObject currentEmployee = allDetailsArr.getJSONObject(1);
+                        user = new Employee(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getPhoneNumber(), currentUser.getBirthDate(), currentUser.getPassword(), currentUser.getEmail(), currentUser.getRole(), currentEmployee.getString("status"), currentEmployee.getString("rate"), currentEmployee.getString("specialDemands"), currentEmployee.getString("workingHoursInMonth"), currentEmployee.getString("experience") , userAddress);
+                    }
+                    else{
+                        JSONObject currentParent = allDetailsArr.getJSONObject(1);
+                        user = new Parent(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getPhoneNumber(), currentUser.getBirthDate(), currentUser.getPassword(), currentUser.getEmail(), currentUser.getRole(), currentParent.getString("status"), currentParent.getString("rate"), currentParent.getString("specialDemands"), currentParent.getString("numberOfChildren"), userAddress);
+                    }
+
+                    Profile.currentUser = user;
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", currentUser.getId());
+                map.put("urole", currentUser.getRole());
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+
 
 
 }

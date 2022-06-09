@@ -5,14 +5,16 @@ public class Parent extends User {
     private String status; // 0- active parent account, 1- inactive account.
     private String rate; // the rate that other employees give to parent.
     private String specialDemands; // the special demands of the parent regarding their children and working with them.
-    private int numberOfChildren; // the number of children that will take part in the system.
+    private String numberOfChildren; // the number of children that will take part in the system.
+    private Address address;
 
-    public Parent(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String email, String role, String status, String rate, String specialDemands, int numberOfChildren) {
+    public Parent(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String email, String role, String status, String rate, String specialDemands, String numberOfChildren, Address address) {
         super(id, fName, lName, phoneNumber, birthDate, password, role, email);
         this.status = status;
         this.rate = rate;
         this.specialDemands = specialDemands;
         this.numberOfChildren = numberOfChildren;
+        this.address = address;
     }
 
     // getters and setters
@@ -40,12 +42,20 @@ public class Parent extends User {
         this.specialDemands = specialDemands;
     }
 
-    public int getNumberOfChildren() {
+    public String getNumberOfChildren() {
         return numberOfChildren;
     }
 
-    public void setNumberOfChildren(int numberOfChildren) {
+    public void setNumberOfChildren(String numberOfChildren) {
         this.numberOfChildren = numberOfChildren;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     // toString

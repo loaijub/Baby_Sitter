@@ -5,18 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.babysitter.Classes.Employee;
+import com.example.babysitter.Classes.Parent;
 import com.example.babysitter.Classes.User;
 import com.example.babysitter.Classes.dbClass;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Profile extends Fragment {
 
     View view;
+    public static User currentUser;
 
     @Nullable
     @Override
@@ -43,6 +50,8 @@ public class Profile extends Fragment {
 
         Button btnChangePassword = view.findViewById(R.id.changePassword);
 
+        ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
+
         // we get the current user as an object
         User currentUser = login.dbClass.getCurrentUser();
 
@@ -55,7 +64,23 @@ public class Profile extends Fragment {
         email.setText(currentUser.getEmail());
         role.setText(currentUser.getRole());
 
-
+        // we do down casting
+        if (currentUser.getRole().equals("1")) {
+            city.setText(((Employee) currentUser).getAddress().getCity());
+            street.setText(((Employee) currentUser).getAddress().getStreet());
+            houseNumber.setText(((Employee) currentUser).getAddress().getHouse_number());
+            specialDemands.setText(((Employee) currentUser).getSpecialDemands());
+            rate.setText(((Employee) currentUser).getRate());
+            experience.setText(((Employee) currentUser).getExperience());
+            workingHoursInMonth.setText(((Employee) currentUser).getWorkingHoursInMonth());
+        } else {
+            city.setText(((Parent) currentUser).getAddress().getCity());
+            street.setText(((Parent) currentUser).getAddress().getStreet());
+            houseNumber.setText(((Parent) currentUser).getAddress().getHouse_number());
+            specialDemands.setText(((Parent) currentUser).getSpecialDemands());
+            numberOfChildren.setText(((Parent) currentUser).getNumberOfChildren());
+            rate.setText(((Parent) currentUser).getRate());
+        }
 
 
         return view;
