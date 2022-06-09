@@ -565,11 +565,12 @@ public class dbClass {
     }
 
     public void getAllDeals() {
+
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray allDealsArr = new JSONArray(response);
                     for (int i = 0; i < allDealsArr.length(); i++) {
@@ -593,10 +594,12 @@ public class dbClass {
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
                         History.allDeals.add(tempDeal);
 
-                    }
-                    ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
-                    History.list.setAdapter(myAdapter);
 
+                    }
+                    if(History.list != null) {
+                        ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
+                        History.list.setAdapter(myAdapter);
+                    }
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }

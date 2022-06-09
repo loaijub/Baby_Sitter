@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,10 @@ public class History extends Fragment {
     // array of all deals in database
     public static List<Deals> allDeals;
 
-
+    public History(){
+        allDeals = new ArrayList<>();
+        login.dbClass.getAllDeals();
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,13 +55,6 @@ public class History extends Fragment {
 
         list = view.findViewById(R.id.listOfHistory);
         allDeals = new ArrayList<>();
-
-        login.dbClass.getAllDeals();
-
-
-
-
-
 
         return view;
     }

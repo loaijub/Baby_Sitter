@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.Employee;
 import com.example.babysitter.Classes.ProfilePhoto;
+import com.example.babysitter.Classes.SetImageViewFromUrl;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -82,6 +84,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         title = findViewById(R.id.title);
+        //to load all deals from the database
+        new History();
+
 
         // menu code
         navigationView = findViewById(R.id.nav);
@@ -299,13 +304,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        Employee emp = (Employee) marker.getTag();
         //Toast.makeText(context, ""+((Employee)marker.getTag()).toString(), Toast.LENGTH_SHORT).show();
-        TextView txtclose;
-        Button btnFollow;
+        TextView txtclose, fullName, city, rating, workedHours, dealsMade;
+        ImageView profilePhoto;
+        Button btnRequest;
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.map_user_popup);
-        txtclose =(TextView) myDialog.findViewById(R.id.txtclose);
-        btnFollow = (Button) myDialog.findViewById(R.id.btnfollow);
+
+        txtclose = myDialog.findViewById(R.id.txtclose);
+        fullName = myDialog.findViewById(R.id.fullName);
+        city = myDialog.findViewById(R.id.city);
+        btnRequest = myDialog.findViewById(R.id.btnRequest);
+        profilePhoto = myDialog.findViewById(R.id.profilePhoto);
+        rating = myDialog.findViewById(R.id.rating);
+        workedHours = myDialog.findViewById(R.id.workedHours);
+        dealsMade = myDialog.findViewById(R.id.dealsMade);
+
+        fullName.setText(emp.getFirstName() + " " + emp.getLastName());
+        city.setText(emp.getAddress().getCity());
+        rating.setText(emp.getRate());
+        workedHours.setText(emp.getWorkingHoursInMonth());
+
+        dealsMade.setText(""+History.allDeals.size());
+
+
+        new SetImageViewFromUrl(profilePhoto).execute(emp.getProfilePhoto().getImageUrl());
+
+
         txtclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,7 +371,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
                 Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
-                System.out.println("Loaiii" + location.latitude +", "+ location.longitude);
 
                 Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
                 marker.showInfoWindow();
@@ -354,6 +379,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
-
 
 }
