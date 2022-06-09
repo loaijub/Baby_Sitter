@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.babysitter.Classes.Employee;
 import com.example.babysitter.Classes.Parent;
+import com.example.babysitter.Classes.SetImageViewFromUrl;
 import com.example.babysitter.Classes.User;
 import com.example.babysitter.Classes.dbClass;
 
@@ -51,21 +52,20 @@ public class Profile extends Fragment {
         Button btnChangePassword = view.findViewById(R.id.changePassword);
 
         ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
+        new SetImageViewFromUrl(profilePicture).execute(this.currentUser.getProfilePhoto().getImageUrl());
 
-        // we get the current user as an object
-        User currentUser = login.dbClass.getCurrentUser();
 
         // we fill the textView with the current user information
-        id.setText(currentUser.getId());
-        firstName.setText(currentUser.getFirstName());
-        lastName.setText(currentUser.getLastName());
-        phoneNumber.setText(currentUser.getPhoneNumber());
-        birthdate.setText(currentUser.getBirthDate().toString());
-        email.setText(currentUser.getEmail());
-        role.setText(currentUser.getRole());
+        id.setText(login.dbClass.getCurrentUser().getId());
+        firstName.setText(login.dbClass.getCurrentUser().getFirstName());
+        lastName.setText(login.dbClass.getCurrentUser().getLastName());
+        phoneNumber.setText(login.dbClass.getCurrentUser().getPhoneNumber());
+        birthdate.setText(login.dbClass.getCurrentUser().getBirthDate().toString());
+        email.setText(login.dbClass.getCurrentUser().getEmail());
+        role.setText(login.dbClass.getCurrentUser().getRole());
 
         // we do down casting
-        if (currentUser.getRole().equals("1")) {
+        if (login.dbClass.getCurrentUser().getRole().equals("1")) {
             city.setText(((Employee) currentUser).getAddress().getCity());
             street.setText(((Employee) currentUser).getAddress().getStreet());
             houseNumber.setText(((Employee) currentUser).getAddress().getHouse_number());

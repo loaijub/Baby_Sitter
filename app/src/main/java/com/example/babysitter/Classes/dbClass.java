@@ -80,7 +80,7 @@ public class dbClass {
 
             @Override
             public void onResponse(String response) {
-                dialogLoading.dismiss();
+
                 //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONObject result = new JSONObject(response);
@@ -94,6 +94,7 @@ public class dbClass {
                             ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
                             ((Activity) context).finish();
                         }
+                        getUserDetailsFromDatabase();
                     } else {
                         new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Login failed..")
@@ -101,7 +102,7 @@ public class dbClass {
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                     }
-
+                    dialogLoading.dismiss();
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -645,7 +646,7 @@ public class dbClass {
 
             @Override
             public void onResponse(String response) {
-                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                System.out.println(response);
                 try {
                     JSONArray allDetailsArr = new JSONArray(response);
 
@@ -662,6 +663,7 @@ public class dbClass {
                         user = new Parent(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getPhoneNumber(), currentUser.getBirthDate(), currentUser.getPassword(), currentUser.getEmail(), currentUser.getRole(), currentParent.getString("status"), currentParent.getString("rate"), currentParent.getString("specialDemands"), currentParent.getString("numberOfChildren"), userAddress);
                     }
 
+                    user.setProfilePhoto(new ProfilePhoto(user.getId(),allDetailsArr.getJSONObject(2).getString("profile_image_path")));
                     Profile.currentUser = user;
 
                 } catch (Exception e) {

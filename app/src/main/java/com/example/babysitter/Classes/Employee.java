@@ -8,19 +8,13 @@ public class Employee extends User {
     private String workingHoursInMonth; // the total working hours of employee in a month
     private String experience; // the experience of the employee with working with kids.
     private Address address;
-    private ProfilePhoto profilePhoto;
+
 
     public Address getAddress() {
         return address;
     }
 
-    public void setProfilePhoto(ProfilePhoto profilePhoto) {
-        this.profilePhoto = profilePhoto;
-    }
 
-    public ProfilePhoto getProfilePhoto() {
-        return profilePhoto;
-    }
 
     public void setAddress(Address address) {
         this.address = address;
