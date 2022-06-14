@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,22 +183,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                     //adding marker on the map for all locations from db
+
                     for (int i=0; i<allLocationsForEmp.length;i++) {
                         double[] cordinates = new double[2];
+                        LatLng adjustedLocation;
                         try {
                             cordinates = getLocationFromAddress(allLocationsForEmp[i].getAddress().getCity());
+                            LatLng location = new LatLng(cordinates[0], cordinates[1]);
+                            adjustedLocation = adjustLocation(location);
+                            markerCoordinates.add(adjustedLocation);
+
                         } catch (IOException e) {
+                            adjustedLocation = new LatLng(0, 0);
                         }
-                        LatLng location = new LatLng(cordinates[0], cordinates[1]);
+
 
                         for (int j = 0; j < profilePhoto.length; j++) {
                             if (allLocationsForEmp[i].getId().equals(profilePhoto[j].getUserId())) {
                                 allLocationsForEmp[i].setProfilePhoto(profilePhoto[j]);
-                                new GetImageFromUrl(location, allLocationsForEmp[i]).execute(profilePhoto[j].getImageUrl());
+                                new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(profilePhoto[j].getImageUrl());
                             }
                         }
 
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(adjustedLocation, 16));
                     }
 
                 } catch (Exception e) {
@@ -217,6 +225,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
 
+    }
+    private static final float COORDINATE_OFFSET = 0.000585f;
+    private int offsetType = 0;
+    private ArrayList<LatLng> markerCoordinates = new ArrayList<>();
+
+    private LatLng adjustLocation(LatLng latLng) {
+        LatLng updatedLatLng;
+
+        if (markerCoordinates.contains(latLng)) {
+            double latitude = 0;
+            double longitude = 0;
+            if (offsetType == 0) {
+                latitude = latLng.latitude + COORDINATE_OFFSET;
+                longitude = latLng.longitude;
+            } else if (offsetType == 1) {
+                latitude = latLng.latitude - COORDINATE_OFFSET;
+                longitude = latLng.longitude;
+            } else if (offsetType == 2) {
+                latitude = latLng.latitude;
+                longitude = latLng.longitude + COORDINATE_OFFSET;
+            } else if (offsetType == 3) {
+                latitude = latLng.latitude;
+                longitude = latLng.longitude - COORDINATE_OFFSET;
+            } else if (offsetType == 4) {
+                latitude = latLng.latitude + COORDINATE_OFFSET;
+                longitude = latLng.longitude + COORDINATE_OFFSET;
+            }
+            offsetType++;
+            if (offsetType == 5) {
+                offsetType = 0;
+            }
+
+            updatedLatLng = adjustLocation(new LatLng(latitude, longitude));
+
+        } else {
+            markerCoordinates.add(latLng);
+            updatedLatLng = latLng;
+        }
+        return updatedLatLng;
     }
 
     @Override
@@ -324,7 +371,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         rating.setText(emp.getRate());
         workedHours.setText(emp.getWorkingHoursInMonth());
 
-        dealsMade.setText(""+History.allDeals.size());
+        dealsMade.setText("");
 
 
         new SetImageViewFromUrl(profilePhoto).execute(emp.getProfilePhoto().getImageUrl());
@@ -361,6 +408,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 inputStream = new java.net.URL(stringUrl).openStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
             } catch (IOException e) {
+                bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_photo_default);
                 e.printStackTrace();
             }
             return bitmap;
@@ -369,7 +417,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
                 Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
-
                 Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
                 marker.showInfoWindow();
                 marker.setTag(currentEmployee);
@@ -377,5 +424,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
+
+
 
 }
