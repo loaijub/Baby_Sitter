@@ -10,6 +10,7 @@ import static com.example.babysitter.signUpParent.fields;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -653,17 +654,16 @@ public class dbClass {
                     // to save the info about parent OR employee
                     User user = null;
                     JSONObject currentAddress = allDetailsArr.getJSONObject(0);
-                    Address userAddress = new Address(currentAddress.getString("city") , currentAddress.getString("street") , currentAddress.getString("house_number"));
-                    if (currentUser.getRole().equals("1")){
+                    Address userAddress = new Address(currentAddress.getString("city"), currentAddress.getString("street"), currentAddress.getString("house_number"));
+                    if (currentUser.getRole().equals("1")) {
                         JSONObject currentEmployee = allDetailsArr.getJSONObject(1);
-                        user = new Employee(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getPhoneNumber(), currentUser.getBirthDate(), currentUser.getPassword(), currentUser.getEmail(), currentUser.getRole(), currentEmployee.getString("status"), currentEmployee.getString("rate"), currentEmployee.getString("specialDemands"), currentEmployee.getString("workingHoursInMonth"), currentEmployee.getString("experience") , userAddress);
-                    }
-                    else{
+                        user = new Employee(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getPhoneNumber(), currentUser.getBirthDate(), currentUser.getPassword(), currentUser.getEmail(), currentUser.getRole(), currentEmployee.getString("status"), currentEmployee.getString("rate"), currentEmployee.getString("specialDemands"), currentEmployee.getString("workingHoursInMonth"), currentEmployee.getString("experience"), userAddress);
+                    } else {
                         JSONObject currentParent = allDetailsArr.getJSONObject(1);
                         user = new Parent(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getPhoneNumber(), currentUser.getBirthDate(), currentUser.getPassword(), currentUser.getEmail(), currentUser.getRole(), currentParent.getString("status"), currentParent.getString("rate"), currentParent.getString("specialDemands"), currentParent.getString("numberOfChildren"), userAddress);
                     }
 
-                    user.setProfilePhoto(new ProfilePhoto(user.getId(),allDetailsArr.getJSONObject(2).getString("profile_image_path")));
+                    user.setProfilePhoto(new ProfilePhoto(user.getId(), allDetailsArr.getJSONObject(2).getString("profile_image_path")));
                     Profile.currentUser = user;
 
                 } catch (Exception e) {
@@ -697,6 +697,64 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function gets a password and a dialog, it tries to change the password of the current user in the database to the new password. At the end it closes the dialog.
+     *
+     * @param newPasswordToChange The new password of the current user.
+     * @param dialog              The dialog that shows for the user to enter his new password.
+     */
+    public void changePasswordOfCurrentUser(String newPasswordToChange, Dialog dialog) {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changePasswordForCurrentUser", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+
+                    // changing the password in the database was successful
+                    if (success.equals("true")) {
+                        Toast.makeText(context, "Changes were saved successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Changes were not saved. Please try again!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // whatever the result was, we close the dialog
+                    dialog.dismiss();
+
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", currentUser.getId());
+                map.put("newPassword", newPasswordToChange);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
+    }
 
 
 }
