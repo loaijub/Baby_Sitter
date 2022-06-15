@@ -350,7 +350,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         Employee emp = (Employee) marker.getTag();
+        marker.showInfoWindow();
+
         //Toast.makeText(context, ""+((Employee)marker.getTag()).toString(), Toast.LENGTH_SHORT).show();
         TextView txtclose, fullName, city, rating, workedHours, dealsMade;
         ImageView profilePhoto;
