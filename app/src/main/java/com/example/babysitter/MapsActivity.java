@@ -373,6 +373,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         dealsMade.setText("");
 
+
         new SetImageViewFromUrl(profilePhoto).execute(emp.getProfilePhoto().getImageUrl());
 
 
