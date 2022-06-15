@@ -94,8 +94,9 @@ public class dbClass {
                         else if (currentUser.getRole().equals("2")) { // parent ui
                             ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
                             ((Activity) context).finish();
+                            getUserDetailsFromDatabase();
                         }
-                        getUserDetailsFromDatabase();
+
                     } else {
                         new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Login failed..")
@@ -654,6 +655,7 @@ public class dbClass {
                     // to save the info about parent OR employee
                     User user = null;
                     JSONObject currentAddress = allDetailsArr.getJSONObject(0);
+
                     Address userAddress = new Address(currentAddress.getString("city"), currentAddress.getString("street"), currentAddress.getString("house_number"));
                     if (currentUser.getRole().equals("1")) {
                         JSONObject currentEmployee = allDetailsArr.getJSONObject(1);

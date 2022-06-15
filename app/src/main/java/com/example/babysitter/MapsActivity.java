@@ -198,6 +198,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
 
 
+                        //searching for profile photo for employee "i" in the profilePhoto array and set it
                         for (int j = 0; j < profilePhoto.length; j++) {
                             if (allLocationsForEmp[i].getId().equals(profilePhoto[j].getUserId())) {
                                 allLocationsForEmp[i].setProfilePhoto(profilePhoto[j]);
