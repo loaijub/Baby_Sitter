@@ -22,6 +22,8 @@ import com.example.babysitter.Classes.SetImageViewFromUrl;
 import com.example.babysitter.Classes.User;
 import com.example.babysitter.Classes.dbClass;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,14 +105,48 @@ public class Profile extends Fragment {
     public void showPopupToChangePassword() {
         // function show for user the popup to change his password
         dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setContentView(R.layout.change_password_dialog);
         dialog.show();
-
-        boolean flagOfDialog = true; // flag to know if the operation failed and to close dialog, or it succeeded
 
         // the buttons in the dialog
         Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
         Button saveChangesBtn = dialog.findViewById(R.id.saveBtn);
+
+
+        // setting listeners on each button
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndDoNotSave();
+            }
+        });
+
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndSave();
+            }
+        });
+
+
+
+    }
+
+    public void closeAndDoNotSave() {
+        // function closes the dialog and do not save the changes
+        Toast.makeText(getContext(), "Changes are NOT saved!", Toast.LENGTH_SHORT).show();
+
+
+        dialog.dismiss();
+    }
+
+    public void closeAndSave() {
+        // function gets the new password to change, and saves it encrypted in the database.
+
+        boolean flagOfDialog = true; // flag to know if the operation failed and to close dialog, or it succeeded
+
+
+
 
 
         // the EditText in the dialog
@@ -119,13 +155,16 @@ public class Profile extends Fragment {
         EditText confirmNewPassword = dialog.findViewById(R.id.confirmNewPassword);
 
 
+
         // getting what the user typed
         String currentPasswordFromUser = currentPassword.getText().toString();
         String newPasswordFromUser = newPassword.getText().toString();
         String confirmNewPasswordFromUser = confirmNewPassword.getText().toString();
 
+        String currentUserPass = currentUser.getPassword().substring(0,2)+'a'+currentUser.getPassword().substring(3);
+        System.out.println("loaii" + currentUserPass);
         // first we check if the user typed his old password correctly
-        if (!currentPasswordFromUser.equals(currentUser.getPassword())) {
+        if (!BCrypt.checkpw(currentPasswordFromUser, currentUserPass)) {
             Toast.makeText(getContext(), "The password you wrote is not correct!", Toast.LENGTH_SHORT).show();
             flagOfDialog = false;
         }
@@ -141,34 +180,12 @@ public class Profile extends Fragment {
             Toast.makeText(getContext(), "The passwords were not correct, please try again!", Toast.LENGTH_SHORT).show();
             closeAndDoNotSave();
         }
+        else
+            // this function changes the password in the database, and informs the user if it was successful or if it failed to save the new password
+            login.dbClass.changePasswordOfCurrentUser(newPasswordFromUser, dialog);
 
-        // setting listeners on each button
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeAndDoNotSave();
-            }
-        });
 
-        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeAndSave(newPasswordFromUser);
-            }
-        });
-    }
 
-    public void closeAndDoNotSave() {
-        // function closes the dialog and do not save the changes
-        Toast.makeText(getContext(), "Changes are NOT saved!", Toast.LENGTH_SHORT).show();
-        dialog.dismiss();
-    }
-
-    public void closeAndSave(String passwordToChange) {
-        // function gets the new password to change, and saves it encrypted in the database.
-
-        // this function changes the password in the database, and informs the user if it was successful or if it failed to save the new password
-        login.dbClass.changePasswordOfCurrentUser(passwordToChange, dialog);
     }
 
 
