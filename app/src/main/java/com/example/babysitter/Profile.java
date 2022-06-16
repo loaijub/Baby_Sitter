@@ -32,6 +32,7 @@ public class Profile extends Fragment {
     View view;
     public static User currentUser;
     Button btnChangePassword;
+    Button btnChangeDetails;
     Dialog dialog;
 
     @Nullable
@@ -57,6 +58,7 @@ public class Profile extends Fragment {
         TextView experience = view.findViewById(R.id.userExperience);
         TextView workingHoursInMonth = view.findViewById(R.id.userWorkingHoursInMonth);
         btnChangePassword = view.findViewById(R.id.changePassword);
+        btnChangeDetails = view.findViewById(R.id.changeMyDetails);
 
 
         ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
@@ -64,30 +66,42 @@ public class Profile extends Fragment {
 
 
         // we fill the textView with the current user information
-        id.setText(login.dbClass.getCurrentUser().getId());
-        firstName.setText(login.dbClass.getCurrentUser().getFirstName());
-        lastName.setText(login.dbClass.getCurrentUser().getLastName());
-        phoneNumber.setText(login.dbClass.getCurrentUser().getPhoneNumber());
-        birthdate.setText(login.dbClass.getCurrentUser().getBirthDate().toString());
-        email.setText(login.dbClass.getCurrentUser().getEmail());
-        role.setText(login.dbClass.getCurrentUser().getRole());
+        id.setText("Id: " + login.dbClass.getCurrentUser().getId());
+        firstName.setText("First name: " + login.dbClass.getCurrentUser().getFirstName());
+        lastName.setText("Last name: " + login.dbClass.getCurrentUser().getLastName());
+        phoneNumber.setText("Phone number: " + login.dbClass.getCurrentUser().getPhoneNumber());
+        birthdate.setText("Birthdate: " + login.dbClass.getCurrentUser().getBirthDate().toString());
+        email.setText("Email: " + login.dbClass.getCurrentUser().getEmail());
+        role.setText("You signed up as: " + login.dbClass.getCurrentUser().getRole() == "1" ? "Employee" : "Parent");
 
         // we do down casting
+        // current user is an Employee
         if (login.dbClass.getCurrentUser().getRole().equals("1")) {
-            city.setText(((Employee) currentUser).getAddress().getCity());
-            street.setText(((Employee) currentUser).getAddress().getStreet());
-            houseNumber.setText(((Employee) currentUser).getAddress().getHouse_number());
-            specialDemands.setText(((Employee) currentUser).getSpecialDemands());
-            rate.setText(((Employee) currentUser).getRate());
-            experience.setText(((Employee) currentUser).getExperience());
-            workingHoursInMonth.setText(((Employee) currentUser).getWorkingHoursInMonth());
-        } else {
-            city.setText(((Parent) currentUser).getAddress().getCity());
-            street.setText(((Parent) currentUser).getAddress().getStreet());
-            houseNumber.setText(((Parent) currentUser).getAddress().getHouse_number());
-            specialDemands.setText(((Parent) currentUser).getSpecialDemands());
-            numberOfChildren.setText(((Parent) currentUser).getNumberOfChildren());
-            rate.setText(((Parent) currentUser).getRate());
+            city.setText("City: " + ((Employee) currentUser).getAddress().getCity());
+            street.setText("Street: " + ((Employee) currentUser).getAddress().getStreet());
+            houseNumber.setText("House number: " + ((Employee) currentUser).getAddress().getHouse_number());
+            specialDemands.setText("Special demands: " + ((Employee) currentUser).getSpecialDemands());
+            rate.setText("Rate: " + ((Employee) currentUser).getRate());
+            experience.setText("Experience: " + ((Employee) currentUser).getExperience());
+            workingHoursInMonth.setText("Working hours in a month: " + ((Employee) currentUser).getWorkingHoursInMonth());
+
+            // we don't put the parent attributes on screen, because the current user is an Employee.
+            numberOfChildren.setText("");
+
+
+        }
+        // current user is a parent
+        else {
+            city.setText("City: " + ((Parent) currentUser).getAddress().getCity());
+            street.setText("Street: " + ((Parent) currentUser).getAddress().getStreet());
+            houseNumber.setText("House number: " + ((Parent) currentUser).getAddress().getHouse_number());
+            specialDemands.setText("Special demands: " + ((Parent) currentUser).getSpecialDemands());
+            numberOfChildren.setText("Number of children: " + ((Parent) currentUser).getNumberOfChildren());
+            rate.setText("Rate: " + ((Parent) currentUser).getRate());
+
+            // we don't put the Employee attributes on screen, because the current user is a Parent.
+            workingHoursInMonth.setText("");
+            experience.setText("");
         }
 
         // if user clicked on "change my password" button
@@ -97,6 +111,16 @@ public class Profile extends Fragment {
                 showPopupToChangePassword();
             }
         });
+
+        // if user clicked on "change my details" button
+        btnChangeDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupToChangeDetails();
+            }
+        });
+
+
         return view;
 
     }
@@ -129,7 +153,6 @@ public class Profile extends Fragment {
         });
 
 
-
     }
 
     public void closeAndDoNotSave() {
@@ -145,23 +168,17 @@ public class Profile extends Fragment {
 
         boolean flagOfDialog = true; // flag to know if the operation failed and to close dialog, or it succeeded
 
-
-
-
-
         // the EditText in the dialog
         EditText currentPassword = dialog.findViewById(R.id.currentPassword);
         EditText newPassword = dialog.findViewById(R.id.newPassword);
         EditText confirmNewPassword = dialog.findViewById(R.id.confirmNewPassword);
-
-
 
         // getting what the user typed
         String currentPasswordFromUser = currentPassword.getText().toString();
         String newPasswordFromUser = newPassword.getText().toString();
         String confirmNewPasswordFromUser = confirmNewPassword.getText().toString();
 
-        String currentUserPass = currentUser.getPassword().substring(0,2)+'a'+currentUser.getPassword().substring(3);
+        String currentUserPass = currentUser.getPassword().substring(0, 2) + 'a' + currentUser.getPassword().substring(3);
         System.out.println("loaii" + currentUserPass);
         // first we check if the user typed his old password correctly
         if (!BCrypt.checkpw(currentPasswordFromUser, currentUserPass)) {
@@ -179,12 +196,18 @@ public class Profile extends Fragment {
         if (!flagOfDialog) {
             Toast.makeText(getContext(), "The passwords were not correct, please try again!", Toast.LENGTH_SHORT).show();
             closeAndDoNotSave();
-        }
-        else
+        } else
             // this function changes the password in the database, and informs the user if it was successful or if it failed to save the new password
             login.dbClass.changePasswordOfCurrentUser(newPasswordFromUser, dialog);
 
 
+    }
+
+
+    /**
+     * Function shows a popup with the user current details as EditText, and user can change his own details.
+     */
+    public void showPopupToChangeDetails() {
 
     }
 
