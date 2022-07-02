@@ -43,22 +43,17 @@ public class Profile extends Fragment {
 
         // we get all the ids of the textView from the xml so we can fill them with the info from the database.
         TextView id = view.findViewById(R.id.userId);
-        TextView firstName = view.findViewById(R.id.userFirstName);
-        TextView lastName = view.findViewById(R.id.userLastName);
+        TextView userName = view.findViewById(R.id.userName);
         TextView phoneNumber = view.findViewById(R.id.userPhoneNumber);
         TextView birthdate = view.findViewById(R.id.userBirthdate);
         TextView email = view.findViewById(R.id.userEmail);
         TextView role = view.findViewById(R.id.userRole);
-        TextView city = view.findViewById(R.id.userCity);
-        TextView street = view.findViewById(R.id.userStreet);
-        TextView houseNumber = view.findViewById(R.id.userHouseNumber);
-        TextView numberOfChildren = view.findViewById(R.id.userNumberOfChildren);
-        TextView specialDemands = view.findViewById(R.id.userSpecialDemands);
+        TextView userAddress = view.findViewById(R.id.userAddress);
+
         TextView rate = view.findViewById(R.id.userRate);
-        TextView experience = view.findViewById(R.id.userExperience);
-        TextView workingHoursInMonth = view.findViewById(R.id.userWorkingHoursInMonth);
-        btnChangePassword = view.findViewById(R.id.changePassword);
-        btnChangeDetails = view.findViewById(R.id.changeMyDetails);
+        //TextView workingHoursInMonth = view.findViewById(R.id.userWorkingHoursInMonth);
+        //btnChangePassword = view.findViewById(R.id.changePassword);
+        //btnChangeDetails = view.findViewById(R.id.changeMyDetails);
 
 
         ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
@@ -67,43 +62,41 @@ public class Profile extends Fragment {
 
         // we fill the textView with the current user information
         id.setText("Id: " + login.dbClass.getCurrentUser().getId());
-        firstName.setText("First name: " + login.dbClass.getCurrentUser().getFirstName());
-        lastName.setText("Last name: " + login.dbClass.getCurrentUser().getLastName());
-        phoneNumber.setText("Phone number: " + login.dbClass.getCurrentUser().getPhoneNumber());
-        birthdate.setText("Birthdate: " + login.dbClass.getCurrentUser().getBirthDate().toString());
-        email.setText("Email: " + login.dbClass.getCurrentUser().getEmail());
-        role.setText("You signed up as: " + login.dbClass.getCurrentUser().getRole() == "1" ? "Employee" : "Parent");
+        userName.setText(login.dbClass.getCurrentUser().getFirstName() + " " + login.dbClass.getCurrentUser().getLastName());
+        phoneNumber.setText(login.dbClass.getCurrentUser().getPhoneNumber());
+        birthdate.setText(login.dbClass.getCurrentUser().getBirthDate().toString());
+        email.setText(login.dbClass.getCurrentUser().getEmail());
+        role.setText(login.dbClass.getCurrentUser().getRole() == "1" ? "Employee" : "Parent");
 
         // we do down casting
         // current user is an Employee
         if (login.dbClass.getCurrentUser().getRole().equals("1")) {
-            city.setText("City: " + ((Employee) currentUser).getAddress().getCity());
-            street.setText("Street: " + ((Employee) currentUser).getAddress().getStreet());
-            houseNumber.setText("House number: " + ((Employee) currentUser).getAddress().getHouse_number());
-            specialDemands.setText("Special demands: " + ((Employee) currentUser).getSpecialDemands());
-            rate.setText("Rate: " + ((Employee) currentUser).getRate());
-            experience.setText("Experience: " + ((Employee) currentUser).getExperience());
-            workingHoursInMonth.setText("Working hours in a month: " + ((Employee) currentUser).getWorkingHoursInMonth());
+            userAddress.setText("City: " + ((Employee) currentUser).getAddress().getCity() + "\nStreet: "
+                    + ((Employee) currentUser).getAddress().getStreet() + "\nHouse number: "
+                    + ((Employee) currentUser).getAddress().getHouse_number());
 
-            // we don't put the parent attributes on screen, because the current user is an Employee.
-            numberOfChildren.setText("");
-
+            //specialDemands.setText("Special demands: " + ((Employee) currentUser).getSpecialDemands());
+            rate.setText(((Employee) currentUser).getRate());
+            //experience.setText("Experience: " + ((Employee) currentUser).getExperience());
+            //workingHoursInMonth.setText("Working hours in a month: " + ((Employee) currentUser).getWorkingHoursInMonth());
 
         }
         // current user is a parent
         else {
-            city.setText("City: " + ((Parent) currentUser).getAddress().getCity());
-            street.setText("Street: " + ((Parent) currentUser).getAddress().getStreet());
-            houseNumber.setText("House number: " + ((Parent) currentUser).getAddress().getHouse_number());
-            specialDemands.setText("Special demands: " + ((Parent) currentUser).getSpecialDemands());
-            numberOfChildren.setText("Number of children: " + ((Parent) currentUser).getNumberOfChildren());
-            rate.setText("Rate: " + ((Parent) currentUser).getRate());
+            userAddress.setText("City: " + ((Parent) currentUser).getAddress().getCity() + "\nStreet: "
+                    + ((Parent) currentUser).getAddress().getStreet() + "\nHouse number: "
+                    + ((Parent) currentUser).getAddress().getHouse_number());
+            //specialDemands.setText("Special demands: " + ((Parent) currentUser).getSpecialDemands());
+            //numberOfChildren.setText("Number of children: " + ((Parent) currentUser).getNumberOfChildren());
+            rate.setText(((Parent) currentUser).getRate());
 
             // we don't put the Employee attributes on screen, because the current user is a Parent.
-            workingHoursInMonth.setText("");
-            experience.setText("");
+            //workingHoursInMonth.setText("");
+            //experience.setText("");
         }
 
+
+        /*
         // if user clicked on "change my password" button
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +112,7 @@ public class Profile extends Fragment {
                 showPopupToChangeDetails();
             }
         });
+        */
 
 
         return view;

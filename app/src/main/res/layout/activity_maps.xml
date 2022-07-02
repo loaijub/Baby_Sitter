@@ -11,9 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/nav"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/upNav"
         tools:context=".MapsActivity" />
-
+    <RelativeLayout
+        android:id="@+id/upNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <ImageView
         android:layout_width="match_parent"
         android:scaleX="@integer/material_motion_duration_long_1"
@@ -24,9 +27,10 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="left"
+
         android:text="Employees around you"
         android:textColor="@color/white"
         android:textSize="20sp" />
@@ -41,6 +45,7 @@
         android:padding="10dp"
         android:textColor="@color/white"
         android:textSize="20sp" />
+    </RelativeLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

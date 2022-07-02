@@ -105,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     case R.id.profileIcon:
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new Profile()).addToBackStack(null).commit();
-                        title.setText("Profile");
+                        findViewById(R.id.upNav).setVisibility(View.GONE);
                         break;
 
                     case R.id.infoIcon:
