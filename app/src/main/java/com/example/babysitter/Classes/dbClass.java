@@ -49,7 +49,7 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://87.69.227.67:131/babysitter/dbMain.php";
+    private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser;
 
