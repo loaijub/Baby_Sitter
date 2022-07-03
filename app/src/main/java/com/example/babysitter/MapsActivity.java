@@ -125,8 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     @Override
     public void onBackPressed() {
-        getSupportFragmentManager().popBackStack();
-
+        //getSupportFragmentManager().popBackStack();
     }
 
     /**
