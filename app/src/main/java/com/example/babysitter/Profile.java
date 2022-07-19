@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ public class Profile extends Fragment {
     View view;
     public static User currentUser;
     Button btnChangePassword;
-    Button btnChangeDetails;
+    LinearLayout btnEditAddress, btnEditPhone, btnEditEmail;
     Dialog dialog;
 
     @Nullable
@@ -52,8 +53,10 @@ public class Profile extends Fragment {
 
         TextView rate = view.findViewById(R.id.userRate);
         //TextView workingHoursInMonth = view.findViewById(R.id.userWorkingHoursInMonth);
-        //btnChangePassword = view.findViewById(R.id.changePassword);
-        //btnChangeDetails = view.findViewById(R.id.changeMyDetails);
+        btnChangePassword = view.findViewById(R.id.changePassword);
+        btnEditAddress = view.findViewById(R.id.btnAddressEdit);
+        btnEditPhone = view.findViewById(R.id.btnPhoneEdit);
+        btnEditEmail = view.findViewById(R.id.btnEmailEdit);
 
 
         ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
@@ -96,7 +99,7 @@ public class Profile extends Fragment {
         }
 
 
-        /*
+
         // if user clicked on "change my password" button
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,17 +108,80 @@ public class Profile extends Fragment {
             }
         });
 
-        // if user clicked on "change my details" button
-        btnChangeDetails.setOnClickListener(new View.OnClickListener() {
+        // if user clicked on edit address button
+        btnEditAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupToChangeDetails();
+                showPopupToChangeAddress();
             }
         });
-        */
+        // if user clicked on edit email button
+        btnEditEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupToChangeEmail();
+            }
+        });
+        // if user clicked on edit phone button
+        btnEditPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupToChangePhone();
+            }
+        });
+
 
 
         return view;
+
+    }
+
+    private void showPopupToChangePhone() {
+        // function show for user the popup to change his phone number
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.change_phone_dialog);
+        dialog.show();
+
+        // the buttons in the dialog
+        Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
+        Button saveChangesBtn = dialog.findViewById(R.id.saveBtn);
+
+
+        // setting listeners on each button
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndDoNotSave();
+            }
+        });
+
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndChangePhone();
+            }
+        });
+    }
+
+    private void closeAndChangePhone() {
+        // function gets the new password to change, and saves it encrypted in the database.
+
+        // the EditText in the dialog
+        EditText newPhoneNum = dialog.findViewById(R.id.newPhoneNumber);
+        if(newPhoneNum.getText().toString().equals(""))
+        {
+            Toast.makeText(getContext(), "Please enter phone number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!login.dbClass.getCurrentUser().getPhoneNumber().equals(newPhoneNum.getText().toString()))
+            // this function changes the phone in the database, and informs the user if it was successful or if it failed to save the new password
+            login.dbClass.changePhoneOfCurrentUser(newPhoneNum.getText().toString(), dialog, view.findViewById(R.id.userPhoneNumber));
+        else
+            dialog.dismiss();
+
+    }
+
+    private void showPopupToChangeEmail() {
 
     }
 
@@ -142,7 +208,7 @@ public class Profile extends Fragment {
         saveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeAndSave();
+                closeAndChangePass();
             }
         });
 
@@ -152,12 +218,10 @@ public class Profile extends Fragment {
     public void closeAndDoNotSave() {
         // function closes the dialog and do not save the changes
         Toast.makeText(getContext(), "Changes are NOT saved!", Toast.LENGTH_SHORT).show();
-
-
         dialog.dismiss();
     }
 
-    public void closeAndSave() {
+    public void closeAndChangePass() {
         // function gets the new password to change, and saves it encrypted in the database.
 
         boolean flagOfDialog = true; // flag to know if the operation failed and to close dialog, or it succeeded
@@ -173,7 +237,6 @@ public class Profile extends Fragment {
         String confirmNewPasswordFromUser = confirmNewPassword.getText().toString();
 
         String currentUserPass = currentUser.getPassword().substring(0, 2) + 'a' + currentUser.getPassword().substring(3);
-        System.out.println("loaii" + currentUserPass);
         // first we check if the user typed his old password correctly
         if (!BCrypt.checkpw(currentPasswordFromUser, currentUserPass)) {
             Toast.makeText(getContext(), "The password you wrote is not correct!", Toast.LENGTH_SHORT).show();
@@ -201,7 +264,7 @@ public class Profile extends Fragment {
     /**
      * Function shows a popup with the user current details as EditText, and user can change his own details.
      */
-    public void showPopupToChangeDetails() {
+    public void showPopupToChangeAddress() {
 
     }
 

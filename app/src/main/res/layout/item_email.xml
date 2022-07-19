@@ -13,13 +13,14 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:padding="3dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
                 android:padding="2dp"
+                android:id="@+id/email"
                 android:src="@drawable/ic_email"
                 android:layout_marginStart="5dp"
                 android:layout_width="30dp"
@@ -29,13 +30,35 @@
                 android:layout_marginStart="10dp"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:layout_toRightOf="@+id/email"
                 android:layout_gravity="center"
                 android:textColor="#605E5E"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="1dp"
+                android:gravity="center"
+                android:id="@+id/btnEmailEdit"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_baseline_edit_24"
+                    />
+                <TextView
+                    android:text="Edit"
+                    android:textSize="16sp"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold|normal"
+                    android:textColor="#286DC2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-
-        </LinearLayout>
+        </RelativeLayout>
         <TextView
             android:text="malakinfoapp@gmail.com"
             android:textStyle="bold"

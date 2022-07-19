@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -759,4 +760,57 @@ public class dbClass {
     }
 
 
+    public void changePhoneOfCurrentUser(String newPhoneNum, Dialog dialog, TextView phoneNumber) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changePhoneForCurrentUser", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+
+                    // changing the password in the database was successful
+                    if (success.equals("true")) {
+                        Toast.makeText(context, "Changes were saved successfully", Toast.LENGTH_SHORT).show();
+                        currentUser.setPhoneNumber(newPhoneNum);
+                    } else {
+                        Toast.makeText(context, "Changes were not saved. Please try again!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // whatever the result was, we close the dialog
+                    dialog.dismiss();
+                    phoneNumber.setText(newPhoneNum);
+
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", currentUser.getId());
+                map.put("newPhoneNumber", newPhoneNum);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
 }

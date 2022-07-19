@@ -50,6 +50,24 @@
             <include layout="@layout/item_add"/>
             <include layout="@layout/item_info"/>
             <include layout="@layout/item_email"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="1dp"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:text="change pasword"
+                    android:textSize="16sp"
+                    android:layout_margin="5dp"
+                    android:id="@+id/changePassword"
+                    android:textStyle="bold|normal"
+                    android:textColor="#286DC2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

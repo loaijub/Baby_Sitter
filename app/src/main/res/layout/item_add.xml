@@ -44,23 +44,23 @@
                 android:orientation="horizontal"
                 android:padding="1dp"
                 android:gravity="center"
+                android:id="@+id/btnAddressEdit"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:padding="5dp"
-                    android:src="@drawable/ic_add"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_baseline_edit_24"
+                    />
                 <TextView
-                    android:text="Add Information"
+                    android:text="Edit"
                     android:textSize="16sp"
                     android:layout_margin="5dp"
                     android:textStyle="bold|normal"
                     android:textColor="#286DC2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-
             </LinearLayout>
 
 
@@ -105,7 +105,6 @@
 
 
         </LinearLayout>
-
 
 
     </LinearLayout>
