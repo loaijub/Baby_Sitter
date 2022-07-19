@@ -67,6 +67,10 @@ public class Deals {
         return feedbackAboutParent;
     }
 
+    public String getEmployeeAccepted() {
+        return employeeAccepted;
+    }
+
     public void setFeedbackAboutParent(String feedbackAboutParent) {
         this.feedbackAboutParent = feedbackAboutParent;
     }

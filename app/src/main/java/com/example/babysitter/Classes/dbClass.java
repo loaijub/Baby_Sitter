@@ -35,6 +35,7 @@ import com.example.babysitter.MapsActivity;
 import com.example.babysitter.Profile;
 import com.example.babysitter.R;
 import com.example.babysitter.admin;
+import com.example.babysitter.adminAddEmployee;
 import com.example.babysitter.login;
 import com.example.babysitter.signUpEmployee;
 import com.example.babysitter.signUpParent;
@@ -758,6 +759,68 @@ public class dbClass {
         queue.add(request);
 
     }
+
+    public void sendWorkRequest(Deals dealToAdd)  {
+        // function adds a new deal to the database
+
+        ProgressDialog dialogLoading;
+        dialogLoading = ProgressDialog.show(context, "",
+                "Sending, please wait...", true);
+
+        StringRequest request = new StringRequest(Request.Method.POST, this.getUrl() + "?action=addDeal", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                dialogLoading.dismiss();
+
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        // if the adding to the database was successful, then we add the new deal to the home page of the employee.
+                        Toast.makeText(context, "ADDING WAS SUCCESSFUL", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Sending job request failed..")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("employee_id", dealToAdd.getEmployeeId());
+                map.put("parent_id", dealToAdd.getParentId());
+                map.put("employee_accepted", dealToAdd.getEmployeeAccepted());
+                map.put("has_done", dealToAdd.isHasDone());
+                map.put("completed_deal_date", dealToAdd.getCompletedDealDate().toString());
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
+
+    }
+
+
+
 
 
     public void changePhoneOfCurrentUser(String newPhoneNum, Dialog dialog, TextView phoneNumber) {
