@@ -34,9 +34,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Date;
+import com.example.babysitter.Classes.Deals;
 import com.example.babysitter.Classes.Employee;
+import com.example.babysitter.Classes.Parent;
 import com.example.babysitter.Classes.ProfilePhoto;
 import com.example.babysitter.Classes.SetImageViewFromUrl;
+import com.example.babysitter.Classes.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -70,6 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView title;
     Employee[] allLocationsForEmp;
     Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
     @Override
     public void onBackPressed() {
         //getSupportFragmentManager().popBackStack();
@@ -142,7 +147,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         getAllLocationsForEmp();
-
 
 
         mMap.getUiSettings().setAllGesturesEnabled(true);
@@ -175,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     JSONArray allUsersPhotos = new JSONArray(response);
                     ProfilePhoto[] profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
-                    for (int i=0;i<allUsersPhotos.length();i++) {
+                    for (int i = 0; i < allUsersPhotos.length(); i++) {
                         JSONObject userPhoto = allUsersPhotos.getJSONObject(i);
                         profilePhoto[i] = new ProfilePhoto(userPhoto.getString("id"), userPhoto.getString("profile_image_path"));
                     }
@@ -183,7 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     //adding marker on the map for all locations from db
 
-                    for (int i=0; i<allLocationsForEmp.length;i++) {
+                    for (int i = 0; i < allLocationsForEmp.length; i++) {
                         double[] cordinates = new double[2];
                         LatLng adjustedLocation;
                         try {
@@ -226,6 +230,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         queue.add(request);
 
     }
+
     private static final float COORDINATE_OFFSET = 0.000585f;
     private int offsetType = 0;
     private ArrayList<LatLng> markerCoordinates = new ArrayList<>();
@@ -297,7 +302,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return point;
     }
 
-    public void getAllLocationsForEmp(){
+    public void getAllLocationsForEmp() {
         StringRequest request = new StringRequest(Request.Method.POST, login.dbClass.getUrl() + "?action=getAllLocationsForEmp", new Response.Listener<String>() {
 
             @Override
@@ -305,14 +310,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     JSONArray allEmployees = new JSONArray(response);
                     allLocationsForEmp = new Employee[allEmployees.length()];
-                    for (int i=0; i<allEmployees.length();i++){
+                    for (int i = 0; i < allEmployees.length(); i++) {
                         JSONObject emp = allEmployees.getJSONObject(i);
 
                         String[] dateOfSubAsString = emp.getString("birthdate").split("-");
                         Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
-                        com.example.babysitter.Classes.Address address = new com.example.babysitter.Classes.Address(emp.getString("city"),emp.getString("street"),emp.getString("house_number"));
+                        com.example.babysitter.Classes.Address address = new com.example.babysitter.Classes.Address(emp.getString("city"), emp.getString("street"), emp.getString("house_number"));
 
-                        allLocationsForEmp[i] = new Employee(emp.getString("id"),emp.getString("first_name"), emp.getString("last_name"), emp.getString("phone_number"), dateOfbirth, emp.getString("password"), emp.getString("email"), emp.getString("role"), emp.getString("status"), emp.getString("rate"), emp.getString("special_demands"), emp.getString("working_hours_in_month"), emp.getString("experience"), address);
+                        allLocationsForEmp[i] = new Employee(emp.getString("id"), emp.getString("first_name"), emp.getString("last_name"), emp.getString("phone_number"), dateOfbirth, emp.getString("password"), emp.getString("email"), emp.getString("role"), emp.getString("status"), emp.getString("rate"), emp.getString("special_demands"), emp.getString("working_hours_in_month"), emp.getString("experience"), address);
                     }
                     showAllEmployeesOnMap();
 
@@ -376,6 +381,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         dealsMade.setText("");
 
+        // setting a listener on the "send request" button
+        btnRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendWorkRequestToCurrentEmployee(emp);
+            }
+        });
+
 
         new SetImageViewFromUrl(profilePhoto).execute(emp.getProfilePhoto().getImageUrl());
 
@@ -392,16 +405,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    /**
+     * Function gets the current employee and sends from the parent account a job request to the user they choose.
+     */
+    public void sendWorkRequestToCurrentEmployee(Employee emp) {
+        Parent currentParentUser = (Parent) login.dbClass.currentUser; // getting the parents' account
+
+        // setting all the parameters for the new deal
+        String defaultId = null;
+        String employeeId = emp.getId();
+        String parentId = currentParentUser.getId();
+        String employeeAccepted = "false";
+        String hasDone = "false";
+        Date completedDealDate = null;
+
+        Deals dealToSend = new Deals(defaultId, employeeId, parentId, employeeAccepted, hasDone, completedDealDate);
+        login.dbClass.sendWorkRequest(dealToSend);
+
+
+    }
 
 
     public class GetImageFromUrl extends AsyncTask<String, Void, Bitmap> {
         LatLng location;
         Bitmap bitmap;
         Employee currentEmployee;
-        public GetImageFromUrl(LatLng location, Employee currentEmployee){
+
+        public GetImageFromUrl(LatLng location, Employee currentEmployee) {
             this.location = location;
             this.currentEmployee = currentEmployee;
         }
+
         @Override
         protected Bitmap doInBackground(String... url) {
             String stringUrl = url[0];
@@ -411,23 +445,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 inputStream = new java.net.URL(stringUrl).openStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
             } catch (IOException e) {
-                bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_photo_default);
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_photo_default);
                 e.printStackTrace();
             }
             return bitmap;
         }
+
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-                Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
-                Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
-                marker.showInfoWindow();
-                marker.setTag(currentEmployee);
+            Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
+            Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+            marker.showInfoWindow();
+            marker.setTag(currentEmployee);
 
 
         }
     }
-
 
 
 }
