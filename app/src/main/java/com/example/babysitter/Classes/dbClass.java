@@ -763,15 +763,10 @@ public class dbClass {
     public void sendWorkRequest(Deals dealToAdd)  {
         // function adds a new deal to the database
 
-        ProgressDialog dialogLoading;
-        dialogLoading = ProgressDialog.show(context, "",
-                "Sending, please wait...", true);
 
         StringRequest request = new StringRequest(Request.Method.POST, this.getUrl() + "?action=addDeal", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                dialogLoading.dismiss();
-
                 try {
                     JSONObject result = new JSONObject(response);
                     String success = result.getString("success");
@@ -793,7 +788,6 @@ public class dbClass {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
                 Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
             }
 
@@ -807,7 +801,6 @@ public class dbClass {
                 map.put("parent_id", dealToAdd.getParentId());
                 map.put("employee_accepted", dealToAdd.getEmployeeAccepted());
                 map.put("has_done", dealToAdd.isHasDone());
-                map.put("completed_deal_date", dealToAdd.getCompletedDealDate().toString());
                 return map;
             }
 

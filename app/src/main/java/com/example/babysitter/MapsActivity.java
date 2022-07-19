@@ -409,14 +409,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Function gets the current employee and sends from the parent account a job request to the user they choose.
      */
     public void sendWorkRequestToCurrentEmployee(Employee emp) {
-        Parent currentParentUser = (Parent) login.dbClass.currentUser; // getting the parents' account
 
         // setting all the parameters for the new deal
         String defaultId = null;
         String employeeId = emp.getId();
-        String parentId = currentParentUser.getId();
-        String employeeAccepted = "false";
-        String hasDone = "false";
+        String parentId = login.dbClass.getCurrentUser().getId();
+        String employeeAccepted = "0";
+        String hasDone = "0";
         Date completedDealDate = null;
 
         Deals dealToSend = new Deals(defaultId, employeeId, parentId, employeeAccepted, hasDone, completedDealDate);
