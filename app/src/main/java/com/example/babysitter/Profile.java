@@ -22,6 +22,7 @@ import com.example.babysitter.Classes.Parent;
 import com.example.babysitter.Classes.SetImageViewFromUrl;
 import com.example.babysitter.Classes.User;
 import com.example.babysitter.Classes.dbClass;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -33,6 +34,7 @@ public class Profile extends Fragment {
     View view;
     public static User currentUser;
     Button btnChangePassword;
+    Button btnLogout;
     LinearLayout btnEditAddress, btnEditPhone, btnEditEmail;
     Dialog dialog;
 
@@ -57,6 +59,8 @@ public class Profile extends Fragment {
         btnEditAddress = view.findViewById(R.id.btnAddressEdit);
         btnEditPhone = view.findViewById(R.id.btnPhoneEdit);
         btnEditEmail = view.findViewById(R.id.btnEmailEdit);
+
+        btnLogout = view.findViewById(R.id.logoutBtn);
 
 
         ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
@@ -99,7 +103,6 @@ public class Profile extends Fragment {
         }
 
 
-
         // if user clicked on "change my password" button
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +133,13 @@ public class Profile extends Fragment {
             }
         });
 
+        // if user clicked on the logout button
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logoutFromProfile();
+            }
+        });
 
 
         return view;
@@ -168,12 +178,11 @@ public class Profile extends Fragment {
 
         // the EditText in the dialog
         EditText newPhoneNum = dialog.findViewById(R.id.newPhoneNumber);
-        if(newPhoneNum.getText().toString().equals(""))
-        {
+        if (newPhoneNum.getText().toString().equals("")) {
             Toast.makeText(getContext(), "Please enter phone number", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!login.dbClass.getCurrentUser().getPhoneNumber().equals(newPhoneNum.getText().toString()))
+        if (!login.dbClass.getCurrentUser().getPhoneNumber().equals(newPhoneNum.getText().toString()))
             // this function changes the phone in the database, and informs the user if it was successful or if it failed to save the new password
             login.dbClass.changePhoneOfCurrentUser(newPhoneNum.getText().toString(), dialog, view.findViewById(R.id.userPhoneNumber));
         else
@@ -266,6 +275,12 @@ public class Profile extends Fragment {
      */
     public void showPopupToChangeAddress() {
 
+    }
+
+
+    // function logs out from the current user account
+    public void logoutFromProfile() {
+        ////////////////////////***************************////////////////////
     }
 
 
