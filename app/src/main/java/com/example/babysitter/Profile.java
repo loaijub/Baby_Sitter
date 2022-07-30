@@ -78,9 +78,7 @@ public class Profile extends Fragment {
         // we do down casting
         // current user is an Employee
         if (login.dbClass.getCurrentUser().getRole().equals("1")) {
-            userAddress.setText("City: " + ((Employee) currentUser).getAddress().getCity() + "\nStreet: "
-                    + ((Employee) currentUser).getAddress().getStreet() + "\nHouse number: "
-                    + ((Employee) currentUser).getAddress().getHouse_number());
+            userAddress.setText(((Employee) currentUser).getAddress().toString());
 
             //specialDemands.setText("Special demands: " + ((Employee) currentUser).getSpecialDemands());
             rate.setText(((Employee) currentUser).getRate());
@@ -90,9 +88,7 @@ public class Profile extends Fragment {
         }
         // current user is a parent
         else {
-            userAddress.setText("City: " + ((Parent) currentUser).getAddress().getCity() + "\nStreet: "
-                    + ((Parent) currentUser).getAddress().getStreet() + "\nHouse number: "
-                    + ((Parent) currentUser).getAddress().getHouse_number());
+            userAddress.setText(((Parent) currentUser).getAddress().toString());
             //specialDemands.setText("Special demands: " + ((Parent) currentUser).getSpecialDemands());
             //numberOfChildren.setText("Number of children: " + ((Parent) currentUser).getNumberOfChildren());
             rate.setText(((Parent) currentUser).getRate());
@@ -191,7 +187,43 @@ public class Profile extends Fragment {
     }
 
     private void showPopupToChangeEmail() {
+        // function show for user the popup to change his phone number
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.change_email_dialog);
+        dialog.show();
 
+        // the buttons in the dialog
+        Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
+        Button saveChangesBtn = dialog.findViewById(R.id.saveBtn);
+
+
+        // setting listeners on each button
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndDoNotSave();
+            }
+        });
+
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndChangeEmail();
+            }
+        });
+    }
+
+    private void closeAndChangeEmail() {
+        EditText newEmail = dialog.findViewById(R.id.newEmail);
+        if (newEmail.getText().toString().equals("")) {
+            Toast.makeText(getContext(), "Please enter email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!login.dbClass.getCurrentUser().getEmail().equals(newEmail.getText().toString()))
+            // this function changes the email in the database, and informs the user if it was successful or if it failed to save the new password
+            login.dbClass.changeEmailOfCurrentUser(newEmail.getText().toString(), dialog, view.findViewById(R.id.userEmail));
+        else
+            dialog.dismiss();
     }
 
 
@@ -274,6 +306,42 @@ public class Profile extends Fragment {
      * Function shows a popup with the user current details as EditText, and user can change his own details.
      */
     public void showPopupToChangeAddress() {
+        // function show for user the popup to change his password
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.change_address_dialog);
+        dialog.show();
+
+        // the buttons in the dialog
+        Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
+        Button saveChangesBtn = dialog.findViewById(R.id.saveBtn);
+
+
+        // setting listeners on each button
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndDoNotSave();
+            }
+        });
+
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeAndChangeAddress();
+            }
+        });
+    }
+
+    private void closeAndChangeAddress() {
+        String newAddressCity = ((EditText)dialog.findViewById(R.id.newAddressCity)).getText().toString();
+        String newAddressStreet = ((EditText)dialog.findViewById(R.id.newAddressStreet)).getText().toString();
+        String newAddressHouse = ((EditText)dialog.findViewById(R.id.newAddressHouse)).getText().toString();
+        if (newAddressCity.equals("") || newAddressStreet.equals("") || newAddressHouse.equals(""))
+        {
+            Toast.makeText(getContext(), "Please enter address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        login.dbClass.changeAddressOfCurrentUser(new String[]{newAddressCity,newAddressStreet,newAddressHouse}, dialog, view.findViewById(R.id.userAddress));
 
     }
 

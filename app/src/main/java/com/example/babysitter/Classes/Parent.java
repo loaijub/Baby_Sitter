@@ -6,7 +6,6 @@ public class Parent extends User {
     private String rate; // the rate that other employees give to parent.
     private String specialDemands; // the special demands of the parent regarding their children and working with them.
     private String numberOfChildren; // the number of children that will take part in the system.
-    private Address address;
 
     public Parent(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String email, String role, String status, String rate, String specialDemands, String numberOfChildren, Address address) {
         super(id, fName, lName, phoneNumber, birthDate, password, role, email);

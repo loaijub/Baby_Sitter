@@ -12,6 +12,7 @@ public class User {
     protected String role;
     protected String email;
     private ProfilePhoto profilePhoto;
+    protected Address address;
 
     // constructor
     public User(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String role, String email) {
@@ -26,6 +27,10 @@ public class User {
     }
     public void setProfilePhoto(ProfilePhoto profilePhoto) {
         this.profilePhoto = profilePhoto;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public ProfilePhoto getProfilePhoto() {

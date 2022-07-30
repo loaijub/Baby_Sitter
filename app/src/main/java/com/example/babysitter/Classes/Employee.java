@@ -7,7 +7,6 @@ public class Employee extends User {
     private String specialDemands; // the special demands regarding work.
     private String workingHoursInMonth; // the total working hours of employee in a month
     private String experience; // the experience of the employee with working with kids.
-    private Address address;
 
 
     public Address getAddress() {

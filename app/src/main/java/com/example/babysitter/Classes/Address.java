@@ -23,7 +23,13 @@ public class Address {
         return house_number;
     }
 
-
+    @Override
+    public String toString() {
+        return
+                "City: " + city + "\n" +
+                "Street: " + street + "\n " +
+                "House number: " + house_number;
+    }
 
     public void setCity(String city) {
         this.city = city;

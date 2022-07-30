@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -868,6 +869,113 @@ public class dbClass {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
+    }
+
+    public void changeEmailOfCurrentUser(String newEmail, Dialog dialog, TextView email) {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeEmailForCurrentUser", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+
+                    // changing the email in the database was successful
+                    if (success.equals("true")) {
+                        Toast.makeText(context, "Changes were saved successfully", Toast.LENGTH_SHORT).show();
+                        currentUser.setEmail(newEmail);
+                    } else {
+                        Toast.makeText(context, "Changes were not saved. Please try again!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // whatever the result was, we close the dialog
+                    dialog.dismiss();
+                    email.setText(newEmail);
+
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", currentUser.getId());
+                map.put("newEmail", newEmail);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+
+    public void changeAddressOfCurrentUser(String[] newAddress, Dialog dialog, TextView address) {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeAddressForCurrentUser", new Response.Listener<String>() {
+        Address newAddrss = new Address(newAddress[0], newAddress[1], newAddress[2]);
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    // changing the email in the database was successful
+                    if (success.equals("true")) {
+                        Toast.makeText(context, "Changes were saved successfully", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(context, "Changes were not saved. Please try again!", Toast.LENGTH_SHORT).show();
+                    }
+                    currentUser.setAddress(newAddrss);
+                    // whatever the result was, we close the dialog
+                    dialog.dismiss();
+                    address.setText(newAddrss.toString());
+
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", currentUser.getId());
+                map.put("newCity", newAddress[0]);
+                map.put("newStreet", newAddress[1]);
+                map.put("newHouse", newAddress[2]);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
     }
 }
 
