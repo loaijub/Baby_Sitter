@@ -5,7 +5,7 @@ public class Deals {
     private final String dealId;
     private final String employeeId;
     private final String parentId;
-    private String employeeAccepted; // 0 - denied   1 - accepted
+    private String employeeAccepted; // 0 - denied   1 - accepted   2 - not answered yet
     private String hasDone; // 0 - is NOT done   1 - done
     private double parentRate;
     private String feedbackAboutParent;

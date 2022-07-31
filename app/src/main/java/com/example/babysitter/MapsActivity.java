@@ -116,9 +116,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new informationPage()).addToBackStack(null).commit();
                         title.setText("Info");
                         break;
+
                     case R.id.historyIcon:
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new History()).addToBackStack(null).commit();
                         title.setText("History");
+                        break;
+
+                    case R.id.jobRequestsIcon:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, new JobRequest()).addToBackStack(null).commit();
+                        title.setText("Job requests");
+
                 }
 
                 return true;
@@ -414,7 +421,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String defaultId = null;
         String employeeId = emp.getId();
         String parentId = login.dbClass.getCurrentUser().getId();
-        String employeeAccepted = "0";
+        String employeeAccepted = "2";
         String hasDone = "0";
         Date completedDealDate = null;
 

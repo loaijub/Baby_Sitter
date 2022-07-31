@@ -319,6 +319,9 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function gets for the admin all the users in the system that are in the database.
+     */
     public void getAllUsers() {
         List<User> users = new ArrayList<>();
 
@@ -379,6 +382,9 @@ public class dbClass {
 
     }
 
+    /**
+     * Function gets for the admin all the reports in the database.
+     */
     public void getAllReports() {
         List<Report> allReports = new ArrayList<>();
 
@@ -571,8 +577,10 @@ public class dbClass {
         AsyncTaskUploadClassOBJ.execute();
     }
 
+    /**
+     * Function gets all the deals related to the current user and displays it as ItemList of the screen for user.
+     */
     public void getAllDeals() {
-        // function gets all the deals related to the current user and displays it as ItemList of the screen for user.
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
@@ -644,8 +652,10 @@ public class dbClass {
     }
 
 
+    /**
+     * Function gets all the user details from the database and returns it as an array of strings
+     */
     public void getUserDetailsFromDatabase() {
-        // function gets all the user details from the database and returns it as an array of strings
 
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getCurrentUserDetails", new Response.Listener<String>() {
 
@@ -761,10 +771,12 @@ public class dbClass {
 
     }
 
-    public void sendWorkRequest(Deals dealToAdd)  {
-        // function adds a new deal to the database
-
-
+    /**
+     * Function adds a new deal to the database
+     *
+     * @param dealToAdd the new deal to add to database.
+     */
+    public void sendWorkRequest(Deals dealToAdd) {
         StringRequest request = new StringRequest(Request.Method.POST, this.getUrl() + "?action=addDeal", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -814,13 +826,8 @@ public class dbClass {
     }
 
 
-
-
-
     public void changePhoneOfCurrentUser(String newPhoneNum, Dialog dialog, TextView phoneNumber) {
-
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changePhoneForCurrentUser", new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
                 try {
@@ -926,7 +933,8 @@ public class dbClass {
 
     public void changeAddressOfCurrentUser(String[] newAddress, Dialog dialog, TextView address) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeAddressForCurrentUser", new Response.Listener<String>() {
-        Address newAddrss = new Address(newAddress[0], newAddress[1], newAddress[2]);
+            Address newAddrss = new Address(newAddress[0], newAddress[1], newAddress[2]);
+
             @Override
             public void onResponse(String response) {
                 try {
@@ -977,5 +985,7 @@ public class dbClass {
         queue.add(request);
 
     }
+
+
 }
 
