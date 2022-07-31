@@ -622,15 +622,16 @@ public class dbClass {
                     // if the list is not empty, we show the deals for the user
 
                     if (History.list != null) {
-                        ListAdapterForDeals myAdapter;
                         if(historyOrRequests.equals("history")) {
-                            myAdapter = new ListAdapterForDeals(History.allDeals, context);
+                            // we filter the array to show only the done deals
+                            History.filterArray();
+                            ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
                             History.list.setAdapter(myAdapter);
                         }
                         else {
                             // we filter the deals to show only the ones that don't have an answer yet
                             JobRequest.filterList();
-                            myAdapter = new ListAdapterForDeals(JobRequest.allJobs, context);
+                            ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);
                             JobRequest.list.setAdapter(myAdapter);
                         }
                     }

@@ -56,6 +56,17 @@ public class History extends Fragment {
         return view;
     }
 
+    public static void filterArray()
+    {
+        List<Deals> res = new ArrayList<>(); // the result (filtered array)
+        for (Deals deal : allDeals) {
+            // we check if the deal is done, only if it is done, we add it to array.
+            if (deal.isHasDone().equals("1"))
+                res.add(deal);
+        }
+        allDeals = res;
+    }
+
 }
 
 

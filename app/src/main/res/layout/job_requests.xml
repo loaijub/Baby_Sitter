@@ -11,15 +11,16 @@
         android:fillViewport="true">
 
 
-    <ListView
-        android:id="@+id/listOfJobs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp" />
+        <ListView
+            android:id="@+id/listOfJobs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" />
     </ScrollView>
+
     <ProgressBar
         android:id="@+id/progress"
-        android:padding="180dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:padding="180dp" />
 </RelativeLayout>
