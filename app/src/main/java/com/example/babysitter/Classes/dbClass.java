@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.babysitter.EmployeeHomePage;
 import com.example.babysitter.History;
 import com.example.babysitter.JobRequest;
 import com.example.babysitter.MapsActivity;
@@ -96,6 +97,13 @@ public class dbClass {
                             ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
                             ((Activity) context).finish();
                             getUserDetailsFromDatabase();
+                        }
+                        else if(currentUser.getRole().equals("1")){
+                            ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new EmployeeHomePage()).commit();
+                            getUserDetailsFromDatabase();
+                        }
+                        else{
+                            /* both ui (parent + employee) */
                         }
 
                     } else {

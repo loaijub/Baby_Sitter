@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.babysitter.Classes.Deals;
+import com.example.babysitter.Classes.ListAdapterForJobEmployee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ public class EmployeeHomePage extends Fragment {
         list = view.findViewById(R.id.jobRequestsList);
         //login.dbClass.getAllJobRequestsForEmployee();
         allJobs = new ArrayList<>();
+        allJobs.add(null);
+        ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(allJobs,getContext());
+        list.setAdapter(myAdapter);
 
         return view;
     }
