@@ -19,23 +19,16 @@ public class JobRequest extends Fragment {
 
     View view;
     public static ListView list;
-
     // array of all deals in database
-    public static List<Deals> allJobs;
+    public static List<Deals> allJobs = new ArrayList<>();
 
-    public JobRequest() {
-        allJobs = new ArrayList<>();
-        // we get all the deals from the data base
-        login.dbClass.getAllDeals();
-
-        // we filter the deals to show only the ones that don't have an answer yet
-        filterList();
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.job_requests, container, false);
+        // we get all the deals from the data base
+        login.dbClass.getAllDeals("job",view.findViewById(R.id.progress));
 
         list = view.findViewById(R.id.listOfJobs);
         allJobs = new ArrayList<>();
@@ -46,7 +39,7 @@ public class JobRequest extends Fragment {
     /**
      * Function filters the arrayList to contain only the deals with no answer from employee
      */
-    private void filterList() {
+    public static void filterList() {
 
         List<Deals> res = new ArrayList<>(); // the result (filtered array)
         for (Deals job : allJobs) {

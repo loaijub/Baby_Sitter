@@ -6,7 +6,6 @@ import static com.example.babysitter.ViewAllWorkApplications.showAllWorkApplicat
 import static com.example.babysitter.adminAddEmployee.showListViewItems;
 import static com.example.babysitter.signUpEmployee.bitmapForCV;
 import static com.example.babysitter.signUpEmployee.bitmapForPD;
-import static com.example.babysitter.signUpParent.fields;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,7 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,12 +31,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babysitter.History;
+import com.example.babysitter.JobRequest;
 import com.example.babysitter.MapsActivity;
 import com.example.babysitter.Profile;
 import com.example.babysitter.R;
 import com.example.babysitter.admin;
-import com.example.babysitter.adminAddEmployee;
-import com.example.babysitter.login;
 import com.example.babysitter.signUpEmployee;
 import com.example.babysitter.signUpParent;
 
@@ -579,12 +577,14 @@ public class dbClass {
 
     /**
      * Function gets all the deals related to the current user and displays it as ItemList of the screen for user.
+     * @return
      */
-    public void getAllDeals() {
+    public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
+                progress.setVisibility(View.GONE);
                 //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 try {
                     // we get all the deals that are related to the user in an array.
@@ -612,14 +612,27 @@ public class dbClass {
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
 
                         // we add the deal object to the listView
-                        History.allDeals.add(tempDeal);
+                        if(historyOrRequests.equals("history"))
+                            History.allDeals.add(tempDeal);
+                        else
+                            JobRequest.allJobs.add(tempDeal);
 
 
                     }
                     // if the list is not empty, we show the deals for the user
+
                     if (History.list != null) {
-                        ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
-                        History.list.setAdapter(myAdapter);
+                        ListAdapterForDeals myAdapter;
+                        if(historyOrRequests.equals("history")) {
+                            myAdapter = new ListAdapterForDeals(History.allDeals, context);
+                            History.list.setAdapter(myAdapter);
+                        }
+                        else {
+                            // we filter the deals to show only the ones that don't have an answer yet
+                            JobRequest.filterList();
+                            myAdapter = new ListAdapterForDeals(JobRequest.allJobs, context);
+                            JobRequest.list.setAdapter(myAdapter);
+                        }
                     }
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -649,6 +662,7 @@ public class dbClass {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
+        return null;
     }
 
 

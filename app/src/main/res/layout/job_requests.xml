@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -17,5 +17,9 @@
         android:layout_height="match_parent"
         android:layout_marginTop="10dp" />
     </ScrollView>
-
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:padding="180dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

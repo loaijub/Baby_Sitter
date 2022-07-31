@@ -42,17 +42,14 @@ public class History extends Fragment {
     public static ListView list;
 
     // array of all deals in database
-    public static List<Deals> allDeals;
+    public static List<Deals> allDeals = new ArrayList<>();
 
-    public History(){
-        allDeals = new ArrayList<>();
-        login.dbClass.getAllDeals();
-    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.history, container, false);
-
+        login.dbClass.getAllDeals("history",view.findViewById(R.id.progress));
         list = view.findViewById(R.id.listOfHistory);
         allDeals = new ArrayList<>();
 
