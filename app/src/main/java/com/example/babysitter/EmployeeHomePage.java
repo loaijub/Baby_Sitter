@@ -21,7 +21,7 @@ public class EmployeeHomePage extends Fragment {
     public static ListView list;
 
     // array of all jobs in database for current user
-    public static List<Deals> allJobs = new ArrayList<>();
+    public static List<Deals> allJobs = JobRequest.allJobs;
 
 
     @Nullable
@@ -30,11 +30,8 @@ public class EmployeeHomePage extends Fragment {
         view = inflater.inflate(R.layout.employee_homepage, container, false);
 
         list = view.findViewById(R.id.jobRequestsList);
-        //login.dbClass.getAllJobRequestsForEmployee();
-        allJobs = new ArrayList<>();
-        allJobs.add(null);
-        ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(allJobs,getContext());
-        list.setAdapter(myAdapter);
+
+        login.dbClass.getAllDeals("job1",view.findViewById(R.id.progress));
 
         return view;
     }

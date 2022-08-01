@@ -8,7 +8,6 @@
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="70dp"
-            android:src="@drawable/profile_icon"
             android:scaleType="centerCrop"
             android:id="@+id/parentImage"
             android:layout_margin="10dp"

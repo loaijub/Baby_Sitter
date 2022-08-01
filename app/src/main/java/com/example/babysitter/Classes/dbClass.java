@@ -37,13 +37,17 @@ import com.example.babysitter.MapsActivity;
 import com.example.babysitter.Profile;
 import com.example.babysitter.R;
 import com.example.babysitter.admin;
+import com.example.babysitter.login;
 import com.example.babysitter.signUpEmployee;
 import com.example.babysitter.signUpParent;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +58,7 @@ public class dbClass {
     private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser;
+    public static List<User> users;
 
     public String getUrl() {
         return url;
@@ -75,7 +80,8 @@ public class dbClass {
     }
 
     public void login(String id, String pass) {
-
+        getAllUsers(false);
+        getAllProfilePhoto();
         dialogLoading = ProgressDialog.show(context, "",
                 "Logging in. Please wait...", true);
 
@@ -328,17 +334,14 @@ public class dbClass {
     /**
      * Function gets for the admin all the users in the system that are in the database.
      */
-    public void getAllUsers() {
-        List<User> users = new ArrayList<>();
+    public void getAllUsers(boolean showListView) {
+        users = new ArrayList<>();
 
-        dialogLoading = ProgressDialog.show(context, "",
-                "Loading... Please wait", true);
 
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllUsers", new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                dialogLoading.dismiss();
                 //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray allusers = new JSONArray(response);
@@ -352,7 +355,8 @@ public class dbClass {
                         users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, "", user.getString("role"), user.getString("email")));
                     }
 
-                    showListView(users, context);
+                    if(showListView)
+                        showListView(users, context);
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -366,7 +370,6 @@ public class dbClass {
             @Override
 
             public void onErrorResponse(VolleyError error) {
-                dialogLoading.dismiss();
                 Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
             }
 
@@ -592,8 +595,9 @@ public class dbClass {
 
             @Override
             public void onResponse(String response) {
-                progress.setVisibility(View.GONE);
-                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                if(progress != null )
+                    progress.setVisibility(View.GONE);
+
                 try {
                     // we get all the deals that are related to the user in an array.
                     JSONArray allDealsArr = new JSONArray(response);
@@ -629,7 +633,7 @@ public class dbClass {
                     }
                     // if the list is not empty, we show the deals for the user
 
-                    if (History.list != null) {
+                    if (History.list != null || EmployeeHomePage.list != null) {
                         if(historyOrRequests.equals("history")) {
                             // we filter the array to show only the done deals
                             History.filterArray();
@@ -639,8 +643,13 @@ public class dbClass {
                         else {
                             // we filter the deals to show only the ones that don't have an answer yet
                             JobRequest.filterList();
-                            ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);
-                            JobRequest.list.setAdapter(myAdapter);
+                            if(historyOrRequests.equals("job1")){
+                                ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequest.allJobs,context);
+                                EmployeeHomePage.list.setAdapter(myAdapter);
+                            }else {
+                                ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);
+                                JobRequest.list.setAdapter(myAdapter);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -703,7 +712,6 @@ public class dbClass {
 
                     user.setProfilePhoto(new ProfilePhoto(user.getId(), allDetailsArr.getJSONObject(2).getString("profile_image_path")));
                     Profile.currentUser = user;
-
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -1009,6 +1017,37 @@ public class dbClass {
 
     }
 
+    public static ProfilePhoto[] profilePhoto;
+    public void getAllProfilePhoto(){
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllProfilePhotos", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray allUsersPhotos = new JSONArray(response);
+                    profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
+                    for (int i = 0; i < allUsersPhotos.length(); i++) {
+                        JSONObject userPhoto = allUsersPhotos.getJSONObject(i);
+                        profilePhoto[i] = new ProfilePhoto(userPhoto.getString("id"), userPhoto.getString("profile_image_path"));
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error" + e.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
 
 }
 

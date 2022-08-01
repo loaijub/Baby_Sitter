@@ -5,11 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.babysitter.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapterForJobEmployee extends BaseAdapter {
@@ -38,12 +41,29 @@ public class ListAdapterForJobEmployee extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show();
         LayoutInflater ly = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = ly.inflate(R.layout.employee_homepage_adapter, null);
 
-        //TextView applicationInfo = v.findViewById(R.id.singleDeal);
-        //applicationInfo.setText(jobsArr.get(position).toString());
+        ImageView profileImage = v.findViewById(R.id.parentImage);
+        TextView name = v.findViewById(R.id.parentName);
+        TextView acceptDeal = v.findViewById(R.id.acceptDeal);
+
+        User currentUser = null;
+        if(dbClass.users != null) {
+            for (User user : dbClass.users) {
+                if (user.getId().equals(jobsArr.get(position).getParentId())) {
+                    currentUser = user;
+                    break;
+                }
+            }
+        }
+        if(currentUser != null) {
+            name.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+            for(ProfilePhoto pf : dbClass.profilePhoto)
+                if(jobsArr.get(position).getParentId().equals(pf.getUserId()))
+                    currentUser.setProfilePhoto(pf);
+            new SetImageViewFromUrl(profileImage).execute(currentUser.getProfilePhoto().getImageUrl());
+        }
         return v;
     }
 }

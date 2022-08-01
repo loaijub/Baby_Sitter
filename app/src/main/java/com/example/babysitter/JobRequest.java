@@ -22,17 +22,14 @@ public class JobRequest extends Fragment {
     // array of all deals in database
     public static List<Deals> allJobs = new ArrayList<>();
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.job_requests, container, false);
         // we get all the deals from the data base
-        login.dbClass.getAllDeals("job",view.findViewById(R.id.progress));
-
-        list = view.findViewById(R.id.listOfJobs);
         allJobs = new ArrayList<>();
-
+        login.dbClass.getAllDeals("job",view.findViewById(R.id.progress));
+        list = view.findViewById(R.id.listOfJobs);
         return view;
     }
 

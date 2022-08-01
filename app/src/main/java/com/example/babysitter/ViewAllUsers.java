@@ -44,7 +44,7 @@ public class ViewAllUsers extends Fragment {
 
         view = inflater.inflate(R.layout.admin_show_all_users, container,false);
         listView = view.findViewById(R.id.listview_show_users);
-        login.dbClass.getAllUsers();
+        login.dbClass.getAllUsers(true);
 
         return view;
     }
