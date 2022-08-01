@@ -1,10 +1,12 @@
 package com.example.babysitter.Classes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.babysitter.R;
@@ -14,6 +16,7 @@ import java.util.List;
 public class ListAdapterForDeals extends BaseAdapter {
     List<Deals> dealsArr;
     Context context;
+    Button reportBtn;
 
     public ListAdapterForDeals(List<Deals> dealsArr, Context context) {
         this.dealsArr = dealsArr;
@@ -35,6 +38,7 @@ public class ListAdapterForDeals extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater ly = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -42,6 +46,9 @@ public class ListAdapterForDeals extends BaseAdapter {
 
         TextView applicationInfo = v.findViewById(R.id.singleDeal);
         applicationInfo.setText(dealsArr.get(position).toString());
+        this.reportBtn = v.findViewById(R.id.addReportBtn);
+
         return v;
     }
+
 }
