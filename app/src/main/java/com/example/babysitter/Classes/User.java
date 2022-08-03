@@ -13,9 +13,10 @@ public class User {
     protected String email;
     private ProfilePhoto profilePhoto;
     protected Address address;
+    protected String status;
 
     // constructor
-    public User(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String role, String email) {
+    public User(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String role, String email, String status) {
         this.id = id;
         this.firstName = fName;
         this.lastName = lName;
@@ -24,6 +25,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.email = email;
+        this.status = status;
     }
     public void setProfilePhoto(ProfilePhoto profilePhoto) {
         this.profilePhoto = profilePhoto;
@@ -46,6 +48,8 @@ public class User {
         this.password = other.password;
         this.role = other.role;
         this.email = other.email;
+        this.status = other.status;
+
     }
 
     // getters and setters
@@ -103,6 +107,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     // toString

@@ -20,7 +20,7 @@
 
         <Button
             android:id="@+id/deleteBtn"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#0A5DDF"
             android:text="deny"
@@ -29,11 +29,19 @@
 
         <Button
             android:id="@+id/addBtn"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="#0A5DDF"
             android:text="approve"
+            android:textColor="@color/white" />
+        <Button
+            android:id="@+id/ShowSubmittedFiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#0A5DDF"
+            android:text="Show Submitted Files"
             android:textColor="@color/white" />
     </LinearLayout>
 

@@ -2,12 +2,14 @@ package com.example.babysitter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,6 +126,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
         TextView applicationInfo = v.findViewById(R.id.workApplicationInfo);
         Button addEmployeeBtn = v.findViewById(R.id.addBtn);
         Button deleteApplicationBtn = v.findViewById(R.id.deleteBtn);
+        Button showSubmittedFiles = v.findViewById(R.id.ShowSubmittedFiles);
 
         // setting listener for the add button
         addEmployeeBtn.setOnClickListener(new View.OnClickListener() {
@@ -140,11 +143,51 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                 denyWorkApplication(applicationsArr[position].getEmployeeId(), applicationsArr[position].getEmployeeEmail());
             }
         });
+        // setting listener for the showSubmittedFiles
+        showSubmittedFiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowSubmittedFiles(applicationsArr[position].getEmployeeId());
+            }
+        });
 
         applicationInfo.setText(applicationsArr[position].toString());
 
 
         return v;
+    }
+
+    private void ShowSubmittedFiles(String employeeId) {
+        // function show for user the popup to change his phone number
+
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.show_submitted_files);
+        dialog.show();
+
+        // the buttons in the dialog
+        Button btnCV = dialog.findViewById(R.id.btnCV);
+        Button btnPD = dialog.findViewById(R.id.btnPD);
+        btnCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                String url = login.dbClass.getUrl();
+                intent.setDataAndType(Uri.parse(url.substring(0,url.length()-10)+employeeId+"/cvimage.png"), "image/*");
+                context.startActivity(intent);
+            }
+        });
+        btnPD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                String url = login.dbClass.getUrl();
+                intent.setDataAndType(Uri.parse(url.substring(0,url.length()-10)+employeeId+"/pdimage.png"), "image/*");
+                context.startActivity(intent);
+            }
+        });
+
     }
 
 

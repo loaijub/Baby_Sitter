@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,6 +39,7 @@ public class ViewAllUsers extends Fragment {
     View view;
     static ListView listView;
     ProgressDialog dialogLoading;
+    public static FragmentActivity fg;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -45,7 +47,7 @@ public class ViewAllUsers extends Fragment {
         view = inflater.inflate(R.layout.admin_show_all_users, container,false);
         listView = view.findViewById(R.id.listview_show_users);
         login.dbClass.getAllUsers(true);
-
+        fg = getActivity();
         return view;
     }
 
@@ -106,7 +108,7 @@ class MyAdapter extends BaseAdapter{
         ((TextView)v.findViewById(R.id.delete)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+                login.dbClass.deleteUser(usersList.get(position).getId(), ViewAllUsers.fg);
             }
         });
         ((TextView)v.findViewById(R.id.edit)).setOnClickListener(new View.OnClickListener() {

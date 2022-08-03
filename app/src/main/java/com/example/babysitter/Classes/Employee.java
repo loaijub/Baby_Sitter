@@ -2,7 +2,6 @@ package com.example.babysitter.Classes;
 
 public class Employee extends User {
 
-    private String status; // 0- active employee, 1- inactive employee.
     private String rate; // the rate for the employee from other parents.
     private String specialDemands; // the special demands regarding work.
     private String workingHoursInMonth; // the total working hours of employee in a month
@@ -21,8 +20,7 @@ public class Employee extends User {
 
     // constructor
     public Employee(String id, String fName, String lName, String phoneNumber, Date birthDate, String password, String email, String role, String status, String rate, String specialDemands, String workingHoursInMonth, String experience, Address address) {
-        super(id, fName, lName, phoneNumber, birthDate, password, role, email);
-        this.status = status;
+        super(id, fName, lName, phoneNumber, birthDate, password, role, email, status);
         this.rate = rate;
         this.specialDemands = specialDemands;
         this.workingHoursInMonth = workingHoursInMonth;

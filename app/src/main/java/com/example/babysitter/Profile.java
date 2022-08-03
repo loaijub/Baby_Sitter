@@ -1,6 +1,7 @@
 package com.example.babysitter;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.babysitter.Classes.Employee;
 import com.example.babysitter.Classes.Parent;
@@ -349,6 +351,10 @@ public class Profile extends Fragment {
     // function logs out from the current user account
     public void logoutFromProfile() {
         ////////////////////////***************************////////////////////
+        getContext().startActivity(new Intent(getActivity(), MainActivity.class));
+        getActivity().finish();
+        login.dbClass.setCurrentUser(null);
+
     }
 
 

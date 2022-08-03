@@ -8,12 +8,14 @@ import static com.example.babysitter.signUpEmployee.bitmapForCV;
 import static com.example.babysitter.signUpEmployee.bitmapForPD;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.hardware.ConsumerIrManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
@@ -33,9 +35,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.babysitter.EmployeeHomePage;
 import com.example.babysitter.History;
 import com.example.babysitter.JobRequest;
+import com.example.babysitter.MainActivity;
 import com.example.babysitter.MapsActivity;
 import com.example.babysitter.Profile;
 import com.example.babysitter.R;
+import com.example.babysitter.ViewAllUsers;
 import com.example.babysitter.admin;
 import com.example.babysitter.login;
 import com.example.babysitter.signUpEmployee;
@@ -55,7 +59,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
+    //private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
+    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser;
     public static List<User> users;
@@ -104,9 +109,18 @@ public class dbClass {
                             ((Activity) context).finish();
                             getUserDetailsFromDatabase();
                         }
-                        else if(currentUser.getRole().equals("1")){
-                            ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new EmployeeHomePage()).commit();
-                            getUserDetailsFromDatabase();
+                        else if(currentUser.getRole().equals("1")){ //employee ui
+                            if(currentUser.getStatus().equals("0")){
+                                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new EmployeeHomePage()).commit();
+                                getUserDetailsFromDatabase();
+                            }
+                            else{
+                                new AlertDialog.Builder(((FragmentActivity) context))
+                                        .setTitle("Login failed..")
+                                        .setMessage("Your account is disabled, please contact the support")
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
+                            }
                         }
                         else{
                             /* both ui (parent + employee) */
@@ -158,7 +172,7 @@ public class dbClass {
     }
 
     private void buildUser(JSONObject userDetails) {
-        String id, fName, lName, phoneNum, birthDate, pass, role, email;
+        String id, fName, lName, phoneNum, birthDate, pass, role, email, status;
         try {
             id = userDetails.getString("id");
             fName = userDetails.getString("first_name");
@@ -168,9 +182,11 @@ public class dbClass {
             pass = userDetails.getString("password");
             role = userDetails.getString("role");
             email = userDetails.getString("email");
+            status = userDetails.getString("status");
 
             String[] s = birthDate.split("-");
-            setCurrentUser(new User(id, fName, lName, phoneNum, new Date(s[2], s[1], s[0]), pass, role, email));
+            setCurrentUser(new User(id, fName, lName, phoneNum, new Date(s[2], s[1], s[0]), pass, role, email, status));
+
         } catch (Exception e) {
             Toast.makeText(context, "error parsing" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -352,7 +368,7 @@ public class dbClass {
                         String[] dateOfSubAsString = user.get("birthdate").toString().split("-");
                         Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
-                        users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, "", user.getString("role"), user.getString("email")));
+                        users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, "", user.getString("role"), user.getString("email"), user.getString("status")));
                     }
 
                     if(showListView)
@@ -1017,7 +1033,7 @@ public class dbClass {
 
     }
 
-    public static ProfilePhoto[] profilePhoto;
+    public static List<ProfilePhoto> profilePhoto;
     public void getAllProfilePhoto(){
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllProfilePhotos", new Response.Listener<String>() {
 
@@ -1025,10 +1041,10 @@ public class dbClass {
             public void onResponse(String response) {
                 try {
                     JSONArray allUsersPhotos = new JSONArray(response);
-                    profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
+                    profilePhoto = new ArrayList<>();
                     for (int i = 0; i < allUsersPhotos.length(); i++) {
                         JSONObject userPhoto = allUsersPhotos.getJSONObject(i);
-                        profilePhoto[i] = new ProfilePhoto(userPhoto.getString("id"), userPhoto.getString("profile_image_path"));
+                        profilePhoto.add(new ProfilePhoto(userPhoto.getString("id"), userPhoto.getString("profile_image_path")));
                     }
 
                 } catch (Exception e) {
@@ -1049,5 +1065,54 @@ public class dbClass {
         queue.add(request);
     }
 
+    public void deleteUser(String uid, FragmentActivity fg) {
+        dialogLoading = ProgressDialog.show(context, "",
+                "Deleting... Please wait", true);
+        StringRequest request = new StringRequest(Request.Method.POST, this.getUrl() + "?action=deleteUser", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                dialogLoading.dismiss();
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        // if the adding to the database was successful, then we add the new deal to the home page of the employee.
+                        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Error deleting user..")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                    fg.getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new ViewAllUsers()).commit();
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", uid);
+
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
 }
 
