@@ -59,8 +59,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    //private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
-    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
+    //    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser;
     public static List<User> users;
@@ -108,21 +108,18 @@ public class dbClass {
                             ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
                             ((Activity) context).finish();
                             getUserDetailsFromDatabase();
-                        }
-                        else if(currentUser.getRole().equals("1")){ //employee ui
-                            if(currentUser.getStatus().equals("0")){
+                        } else if (currentUser.getRole().equals("1")) { //employee ui
+                            if (currentUser.getStatus().equals("0")) {
                                 ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new EmployeeHomePage()).commit();
                                 getUserDetailsFromDatabase();
-                            }
-                            else{
+                            } else {
                                 new AlertDialog.Builder(((FragmentActivity) context))
                                         .setTitle("Login failed..")
                                         .setMessage("Your account is disabled, please contact the support")
                                         .setIcon(android.R.drawable.ic_dialog_alert)
                                         .show();
                             }
-                        }
-                        else{
+                        } else {
                             /* both ui (parent + employee) */
                         }
 
@@ -371,7 +368,7 @@ public class dbClass {
                         users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, "", user.getString("role"), user.getString("email"), user.getString("status")));
                     }
 
-                    if(showListView)
+                    if (showListView)
                         showListView(users, context);
 
                 } catch (Exception e) {
@@ -604,6 +601,7 @@ public class dbClass {
 
     /**
      * Function gets all the deals related to the current user and displays it as ItemList of the screen for user.
+     *
      * @return
      */
     public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
@@ -611,7 +609,7 @@ public class dbClass {
 
             @Override
             public void onResponse(String response) {
-                if(progress != null )
+                if (progress != null)
                     progress.setVisibility(View.GONE);
 
                 try {
@@ -640,7 +638,7 @@ public class dbClass {
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
 
                         // we add the deal object to the listView
-                        if(historyOrRequests.equals("history"))
+                        if (historyOrRequests.equals("history"))
                             History.allDeals.add(tempDeal);
                         else
                             JobRequest.allJobs.add(tempDeal);
@@ -650,19 +648,18 @@ public class dbClass {
                     // if the list is not empty, we show the deals for the user
 
                     if (History.list != null || EmployeeHomePage.list != null) {
-                        if(historyOrRequests.equals("history")) {
+                        if (historyOrRequests.equals("history")) {
                             // we filter the array to show only the done deals
                             History.filterArray();
                             ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
                             History.list.setAdapter(myAdapter);
-                        }
-                        else {
+                        } else {
                             // we filter the deals to show only the ones that don't have an answer yet
                             JobRequest.filterList();
-                            if(historyOrRequests.equals("job1")){
-                                ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequest.allJobs,context);
+                            if (historyOrRequests.equals("job1")) {
+                                ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequest.allJobs, context);
                                 EmployeeHomePage.list.setAdapter(myAdapter);
-                            }else {
+                            } else {
                                 ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);
                                 JobRequest.list.setAdapter(myAdapter);
                             }
@@ -727,7 +724,7 @@ public class dbClass {
                     }
                     try {
                         user.setProfilePhoto(new ProfilePhoto(user.getId(), allDetailsArr.getJSONObject(2).getString("profile_image_path")));
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                     }
                     Profile.currentUser = user;
                 } catch (Exception e) {
@@ -1036,7 +1033,8 @@ public class dbClass {
     }
 
     public static List<ProfilePhoto> profilePhoto;
-    public void getAllProfilePhoto(){
+
+    public void getAllProfilePhoto() {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllProfilePhotos", new Response.Listener<String>() {
 
             @Override
@@ -1078,7 +1076,6 @@ public class dbClass {
                     JSONObject result = new JSONObject(response);
                     String success = result.getString("success");
                     if (success.equals("true")) {
-                        // if the adding to the database was successful, then we add the new deal to the home page of the employee.
                         Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
 
                     } else {
@@ -1116,5 +1113,50 @@ public class dbClass {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
     }
+
+
+//    public void addReport(Deals dealToReport) {
+//        StringRequest request = new StringRequest(Request.Method.POST, this.getUrl() + "?action=deleteUser", new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject result = new JSONObject(response);
+//                    String success = result.getString("success");
+//                    if (success.equals("true")) {
+//                        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
+//
+//                    } else {
+//                        new AlertDialog.Builder(context)
+//                                .setTitle("Error deleting user..")
+//                                .setIcon(android.R.drawable.ic_dialog_alert)
+//                                .show();
+//                    }
+//                } catch (Exception e) {
+//                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+//            }
+//
+//        }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//
+//                Map<String, String> map = new HashMap<>();
+//                map.put("user_id", uid);
+//
+//                return map;
+//            }
+//
+//        };
+//
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        queue.add(request);
+//    }
 }
 

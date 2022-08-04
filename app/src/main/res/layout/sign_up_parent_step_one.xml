@@ -1,95 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_height="wrap_content">
-
+    android:orientation="vertical">
 
 
     <EditText
         android:id="@+id/idOfParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:hint="Enter your ID"
-        android:maxLength="9"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:hint="Enter your ID"
+        android:inputType="phone"
+        android:maxLength="9"
         android:paddingLeft="17dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        />
+        android:paddingBottom="15dp" />
 
     <EditText
         android:id="@+id/firstNameParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:hint="Enter your first name"
+        android:inputType="textPersonName"
         android:paddingLeft="17dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:hint="Enter your first name" />
+        android:paddingBottom="15dp" />
 
     <EditText
         android:id="@+id/lastNameParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:hint="Enter your last name"
+        android:inputType="textPersonName"
         android:paddingLeft="17dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:hint="Enter your last name" />
+        android:paddingBottom="15dp" />
 
     <EditText
         android:id="@+id/phoneNumberParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:maxLength="10"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:hint="Enter your phone number"
+        android:inputType="phone"
+        android:maxLength="10"
         android:paddingLeft="17dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:hint="Enter your phone number" />
+        android:paddingBottom="15dp" />
 
     <EditText
         android:id="@+id/emailParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your email"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:hint="Enter your email"
+        android:inputType="textEmailAddress"
         android:paddingLeft="17dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:inputType="textEmailAddress" />
+        android:paddingBottom="15dp" />
+
     <EditText
         android:id="@+id/passwordParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your password"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:hint="Enter your password"
+        android:inputType="textPassword"
         android:paddingLeft="17dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:inputType="textPassword" />
+        android:paddingBottom="15dp" />
 </LinearLayout>

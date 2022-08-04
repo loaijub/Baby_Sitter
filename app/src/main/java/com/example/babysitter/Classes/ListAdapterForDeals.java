@@ -70,11 +70,14 @@ public class ListAdapterForDeals extends BaseAdapter {
             employeeAccepted.setText("Declined");
 
         completingDate.setText(dealsArr.get(position).getCompletedDealDate().toString());
+
         Button report = v.findViewById(R.id.reportDeal);
+        dbClass dbClassObj = new dbClass(context);
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
+//                dbClassObj.addReport(dealsArr.get(position));
             }
         });
         return v;
