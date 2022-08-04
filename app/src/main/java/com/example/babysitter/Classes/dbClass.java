@@ -1116,5 +1116,59 @@ public class dbClass {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
     }
+    /**
+     * Function adds a report in the database for th deal it got as a parameter
+     */
+    public void addReport (Deals dealToAddFor)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=addReport", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                   JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        // if the adding to the database was successful, we inform the user
+                        Toast.makeText(context, "Report was sent successfully", Toast.LENGTH_LONG).show();
+
+                    } else {
+                       new AlertDialog.Builder(context)
+                                .setTitle("Sending the report failed..")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("applicant_id", dealToAddFor.getEmployeeId());
+                map.put("reported_user_id", dealToAddFor.getParentId());
+                map.put("date_of_sub", dealToAddFor.getEmployeeAccepted());
+                map.put("date_of_accident", dealToAddFor.isHasDone());
+                  map.put("accident_details", dealToAddFor.isHasDone());
+                  return map;
+              }
+
+          };
+
+          RequestQueue queue = Volley.newRequestQueue(context);
+          queue.add(request);
+      }
+
+
+
 }
 

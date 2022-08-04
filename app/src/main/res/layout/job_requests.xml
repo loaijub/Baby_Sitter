@@ -5,6 +5,17 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="200dp"
+        android:paddingTop="20dp"
+        android:background="@drawable/profile_bg"
+        android:gravity="center_horizontal"
+        android:text="Job requests"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +26,7 @@
             android:id="@+id/listOfJobs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="80dp" />
     </ScrollView>
 
     <ProgressBar

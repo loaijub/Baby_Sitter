@@ -1,5 +1,6 @@
 package com.example.babysitter.Classes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ListAdapterForDeals extends BaseAdapter {
     List<Deals> dealsArr;
     Context context;
+    Button reportBtn;
 
     public ListAdapterForDeals(List<Deals> dealsArr, Context context) {
         this.dealsArr = dealsArr;
@@ -37,6 +39,7 @@ public class ListAdapterForDeals extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -77,6 +80,8 @@ public class ListAdapterForDeals extends BaseAdapter {
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
             }
         });
+
         return v;
     }
+
 }
