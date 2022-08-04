@@ -100,10 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 switch (menuItem.getItemId()) {
                     case R.id.homeIcon:
                         findViewById(R.id.upNav).setVisibility(View.VISIBLE);
-                        if (login.dbClass.getCurrentUser().getRole().equals("2"))
-                            title.setText("Employees around you");
-                        else if (login.dbClass.getCurrentUser().getRole().equals("1"))
-                            title.setText("Parents around you");
+                        title.setText("Employees around you");
                         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++)
                             getSupportFragmentManager().popBackStack();
                         break;
@@ -116,19 +113,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.infoIcon:
                         findViewById(R.id.upNav).setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new informationPage()).addToBackStack(null).commit();
-                        title.setText("Info");
                         break;
 
                     case R.id.historyIcon:
-                        findViewById(R.id.upNav).setVisibility(View.VISIBLE);
+                        findViewById(R.id.upNav).setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new History()).addToBackStack(null).commit();
-                        title.setText("History");
                         break;
 
                     case R.id.jobRequestsIcon:
-                        findViewById(R.id.upNav).setVisibility(View.VISIBLE);
+                        findViewById(R.id.upNav).setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new JobRequest()).addToBackStack(null).commit();
-                        title.setText("Job requests");
 
                 }
 
