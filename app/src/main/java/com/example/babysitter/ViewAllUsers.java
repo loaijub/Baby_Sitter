@@ -53,8 +53,13 @@ public class ViewAllUsers extends Fragment {
 
 
     public static void showListView(List<User> users, Context context){
+        List<User> activeUsers = new ArrayList<>();
+        for(User user : users){
+            if(user.getStatus().equals("0"))
+                activeUsers.add(user);
+        }
         //showing the users in the list
-        MyAdapter myAdapter = new MyAdapter(users,context);
+        MyAdapter myAdapter = new MyAdapter(activeUsers,context);
         listView.setAdapter(myAdapter);
     }
 }

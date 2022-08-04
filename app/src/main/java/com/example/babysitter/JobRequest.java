@@ -41,7 +41,7 @@ public class JobRequest extends Fragment {
         List<Deals> res = new ArrayList<>(); // the result (filtered array)
         for (Deals job : allJobs) {
             // we check if the employee answered the job request, only if he didn't we add to the result array.
-            if (job.getEmployeeAccepted().equals("2"))
+            if (job.isHasDone().equals("0"))
                 res.add(job);
         }
         allJobs = res;

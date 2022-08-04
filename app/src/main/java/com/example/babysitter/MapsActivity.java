@@ -99,6 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 switch (menuItem.getItemId()) {
                     case R.id.homeIcon:
+                        findViewById(R.id.upNav).setVisibility(View.VISIBLE);
                         if (login.dbClass.getCurrentUser().getRole().equals("2"))
                             title.setText("Employees around you");
                         else if (login.dbClass.getCurrentUser().getRole().equals("1"))
@@ -113,16 +114,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
 
                     case R.id.infoIcon:
+                        findViewById(R.id.upNav).setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new informationPage()).addToBackStack(null).commit();
                         title.setText("Info");
                         break;
 
                     case R.id.historyIcon:
+                        findViewById(R.id.upNav).setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new History()).addToBackStack(null).commit();
                         title.setText("History");
                         break;
 
                     case R.id.jobRequestsIcon:
+                        findViewById(R.id.upNav).setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, new JobRequest()).addToBackStack(null).commit();
                         title.setText("Job requests");
 

@@ -66,7 +66,8 @@ public class Profile extends Fragment {
 
 
         ImageView profilePicture = view.findViewById(R.id.userProfilePicture);
-        new SetImageViewFromUrl(profilePicture).execute(this.currentUser.getProfilePhoto().getImageUrl());
+        if(this.currentUser.getProfilePhoto() != null)
+            new SetImageViewFromUrl(profilePicture).execute(this.currentUser.getProfilePhoto().getImageUrl());
 
 
         // we fill the textView with the current user information

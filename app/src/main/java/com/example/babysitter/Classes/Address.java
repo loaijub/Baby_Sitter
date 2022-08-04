@@ -27,7 +27,7 @@ public class Address {
     public String toString() {
         return
                 "City: " + city + "\n" +
-                "Street: " + street + "\n " +
+                "Street: " + street + "\n" +
                 "House number: " + house_number;
     }
 

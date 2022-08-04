@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.babysitter.R;
 
@@ -39,10 +42,44 @@ public class ListAdapterForJob extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater ly = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = ly.inflate(R.layout.view_single_job, null);
+        View v = ly.inflate(R.layout.view_single_deal, null);
 
-        TextView applicationInfo = v.findViewById(R.id.singleDeal);
-        applicationInfo.setText(jobsArr.get(position).toString());
+        TextView employeeName = v.findViewById(R.id.employeeName);
+        TextView employeeAccepted = v.findViewById(R.id.acceptedOrNot);
+        TextView completingDate = v.findViewById(R.id.dateOfCompletingDate);
+        ImageView profilePhoto = v.findViewById(R.id.ivDeals);
+
+        User current_user = null;
+        for (User user : dbClass.users) {
+            if(jobsArr.get(position).getEmployeeId().equals(user.getId())) {
+                current_user = user;
+                break;
+            }
+        }
+        String url = "";
+        for (ProfilePhoto pf :
+                dbClass.profilePhoto) {
+            if (current_user.getId().equals(pf.getUserId()))
+                url = pf.getImageUrl();
+        }
+        if(!url.equals(""))
+            new SetImageViewFromUrl(profilePhoto).execute(url);
+
+
+
+        employeeName.setText(current_user.getFirstName() + " " + current_user.getLastName() + " (Deal number: " + jobsArr.get(position).getDealId() + ")");
+        employeeAccepted.setText("Waiting for employee");
+
+        completingDate.setText("");
+        Button cancel = v.findViewById(R.id.reportDeal);
+        cancel.setText("Cancel");
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Cancel", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return v;
     }
 
