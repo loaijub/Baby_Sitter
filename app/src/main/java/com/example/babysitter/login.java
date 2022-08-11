@@ -43,7 +43,11 @@ public class login extends Fragment {
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbClass.forgetPassword(((EditText)view.findViewById(R.id.uid)).getText().toString());
+                String uid = ((EditText)view.findViewById(R.id.uid)).getText().toString();
+                if(!uid.equals(""))
+                    dbClass.forgetPassword(uid);
+                else
+                    Toast.makeText(getContext(), "Please enter your ID", Toast.LENGTH_SHORT).show();
             }
         });
 

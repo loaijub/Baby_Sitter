@@ -59,8 +59,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
-    //    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    //private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
+    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser;
     public static List<User> users;
@@ -105,9 +105,18 @@ public class dbClass {
                         if (currentUser.getRole().equals("0"))
                             ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new admin()).commit();
                         else if (currentUser.getRole().equals("2")) { // parent ui
-                            ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
-                            ((Activity) context).finish();
-                            getUserDetailsFromDatabase();
+                            if (currentUser.getStatus().equals("0")) {
+                                ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
+                                ((Activity) context).finish();
+                                getUserDetailsFromDatabase();
+                            }else{
+                                new AlertDialog.Builder(((FragmentActivity) context))
+                                        .setTitle("Login failed..")
+                                        .setMessage("Your account is disabled, please contact the support")
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
+                            }
+
                         } else if (currentUser.getRole().equals("1")) { //employee ui
                             if (currentUser.getStatus().equals("0")) {
                                 ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new EmployeeHomePage()).commit();
@@ -418,7 +427,7 @@ public class dbClass {
             @Override
             public void onResponse(String response) {
                 dialogLoading.dismiss();
-                //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray all_reports = new JSONArray(response);
 
@@ -431,7 +440,7 @@ public class dbClass {
                         String[] dateOfAccidentAsString = report.get("date_of_sub").toString().split("-");
                         Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
 
-                        allReports.add(new Report("", "", "", dateOfSub, dateOfAccident, ""));
+                        allReports.add(new Report(report.getString("report_id"), report.getString("applicant_id"), report.getString("reported_user_id"), dateOfSub, dateOfAccident, report.getString("accident_details")));
                     }
 
                     showListViewForReports(allReports, context);

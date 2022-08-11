@@ -82,14 +82,14 @@ public class Report {
     public String toString() {
         return "Report{" +
                 "reportId=" + reportId +
-                ", applicantId='" + applicantId + '\'' +
-                ", reportedUserId='" + reportedUserId + '\'' +
+                ", applicantId=" + applicantId + '\n' +
+                ", reportedUserId=" + reportedUserId + '\n' +
                 ", dateOfSub=" + dateOfSub +
                 ", dateOfCheck=" + dateOfCheck +
                 ", dateOfAccident=" + dateOfAccident +
-                ", accidentDetails='" + accidentDetails + '\'' +
+                ", accidentDetails='" + accidentDetails + '\n' +
                 ", hasChecked=" + hasChecked +
-                ", outcome='" + outcome + '\'' +
+                ", outcome='" + outcome + '\n' +
                 '}';
     }
 }
