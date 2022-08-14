@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.babysitter.History;
 import com.example.babysitter.R;
+import com.example.babysitter.login;
 
 import java.util.List;
 
@@ -75,12 +77,10 @@ public class ListAdapterForDeals extends BaseAdapter {
         completingDate.setText(dealsArr.get(position).getCompletedDealDate().toString());
 
         Button report = v.findViewById(R.id.reportDeal);
-        dbClass dbClassObj = new dbClass(context);
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
-//                dbClassObj.addReport(dealsArr.get(position));
+                History.showReport(dealsArr.get(position));
             }
         });
 

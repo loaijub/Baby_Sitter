@@ -17,23 +17,24 @@
         android:id="@+id/upNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="match_parent"
-        android:scaleX="@integer/material_motion_duration_long_1"
-        android:layout_height="50dp"
-        android:src="@drawable/bg_blue" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="left"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:scaleX="@integer/material_motion_duration_long_1"
+            android:src="@drawable/bg_blue" />
 
-        android:text="Employees around you"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+
+            android:text="Employees around you"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
     <ImageView
         android:layout_width="50dp"
@@ -43,6 +44,7 @@
         android:src="@drawable/ic_baseline_filter_alt_24"
         android:text="filter"
         android:padding="10dp"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="20sp" />
     </RelativeLayout>

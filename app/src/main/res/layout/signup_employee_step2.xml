@@ -13,12 +13,39 @@
         android:background="@drawable/blue_border_rounded_cornwe">
 
         <EditText
-            android:id="@+id/employeeAddress"
+            android:id="@+id/employeeAddressCity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/city_icon"
             android:background="@android:color/transparent"
-            android:hint="City, street and house number"
+            android:hint="City"
+            android:paddingLeft="17dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="17sp" />
+        <EditText
+            android:id="@+id/employeeAddressStreet"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/employeeAddressCity"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/city_icon"
+            android:background="@android:color/transparent"
+            android:hint="Street"
+            android:paddingLeft="17dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/employeeAddressHouse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/employeeAddressStreet"
+            android:layout_toRightOf="@+id/city_icon"
+            android:background="@android:color/transparent"
+            android:hint="House number"
             android:paddingLeft="17dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"

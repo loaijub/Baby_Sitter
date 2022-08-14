@@ -35,7 +35,7 @@ public class signUpEmployee extends Fragment {
     public static View view;
     int current_step = 1;
     ProgressDialog progressDialog ;
-    public static String[] fields = new String[9];
+    public static String[] fields = new String[11];
     public static Bitmap bitmapForCV,bitmapForPD;
     String cvImageData = "cv_image_data" ;
     String pdImageData = "pd_image_data" ;
@@ -155,9 +155,11 @@ public class signUpEmployee extends Fragment {
         }
         if (stepNumberToSave == 2)
         {
-            fields[6] = ((EditText)view.findViewById(R.id.employeeAddress)).getText().toString();
-            fields[7] = ((Switch)view.findViewById(R.id.employeeExperience)).isChecked()?"yes":"no";
-            fields[8] = ((EditText)view.findViewById(R.id.employeeSpecialDemands)).getText().toString();
+            fields[6] = ((EditText)view.findViewById(R.id.employeeAddressCity)).getText().toString();
+            fields[7] = ((EditText)view.findViewById(R.id.employeeAddressStreet)).getText().toString();
+            fields[8] = ((EditText)view.findViewById(R.id.employeeAddressHouse)).getText().toString();
+            fields[9] = ((Switch)view.findViewById(R.id.employeeExperience)).isChecked()?"yes":"no";
+            fields[10] = ((EditText)view.findViewById(R.id.employeeSpecialDemands)).getText().toString();
 
         }
 

@@ -62,7 +62,8 @@ public class ListAdapterForJobEmployee extends BaseAdapter {
             for(ProfilePhoto pf : dbClass.profilePhoto)
                 if(jobsArr.get(position).getParentId().equals(pf.getUserId()))
                     currentUser.setProfilePhoto(pf);
-            new SetImageViewFromUrl(profileImage).execute(currentUser.getProfilePhoto().getImageUrl());
+            if(currentUser.getProfilePhoto() != null)
+                new SetImageViewFromUrl(profileImage).execute(currentUser.getProfilePhoto().getImageUrl());
         }
         return v;
     }

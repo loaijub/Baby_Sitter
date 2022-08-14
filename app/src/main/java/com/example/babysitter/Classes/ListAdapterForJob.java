@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.babysitter.JobRequest;
 import com.example.babysitter.R;
 
 import java.util.List;
@@ -76,7 +77,7 @@ public class ListAdapterForJob extends BaseAdapter {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Cancel", Toast.LENGTH_SHORT).show();
+                JobRequest.cancelRequest(jobsArr.get(position));
             }
         });
 

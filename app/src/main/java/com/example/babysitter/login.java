@@ -31,7 +31,7 @@ import java.util.Map;
 public class login extends Fragment {
     View view;
     Dialog dialog;
-    static dbClass dbClass;
+    public static dbClass dbClass;
     TextView forgetPassword;
 
 

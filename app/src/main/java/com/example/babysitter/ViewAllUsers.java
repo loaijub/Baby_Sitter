@@ -1,7 +1,9 @@
 package com.example.babysitter;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,7 +115,29 @@ class MyAdapter extends BaseAdapter{
         ((TextView)v.findViewById(R.id.delete)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login.dbClass.deleteUser(usersList.get(position).getId(), ViewAllUsers.fg);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        login.dbClass.deleteUser(usersList.get(position).getId(), ViewAllUsers.fg);
+
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
             }
         });
         ((TextView)v.findViewById(R.id.edit)).setOnClickListener(new View.OnClickListener() {

@@ -28,9 +28,11 @@ public class signupEmployeeStep2 extends Fragment {
 
     private void loadPreviousStepState() {
 
-        ((EditText)view.findViewById(R.id.employeeAddress)).setText(signUpEmployee.fields[6]);
-        ((Switch)view.findViewById(R.id.employeeExperience)).setChecked(signUpEmployee.fields[7].equals("checked")?true:false);
-        ((EditText)view.findViewById(R.id.employeeSpecialDemands)).setText(signUpEmployee.fields[8]);
+        ((EditText)view.findViewById(R.id.employeeAddressCity)).setText(signUpEmployee.fields[6]);
+        ((EditText)view.findViewById(R.id.employeeAddressStreet)).setText(signUpEmployee.fields[7]);
+        ((EditText)view.findViewById(R.id.employeeAddressHouse)).setText(signUpEmployee.fields[8]);
+        ((Switch)view.findViewById(R.id.employeeExperience)).setChecked(signUpEmployee.fields[9].equals("checked")?true:false);
+        ((EditText)view.findViewById(R.id.employeeSpecialDemands)).setText(signUpEmployee.fields[10]);
 
     }
 
