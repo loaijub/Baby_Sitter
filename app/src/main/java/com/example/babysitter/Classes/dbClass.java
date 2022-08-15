@@ -593,10 +593,10 @@ public class dbClass {
                 map.put("email", signUpEmployee.fields[4]);
                 map.put("phone_number", signUpEmployee.fields[5]);
                 map.put("city_name", signUpEmployee.fields[6]);
-                map.put("street_name", signUpEmployee.fields[6]);
-                map.put("house_number", signUpEmployee.fields[6]);
-                map.put("worked_as_babysitter", signUpEmployee.fields[7]);
-                map.put("special_demands", signUpEmployee.fields[8]);
+                map.put("street_name", signUpEmployee.fields[7]);
+                map.put("house_number", signUpEmployee.fields[8]);
+                map.put("worked_as_babysitter", signUpEmployee.fields[9]);
+                map.put("special_demands", signUpEmployee.fields[10]);
 
                 String FinalData = imageProcessClass.ImageHttpRequest(url + "?action=uploadFile", map);
 
