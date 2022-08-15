@@ -1,5 +1,7 @@
 package com.example.babysitter;
 
+import static com.example.babysitter.ViewAllUsers.fg;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +27,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.babysitter.Classes.AdminEditEmployee;
 import com.example.babysitter.Classes.Date;
+import com.example.babysitter.Classes.ProfilePhoto;
+import com.example.babysitter.Classes.SetImageViewFromUrl;
 import com.example.babysitter.Classes.User;
 import com.example.babysitter.Classes.dbClass;
 
@@ -95,7 +101,13 @@ class MyAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater ly = (LayoutInflater) this.context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View v = ly.inflate(R.layout.list_item,null);
-
+        ImageView profilePic = v.findViewById(R.id.profile_pic);
+        for (ProfilePhoto pf : dbClass.profilePhoto) {
+            if(usersList.get(position).getId().equals(pf.getUserId())) {
+                new SetImageViewFromUrl(profilePic).execute(pf.getImageUrl());
+                break;
+            }
+        }
         ((TextView)v.findViewById(R.id.personName)).setText(usersList.get(position).getFirstName() + " " + usersList.get(position).getLastName());
         String role = "";
         switch(usersList.get(position).getRole()){
@@ -123,7 +135,7 @@ class MyAdapter extends BaseAdapter{
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        login.dbClass.deleteUser(usersList.get(position).getId(), ViewAllUsers.fg);
+                        login.dbClass.deleteUser(usersList.get(position).getId(), fg);
 
                     }
                 });
@@ -143,7 +155,7 @@ class MyAdapter extends BaseAdapter{
         ((TextView)v.findViewById(R.id.edit)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "edit", Toast.LENGTH_SHORT).show();
+                fg.getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new AdminEditEmployee(usersList.get(position))).addToBackStack(null).commit();
             }
         });
 

@@ -64,6 +64,7 @@ public class dbClass {
     private Context context;
     public User currentUser;
     public static List<User> users;
+    public static List<ProfilePhoto> profilePhoto;
 
     public String getUrl() {
         return url;
@@ -374,7 +375,7 @@ public class dbClass {
                         String[] dateOfSubAsString = user.get("birthdate").toString().split("-");
                         Date dateOfbirth = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
-                        users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, "", user.getString("role"), user.getString("email"), user.getString("status")));
+                        users.add(new User(user.getString("id"), user.getString("first_name"), user.getString("last_name"), user.getString("phone_number"), dateOfbirth, user.getString("password"), user.getString("role"), user.getString("email"), user.getString("status")));
                     }
 
                     if (showListView)
@@ -1041,7 +1042,7 @@ public class dbClass {
 
     }
 
-    public static List<ProfilePhoto> profilePhoto;
+
 
     public void getAllProfilePhoto() {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllProfilePhotos", new Response.Listener<String>() {
@@ -1124,52 +1125,7 @@ public class dbClass {
     }
 
 
-//    public void addReport(Deals dealToReport) {
-//        StringRequest request = new StringRequest(Request.Method.POST, this.getUrl() + "?action=deleteUser", new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject result = new JSONObject(response);
-//                    String success = result.getString("success");
-//                    if (success.equals("true")) {
-//                        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
-//
-//                    } else {
-//                        new AlertDialog.Builder(context)
-//                                .setTitle("Error deleting user..")
-//                                .setIcon(android.R.drawable.ic_dialog_alert)
-//                                .show();
-//                    }
-//                } catch (Exception e) {
-//                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-//            }
-//
-//        }) {
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//
-//                Map<String, String> map = new HashMap<>();
-//                map.put("user_id", uid);
-//
-//                return map;
-//            }
-//
-//        };
-//
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        queue.add(request);
-//    }
-    /**
-     * Function adds a report in the database for th deal it got as a parameter
-     */
+
     public void addReport (Report reportToAddFor)
     {
         StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=addReport", new Response.Listener<String>() {
@@ -1255,6 +1211,61 @@ public class dbClass {
                 Map<String, String> map = new HashMap<>();
                 map.put("deal_id", dealId);
 
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+
+    public void editUser(User user) {
+        dialogLoading = ProgressDialog.show(context, "",
+                "Saving... Please wait", true);
+        StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=editUser", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                dialogLoading.dismiss();
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        new AlertDialog.Builder(((FragmentActivity) context))
+                                .setTitle("Successfully updated")
+                                .setMessage("The user details are updated successfully")
+                                .setIcon(R.drawable.ic_baseline_check_circle_24)
+                                .show();
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Sending the data failed..")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("fname", user.getFirstName());
+                map.put("lname", user.getLastName());
+                map.put("phone", user.getPhoneNumber());
+                map.put("email", user.getEmail());
+                map.put("pass", user.getPassword());
+                map.put("id", user.getId());
                 return map;
             }
 
