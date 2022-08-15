@@ -479,9 +479,6 @@ public class dbClass {
     }
 
     public void createParentUser() {
-        Toast.makeText(context, "createUser()", Toast.LENGTH_SHORT).show();
-
-
         dialogLoading = ProgressDialog.show(context, "",
                 "Signing up. Please wait...", true);
 
@@ -490,7 +487,28 @@ public class dbClass {
             @Override
             public void onResponse(String response) {
                 dialogLoading.dismiss();
-                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if(success.equals("true")){
+                        new AlertDialog.Builder(((FragmentActivity) context))
+                                .setTitle("Success")
+                                .setMessage("Your account was created successfully! You can sign in now")
+                                .setIcon(R.drawable.ic_baseline_check_circle_24)
+                                .show();
+                        ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+                    }else{
+                        new AlertDialog.Builder(((FragmentActivity) context))
+                                .setTitle("Error")
+                                .setMessage("Ther was an error while making your account! Try again later")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+
+                }catch(Exception e){
+                    Toast.makeText(context, "Error! \n" +response, Toast.LENGTH_SHORT).show();
+                }
+
 
 
             }
@@ -569,8 +587,12 @@ public class dbClass {
                 // Dismiss the progress dialog after done uploading.
                 dialogLoading.dismiss();
 
-                // Printing uploading success message coming from server on android app.
-                Toast.makeText(context, "dsss" + string1, Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(((FragmentActivity) context))
+                        .setTitle("Success")
+                        .setMessage("Your work application was send successfully. sooner you well get email with answer")
+                        .setIcon(R.drawable.ic_baseline_check_circle_24)
+                        .show();
+                ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
 
                 // Setting image as transparent after done uploading.
                 //CVThumb.setImageResource(android.R.color.transparent);

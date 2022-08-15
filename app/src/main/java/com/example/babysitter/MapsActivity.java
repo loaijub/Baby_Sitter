@@ -11,7 +11,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -213,6 +218,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(profilePhoto[j].getImageUrl());
                             }
                         }
+                        if(allLocationsForEmp[i].getProfilePhoto() == null)
+                            new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(getString(R.string.default_profile_pic));
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(adjustedLocation, 16));
                     }
@@ -459,7 +466,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, 170, 170, false);
-            Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+
+            /* making the marker icon rounded */
+            int w = smallMarker.getWidth(), h = smallMarker.getHeight();
+            // We have to make sure our rounded corners have an alpha channel in most cases
+            Bitmap rounder = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(rounder);
+            // We're going to apply this paint eventually using a porter-duff xfer mode.
+            // This will allow us to only overwrite certain pixels. RED is arbitrary. This
+            // could be any color that was fully opaque (alpha = 255)
+            Paint xferPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            xferPaint.setColor(Color.RED);
+            // We're just reusing xferPaint to paint a normal looking rounded box, the 20.f
+            // is the amount we're rounding by.
+            canvas.drawRoundRect(new RectF(0,0,w,h), 200.0f, 200.0f, xferPaint);
+            // Now we apply the 'magic sauce' to the paint
+            xferPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+
+            Bitmap result = Bitmap.createBitmap(smallMarker.getWidth(), smallMarker.getHeight() ,Bitmap.Config.ARGB_8888);
+            Canvas resultCanvas = new Canvas(result);
+            resultCanvas.drawBitmap(smallMarker, 0, 0, null);
+            resultCanvas.drawBitmap(rounder, 0, 0, xferPaint);
+            /*************************************************/
+
+
+            Marker marker = mMap.addMarker(new MarkerOptions().position(location).title(currentEmployee.getFirstName() + " " + currentEmployee.getLastName()).icon(BitmapDescriptorFactory.fromBitmap(result)));
             marker.showInfoWindow();
             marker.setTag(currentEmployee);
 
