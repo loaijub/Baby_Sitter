@@ -7,27 +7,19 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="200dp"
-        android:paddingTop="20dp"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp"
         android:background="@drawable/profile_bg"
         android:gravity="center_horizontal"
         android:text="Job requests"
         android:textColor="@color/white"
         android:textSize="30sp" />
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-
         <ListView
             android:id="@+id/listOfJobs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="80dp" />
-    </ScrollView>
+            android:layout_marginTop="200dp" />
 
     <ProgressBar
         android:id="@+id/progress"
