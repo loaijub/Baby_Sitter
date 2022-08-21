@@ -1,3 +1,7 @@
+/*
+This class is to connect with the database and to create and to use different queries.
+* */
+
 package com.example.babysitter.Classes;
 
 import static com.example.babysitter.ViewAllReports.showListViewForReports;
@@ -8,14 +12,12 @@ import static com.example.babysitter.signUpEmployee.bitmapForCV;
 import static com.example.babysitter.signUpEmployee.bitmapForPD;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.hardware.ConsumerIrManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
@@ -35,23 +37,18 @@ import com.android.volley.toolbox.Volley;
 import com.example.babysitter.EmployeeHomePage;
 import com.example.babysitter.History;
 import com.example.babysitter.JobRequest;
-import com.example.babysitter.MainActivity;
 import com.example.babysitter.MapsActivity;
 import com.example.babysitter.Profile;
 import com.example.babysitter.R;
 import com.example.babysitter.ViewAllUsers;
 import com.example.babysitter.admin;
-import com.example.babysitter.login;
 import com.example.babysitter.signUpEmployee;
 import com.example.babysitter.signUpParent;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,13 +56,14 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://77.138.56.61:131/babysitter/dbMain.php";
+    private String url = "http://77.138.56.61:131/babysitter/dbMain.php"; // the url of the database.
     //private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
-    public User currentUser;
-    public static List<User> users;
-    public static List<ProfilePhoto> profilePhoto;
+    public User currentUser; // to save the current user.
+    public static List<User> users; // to list the list of users from database.
+    public static List<ProfilePhoto> profilePhoto; // to save a list of profile pictures from database.
 
+    // getters
     public String getUrl() {
         return url;
     }
@@ -81,10 +79,16 @@ public class dbClass {
             this.currentUser = null;
     }
 
+    // constructor
     public dbClass(Context context) {
         this.context = context;
     }
 
+    /**
+     * Function logs in the system according to the id and password it gets as parameters.
+     * @param id The id that the user inserted.
+     * @param pass The password that the user inserted.
+     */
     public void login(String id, String pass) {
         getAllUsers(false);
         getAllProfilePhoto();
@@ -201,8 +205,11 @@ public class dbClass {
 
     }
 
+    /**
+     * function send an email for admin that the user has forgot his password and he needs to restore it
+     * @param uid the id of user who forgot the password.
+     */
     public void forgetPassword(String uid) {
-        // function send an email for admin that the user has forgot his password and he needs to restore it
         dialogLoading = ProgressDialog.show(context, "",
                 "Checking... Please wait", true);
 
@@ -269,8 +276,11 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     *  function gets all the work applications from the database
+     * @param clickedCategory the category that the admin choose.
+     */
     public void getAllWorkApplications(String clickedCategory) {
-        // function gets all the work applications from the data base
 
         dialogLoading = ProgressDialog.show(context, "",
                 "Loading... Please wait", true);
@@ -354,13 +364,13 @@ public class dbClass {
         queue.add(request);
     }
 
+
     /**
      * Function gets for the admin all the users in the system that are in the database.
+     * @param showListView a flag that indicates if to show the list.
      */
     public void getAllUsers(boolean showListView) {
         users = new ArrayList<>();
-
-
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllUsers", new Response.Listener<String>() {
 
             @Override
@@ -368,7 +378,6 @@ public class dbClass {
                 //Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray allusers = new JSONArray(response);
-
 
                     for (int i = 0; i < allusers.length(); i++) {
                         JSONObject user = allusers.getJSONObject(i);
@@ -424,23 +433,22 @@ public class dbClass {
                 "Loading... Please wait", true);
 
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllReports", new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
                 dialogLoading.dismiss();
-                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray all_reports = new JSONArray(response);
 
 
                     for (int i = 0; i < all_reports.length(); i++) {
-                        JSONObject report = all_reports.getJSONObject(i);
+                        JSONObject report = all_reports.getJSONObject(i); // gets the single report
                         String[] dateOfSubAsString = report.get("date_of_sub").toString().split("-");
                         Date dateOfSub = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
                         String[] dateOfAccidentAsString = report.get("date_of_sub").toString().split("-");
                         Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
 
+                        // adding the report to the list
                         allReports.add(new Report(report.getString("report_id"), report.getString("applicant_id"), report.getString("reported_user_id"), dateOfSub, dateOfAccident, report.getString("accident_details")));
                     }
 
@@ -478,6 +486,9 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function creates a parent user.
+     */
     public void createParentUser() {
         dialogLoading = ProgressDialog.show(context, "",
                 "Signing up. Please wait...", true);
@@ -555,7 +566,6 @@ public class dbClass {
 
     public void ImageUploadToServerFunction(String cvImageData, String pdImageData) {
 
-
         ByteArrayOutputStream byteArrayOutputStreamObject;
         ByteArrayOutputStream byteArrayOutputStreamObject1;
         byteArrayOutputStreamObject = new ByteArrayOutputStream();
@@ -631,10 +641,11 @@ public class dbClass {
         AsyncTaskUploadClassOBJ.execute();
     }
 
+
     /**
-     * Function gets all the deals related to the current user and displays it as ItemList of the screen for user.
-     *
-     * @return
+     * Function gets all the deals from the database.
+     * @param historyOrRequests a string that indicates for what we are using th deal (for history, or for requests)
+     * @param progress the progress bar
      */
     public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
@@ -904,6 +915,12 @@ public class dbClass {
     }
 
 
+    /**
+     * Function changes the current user phone number.
+     * @param newPhoneNum the new phone number.
+     * @param dialog The dialog
+     * @param phoneNumber the textView that holds the phone number
+     */
     public void changePhoneOfCurrentUser(String newPhoneNum, Dialog dialog, TextView phoneNumber) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changePhoneForCurrentUser", new Response.Listener<String>() {
             @Override
@@ -956,6 +973,12 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function changes the current user email.
+     * @param newEmail the new email.
+     * @param dialog The dialog to show/dismiss
+     * @param email the textView that holds the email.
+     */
     public void changeEmailOfCurrentUser(String newEmail, Dialog dialog, TextView email) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeEmailForCurrentUser", new Response.Listener<String>() {
 
@@ -1009,6 +1032,12 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function changes the address of current user.
+     * @param newAddress the new address.
+     * @param dialog The dialog to show/dismiss
+     * @param address the textView that holds the address.
+     */
     public void changeAddressOfCurrentUser(String[] newAddress, Dialog dialog, TextView address) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeAddressForCurrentUser", new Response.Listener<String>() {
             Address newAddrss = new Address(newAddress[0], newAddress[1], newAddress[2]);
@@ -1065,7 +1094,9 @@ public class dbClass {
     }
 
 
-
+    /**
+     * Function gets all te profile pictures in a list.
+     */
     public void getAllProfilePhoto() {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllProfilePhotos", new Response.Listener<String>() {
 
@@ -1097,6 +1128,11 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function deletes a user (only changes the status in the database)
+     * @param uid The id of user to delete.
+     * @param fg The fragment activity.
+     */
     public void deleteUser(String uid, FragmentActivity fg) {
         dialogLoading = ProgressDialog.show(context, "",
                 "Deleting... Please wait", true);
@@ -1147,7 +1183,10 @@ public class dbClass {
     }
 
 
-
+    /**
+     * Function gets a report and adds it to the database.
+     * @param reportToAddFor The report to add.
+     */
     public void addReport (Report reportToAddFor)
     {
         StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=addReport", new Response.Listener<String>() {
@@ -1194,9 +1233,13 @@ public class dbClass {
 
           RequestQueue queue = Volley.newRequestQueue(context);
           queue.add(request);
-      }
+    }
 
-
+    /**
+     * Function removes a deal.
+      * @param dealId The id of the deal to remove.
+     * @param fg The fragment activity.
+     */
     public void removeDeal(String dealId, FragmentActivity fg) {
         StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=removeJobRequest", new Response.Listener<String>() {
             @Override
@@ -1242,6 +1285,10 @@ public class dbClass {
         queue.add(request);
     }
 
+    /**
+     * Function edits the user's details.
+     * @param user The user to change his details.
+     */
     public void editUser(User user) {
         dialogLoading = ProgressDialog.show(context, "",
                 "Saving... Please wait", true);
@@ -1297,6 +1344,3 @@ public class dbClass {
         queue.add(request);
     }
 }
-
-
-

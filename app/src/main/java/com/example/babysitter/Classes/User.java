@@ -1,3 +1,4 @@
+/* This class is an User object with all methods (getters + setters + toString) */
 package com.example.babysitter.Classes;
 
 public class User {
