@@ -45,6 +45,7 @@ public class ViewAllReports extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         view = inflater.inflate(R.layout.admin_view_all_reports, container,false);
+        allUsers = new ArrayList<>();
         listView = view.findViewById(R.id.listview_show_reports);
         login.dbClass.getAllReports();
 

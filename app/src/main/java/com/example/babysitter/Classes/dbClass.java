@@ -699,9 +699,10 @@ public class dbClass {
                         // we add the deal object to the listView
                         if (historyOrRequests.equals("history"))
                             History.allDeals.add(tempDeal);
+                        else if(historyOrRequests.equals("job1"))
+                            JobRequestList.allJobs.add(tempDeal);
                         else
                             JobRequest.allJobs.add(tempDeal);
-
 
                     }
                     // if the list is not empty, we show the deals for the user
@@ -716,7 +717,7 @@ public class dbClass {
                             // we filter the deals to show only the ones that don't have an answer yet
                             JobRequest.filterList();
                             if (historyOrRequests.equals("job1")) {
-                                ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequest.allJobs, context);
+                                ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequestList.allJobs, context);
                                 JobRequestList.list.setAdapter(myAdapter);
                             } else {
                                 ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);

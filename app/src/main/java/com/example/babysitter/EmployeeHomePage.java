@@ -40,20 +40,23 @@ public class EmployeeHomePage extends Fragment {
 
                 switch (menuItem.getItemId()) {
                     case R.id.homeIcon:
-                        for (int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); i++)
-                        getActivity().getSupportFragmentManager().popBackStack();
+                        view.findViewById(R.id.title).setVisibility(View.VISIBLE);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new JobRequestList()).commit();
                         break;
 
                     case R.id.profileIcon:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new Profile()).addToBackStack(null).commit();
+                        view.findViewById(R.id.title).setVisibility(View.GONE);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new Profile()).commit();
                         break;
 
                     case R.id.infoIcon:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new informationPage()).addToBackStack(null).commit();
+                        view.findViewById(R.id.title).setVisibility(View.GONE);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new informationPage()).commit();
                         break;
 
                     case R.id.historyIcon:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new History()).addToBackStack(null).commit();
+                        view.findViewById(R.id.title).setVisibility(View.GONE);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new History()).commit();
                         break;
 
                 }

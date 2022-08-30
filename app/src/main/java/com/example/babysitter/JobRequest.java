@@ -25,7 +25,7 @@ public class JobRequest extends Fragment {
     View view;
     public static ListView list;
     // array of all deals in database
-    public static List<Deals> allJobs = new ArrayList<>();
+    public static List<Deals> allJobs;
     public static FragmentActivity fg;
 
     public static void cancelRequest(Deals deal) {

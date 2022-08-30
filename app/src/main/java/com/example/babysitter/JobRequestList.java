@@ -19,6 +19,7 @@ public class JobRequestList extends Fragment {
 
     View view;
     public static ListView list;
+    public static List<Deals> allJobs;
     // array of all jobs in database for current user
 
     @Nullable
@@ -26,6 +27,7 @@ public class JobRequestList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.job_request_list, container, false);
         // we get all the deals from the data base
+        allJobs = new ArrayList<>();
         list = view.findViewById(R.id.jobRequestsList);
         login.dbClass.getAllDeals("job1",view.findViewById(R.id.progress));
 
