@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeIcon"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/profileIcon"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="My Profile" />
+
+    <item
+        android:id="@+id/infoIcon"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="About Us" />
+
+    <item
+        android:id="@+id/historyIcon"
+        android:icon="@drawable/ic_baseline_history_24"
+        android:title="History" />
+
+    <item
+        android:id="@+id/jobRequestsIcon"
+        android:icon="@drawable/ic_baseline_job_request_24"
+        android:title="Job requests" />
+
+</menu>

@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int RC, int RQC, Intent I) {
-        Toast.makeText(this, currentChooser, Toast.LENGTH_SHORT).show();
         super.onActivityResult(RC, RQC, I);
         if (currentChooser.equals("CV")) {
             currentChooser = "";
