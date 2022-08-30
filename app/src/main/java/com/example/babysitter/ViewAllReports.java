@@ -92,23 +92,36 @@ public class ViewAllReports extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                editReportForAdmin();
+                editReportForAdmin(r);
             }
         });
     }
 
     /**
-     * Function shows for admin the edit report dialog
+     *
+     *  Function shows for admin the edit report dialog
+     *
+     * @param r current report
      */
-    private static void editReportForAdmin()
+    private static void editReportForAdmin(Report r)
     {
         Dialog dialog = new Dialog(listView.getContext());
         dialog.setContentView(R.layout.admin_edit_report);
         dialog.show();
-        String outcomeFromAdmin = ((EditText)dialog.findViewById(R.id.outcomeFromAdmin)).getText().toString();
+        EditText outcomeFromAdmin = dialog.findViewById(R.id.outcomeFromAdmin);
 
         // updating the information in the database
-        login.dbClass.editReport(outcomeFromAdmin);
+        Button save = dialog.findViewById(R.id.saveBtnReport);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!outcomeFromAdmin.getText().toString().equals(""))
+                    login.dbClass.editReport(outcomeFromAdmin.getText().toString(), r.getReportId());
+                else
+                    Toast.makeText(dialog.getContext(), "Please fill the outcome", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 

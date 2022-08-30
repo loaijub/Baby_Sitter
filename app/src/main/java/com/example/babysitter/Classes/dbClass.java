@@ -1476,8 +1476,9 @@ public class dbClass {
     /**
      * Function edits the report and saves changes in the database
      * @param outcome the result from admin
+     * @param reportId the report id to update
      */
-    public void editReport(String outcome) {
+    public void editReport(String outcome, String reportId) {
         dialogLoading = ProgressDialog.show(context, "",
                 "Saving... Please wait", true);
         StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=editReport", new Response.Listener<String>() {
@@ -1485,6 +1486,7 @@ public class dbClass {
             public void onResponse(String response) {
                 dialogLoading.dismiss();
                 try {
+                    Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                     JSONObject result = new JSONObject(response);
                     String success = result.getString("success");
                     if (success.equals("true")) {
@@ -1518,6 +1520,7 @@ public class dbClass {
 
                 Map<String, String> map = new HashMap<>();
                 map.put("outcome", outcome);
+                map.put("reportId", reportId);
                 return map;
             }
 
