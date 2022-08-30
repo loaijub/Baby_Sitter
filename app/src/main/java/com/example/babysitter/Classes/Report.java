@@ -80,16 +80,26 @@ public class Report {
     // toString
     @Override
     public String toString() {
-        return "Report{" +
-                "reportId=" + reportId +
-                ", applicantId=" + applicantId + '\n' +
-                ", reportedUserId=" + reportedUserId + '\n' +
-                ", dateOfSub=" + dateOfSub +
-                ", dateOfCheck=" + dateOfCheck +
-                ", dateOfAccident=" + dateOfAccident +
-                ", accidentDetails='" + accidentDetails + '\n' +
-                ", hasChecked=" + hasChecked +
-                ", outcome='" + outcome + '\n' +
-                '}';
+
+        // admin already checked the report
+        if (hasChecked)
+            return "Report id: " + reportId + "\n"
+                    + "Applicant id: " + applicantId + "\n"
+                    + "Reported user id: " + reportedUserId + "\n"
+                    + "Date of submission: " + dateOfSub + "\n"
+                    + "Date of accident: " + dateOfAccident + "\n"
+                    + "Accident Details: " + accidentDetails + "\n"
+                    + "Has been checked: " + hasChecked + "\n"
+                    + "Date of check: " + dateOfCheck + "\n"
+                    + "Outcome: " + outcome;
+
+        // admin didn't check the report yet
+        return "Report id: " + reportId + "\n"
+                + "Applicant id: " + applicantId + "\n"
+                + "Reported user id: " + reportedUserId + "\n"
+                + "Date of submission: " + dateOfSub + "\n"
+                + "Date of accident: " + dateOfAccident + "\n"
+                + "Accident Details: " + accidentDetails + "\n"
+                + "Has been checked: " + hasChecked + "\n";
     }
 }

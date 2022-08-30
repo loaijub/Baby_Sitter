@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,13 +78,37 @@ public class ViewAllReports extends Fragment {
 
     }
 
+    /**
+     * Function creates a dialog with the report details and shows it for admin
+     * @param r The report to show
+     */
     private static void showReport(Report r){
         Dialog dialog = new Dialog(listView.getContext());
         dialog.setContentView(R.layout.show_report);
         dialog.show();
-
         ((TextView)dialog.findViewById(R.id.report_details)).setText(r.toString());
+        Button editBtn = dialog.findViewById(R.id.editReportBtn);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                editReportForAdmin();
+            }
+        });
+    }
 
+    /**
+     * Function shows for admin the edit report dialog
+     */
+    private static void editReportForAdmin()
+    {
+        Dialog dialog = new Dialog(listView.getContext());
+        dialog.setContentView(R.layout.admin_edit_report);
+        dialog.show();
+        String outcomeFromAdmin = ((EditText)dialog.findViewById(R.id.outcomeFromAdmin)).getText().toString();
+
+        // updating the information in the database
+        login.dbClass.editReport(outcomeFromAdmin);
 
     }
 
