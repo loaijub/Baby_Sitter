@@ -185,7 +185,7 @@ public class dbClass {
                                     }
 
                                 }
-                            });
+                            }).show();
 
                         }
 
@@ -721,7 +721,7 @@ public class dbClass {
      * @param historyOrRequests a string that indicates for what we are using th deal (for history, or for requests)
      * @param progress          the progress bar
      */
-    public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
+        public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
@@ -755,16 +755,19 @@ public class dbClass {
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
 
                         // we add the deal object to the listView
-                        if (historyOrRequests.equals("history"))
-                            History.allDeals.add(tempDeal);
-                        else if(historyOrRequests.equals("job1"))
-                            JobRequestList.allJobs.add(tempDeal);
-                        else
-                            JobRequest.allJobs.add(tempDeal);
+                        if (historyOrRequests.equals("history")) {
+                            if (!dealParentId.equals(currentUser.getId()))
+                                History.allDeals.add(tempDeal);
+                        } else if(historyOrRequests.equals("job1")) {
+                            if (!dealParentId.equals(currentUser.getId()))
+                                JobRequestList.allJobs.add(tempDeal);
+                        }
+                        else {
+                                JobRequest.allJobs.add(tempDeal);
+                        }
 
                     }
                     // if the list is not empty, we show the deals for the user
-
                     if (History.list != null || JobRequestList.list != null) {
                         if (historyOrRequests.equals("history")) {
                             // we filter the array to show only the done deals
@@ -773,16 +776,19 @@ public class dbClass {
                             History.list.setAdapter(myAdapter);
                         } else {
                             // we filter the deals to show only the ones that don't have an answer yet
-                            JobRequest.filterList();
+
                             if (historyOrRequests.equals("job1")) {
+                                JobRequestList.filterList();
                                 ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequestList.allJobs, context);
                                 JobRequestList.list.setAdapter(myAdapter);
                             } else {
+                                JobRequest.filterList();
                                 ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);
                                 JobRequest.list.setAdapter(myAdapter);
                             }
                         }
                     }
+
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }

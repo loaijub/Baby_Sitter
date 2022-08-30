@@ -45,18 +45,20 @@ public class EmployeeHomePage extends Fragment {
                         break;
 
                     case R.id.profileIcon:
-                        view.findViewById(R.id.title).setVisibility(View.GONE);
+
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new Profile()).commit();
+                        view.findViewById(R.id.title).setVisibility(View.GONE);
                         break;
 
                     case R.id.infoIcon:
-                        view.findViewById(R.id.title).setVisibility(View.GONE);
+
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new informationPage()).commit();
+                        view.findViewById(R.id.title).setVisibility(View.GONE);
                         break;
 
                     case R.id.historyIcon:
-                        view.findViewById(R.id.title).setVisibility(View.GONE);
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new History()).commit();
+                        view.findViewById(R.id.title).setVisibility(View.GONE);
                         break;
 
                 }

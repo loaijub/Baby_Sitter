@@ -371,7 +371,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.showInfoWindow();
 
         //Toast.makeText(context, ""+((Employee)marker.getTag()).toString(), Toast.LENGTH_SHORT).show();
-        TextView txtclose, fullName, city, rating, workedHours, dealsMade;
+        TextView txtclose, fullName, city, rating, feedback, dealsMade;
         ImageView profilePhoto;
         Button btnRequest;
         Dialog myDialog = new Dialog(this);
@@ -383,13 +383,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnRequest = myDialog.findViewById(R.id.btnRequest);
         profilePhoto = myDialog.findViewById(R.id.profilePhoto);
         rating = myDialog.findViewById(R.id.rating);
-        workedHours = myDialog.findViewById(R.id.workedHours);
+        feedback = myDialog.findViewById(R.id.feedback);
         dealsMade = myDialog.findViewById(R.id.dealsMade);
 
         fullName.setText(emp.getFirstName() + " " + emp.getLastName());
         city.setText(emp.getAddress().getCity());
         rating.setText(emp.getRate());
-        workedHours.setText(emp.getWorkingHoursInMonth());
 
         dealsMade.setText("");
 

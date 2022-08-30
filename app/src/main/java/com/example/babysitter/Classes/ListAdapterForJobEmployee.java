@@ -64,6 +64,9 @@ public class ListAdapterForJobEmployee extends BaseAdapter {
                     currentUser.setProfilePhoto(pf);
             if(currentUser.getProfilePhoto() != null)
                 new SetImageViewFromUrl(profileImage).execute(currentUser.getProfilePhoto().getImageUrl());
+            else
+                new SetImageViewFromUrl(profileImage).execute(context.getString(R.string.default_profile_pic));
+
         }
         return v;
     }

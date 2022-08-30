@@ -33,4 +33,15 @@ public class JobRequestList extends Fragment {
 
         return view;
     }
+    public static void filterList() {
+
+        List<Deals> res = new ArrayList<>(); // the result (filtered array)
+            for (Deals job : allJobs) {
+                // we check if the employee answered the job request, only if he didn't we add to the result array.
+                if (job.isHasDone().equals("0"))
+                    res.add(job);
+            }
+        allJobs = res;
+
+    }
 }
