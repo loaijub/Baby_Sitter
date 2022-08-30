@@ -21,9 +21,5 @@
         android:icon="@drawable/ic_baseline_history_24"
         android:title="History" />
 
-    <item
-        android:id="@+id/jobRequestsIcon"
-        android:icon="@drawable/ic_baseline_job_request_24"
-        android:title="Job requests" />
 
 </menu>

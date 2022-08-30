@@ -15,12 +15,13 @@
         android:textColor="@color/black"
         android:textSize="25sp" />
 
-    <ListView
-        android:id="@+id/jobRequestsList"
+    <FrameLayout
+        android:id="@+id/employeeMainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/nav1"
         android:layout_below="@+id/title" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav1"
         android:layout_width="match_parent"

@@ -37,6 +37,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.babysitter.EmployeeHomePage;
 import com.example.babysitter.History;
 import com.example.babysitter.JobRequest;
+import com.example.babysitter.JobRequestList;
 import com.example.babysitter.MapsActivity;
 import com.example.babysitter.Profile;
 import com.example.babysitter.R;
@@ -46,6 +47,7 @@ import com.example.babysitter.signUpEmployee;
 import com.example.babysitter.signUpParent;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -591,21 +593,35 @@ public class dbClass {
 
             @Override
             protected void onPostExecute(String string1) {
-
+                Toast.makeText(context, string1, Toast.LENGTH_SHORT).show();
                 super.onPostExecute(string1);
 
                 // Dismiss the progress dialog after done uploading.
                 dialogLoading.dismiss();
+                try {
+                    JSONObject result = new JSONObject(string1);
+                    String success = result.getString("success");
+                    String cause = result.getString("cause");
+                    if(success.equals("true")) {
+                        new AlertDialog.Builder(((FragmentActivity) context))
+                                .setTitle("Success")
+                                .setMessage("Your work application was send successfully. sooner you well get email with answer")
+                                .setIcon(R.drawable.ic_baseline_check_circle_24)
+                                .show();
+                        ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+                    }
+                    else{
 
-                new AlertDialog.Builder(((FragmentActivity) context))
-                        .setTitle("Success")
-                        .setMessage("Your work application was send successfully. sooner you well get email with answer")
-                        .setIcon(R.drawable.ic_baseline_check_circle_24)
-                        .show();
-                ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+                        new AlertDialog.Builder(((FragmentActivity) context))
+                                .setTitle("Failed!")
+                                .setMessage("Failed to send the work application ("+cause+")")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                // Setting image as transparent after done uploading.
-                //CVThumb.setImageResource(android.R.color.transparent);
 
 
             }
@@ -690,7 +706,7 @@ public class dbClass {
                     }
                     // if the list is not empty, we show the deals for the user
 
-                    if (History.list != null || EmployeeHomePage.list != null) {
+                    if (History.list != null || JobRequestList.list != null) {
                         if (historyOrRequests.equals("history")) {
                             // we filter the array to show only the done deals
                             History.filterArray();
@@ -701,7 +717,7 @@ public class dbClass {
                             JobRequest.filterList();
                             if (historyOrRequests.equals("job1")) {
                                 ListAdapterForJobEmployee myAdapter = new ListAdapterForJobEmployee(JobRequest.allJobs, context);
-                                EmployeeHomePage.list.setAdapter(myAdapter);
+                                JobRequestList.list.setAdapter(myAdapter);
                             } else {
                                 ListAdapterForJob myAdapter = new ListAdapterForJob(JobRequest.allJobs, context);
                                 JobRequest.list.setAdapter(myAdapter);
