@@ -10,12 +10,14 @@ import static com.example.babysitter.ViewAllWorkApplications.showAllWorkApplicat
 import static com.example.babysitter.adminAddEmployee.showListViewItems;
 import static com.example.babysitter.signUpEmployee.bitmapForCV;
 import static com.example.babysitter.signUpEmployee.bitmapForPD;
+import static com.example.babysitter.signUpEmployee.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -86,7 +88,8 @@ public class dbClass {
 
     /**
      * Function logs in the system according to the id and password it gets as parameters.
-     * @param id The id that the user inserted.
+     *
+     * @param id   The id that the user inserted.
      * @param pass The password that the user inserted.
      */
     public void login(String id, String pass) {
@@ -114,7 +117,7 @@ public class dbClass {
                                 ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
                                 ((Activity) context).finish();
                                 getUserDetailsFromDatabase();
-                            }else{
+                            } else {
                                 new AlertDialog.Builder(((FragmentActivity) context))
                                         .setTitle("Login failed..")
                                         .setMessage("Your account is disabled, please contact the support")
@@ -135,6 +138,53 @@ public class dbClass {
                             }
                         } else {
                             /* both ui (parent + employee) */
+                            // we show a box dialog for user to choose for what ui to connect
+                            String[] options = {"Parents", "Employees"};
+                            AlertDialog.Builder optionsAlert = new AlertDialog.Builder((FragmentActivity) context);
+                            optionsAlert.setTitle("Choose one: ").setItems(options, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    // checking the index to know what user choose
+                                    if (which == 0) {
+                                        // user chose Parents interface
+                                        if (currentUser.getStatus().equals("0")) {
+                                            ((FragmentActivity) context).startActivity(new Intent(((FragmentActivity) context), MapsActivity.class));
+                                            ((Activity) context).finish();
+                                            getUserDetailsFromDatabase();
+                                        }
+                                        // user account is disabled
+                                        else {
+                                            new AlertDialog.Builder(((FragmentActivity) context))
+                                                    .setTitle("Login failed..")
+                                                    .setMessage("Your account is disabled, please contact the support")
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                        }
+                                    }
+
+
+                                    if (which == 1) {
+                                        // user chose Employees interface
+                                        if (currentUser.getStatus().equals("0")) {
+                                            ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, new EmployeeHomePage()).commit();
+                                            getUserDetailsFromDatabase();
+                                        }
+                                        // user account is disabled
+                                        else {
+                                            new AlertDialog.Builder(((FragmentActivity) context))
+                                                    .setTitle("Login failed..")
+                                                    .setMessage("Your account is disabled, please contact the support")
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                        }
+
+
+                                    }
+
+                                }
+                            });
+
                         }
 
                     } else {
@@ -207,6 +257,7 @@ public class dbClass {
 
     /**
      * function send an email for admin that the user has forgot his password and he needs to restore it
+     *
      * @param uid the id of user who forgot the password.
      */
     public void forgetPassword(String uid) {
@@ -277,7 +328,8 @@ public class dbClass {
     }
 
     /**
-     *  function gets all the work applications from the database
+     * function gets all the work applications from the database
+     *
      * @param clickedCategory the category that the admin choose.
      */
     public void getAllWorkApplications(String clickedCategory) {
@@ -367,6 +419,7 @@ public class dbClass {
 
     /**
      * Function gets for the admin all the users in the system that are in the database.
+     *
      * @param showListView a flag that indicates if to show the list.
      */
     public void getAllUsers(boolean showListView) {
@@ -501,14 +554,14 @@ public class dbClass {
                 try {
                     JSONObject result = new JSONObject(response);
                     String success = result.getString("success");
-                    if(success.equals("true")){
+                    if (success.equals("true")) {
                         new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Success")
                                 .setMessage("Your account was created successfully! You can sign in now")
                                 .setIcon(R.drawable.ic_baseline_check_circle_24)
                                 .show();
                         ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
-                    }else{
+                    } else {
                         new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Error")
                                 .setMessage("Ther was an error while making your account! Try again later")
@@ -516,10 +569,9 @@ public class dbClass {
                                 .show();
                     }
 
-                }catch(Exception e){
-                    Toast.makeText(context, "Error! \n" +response, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(context, "Error! \n" + response, Toast.LENGTH_SHORT).show();
                 }
-
 
 
             }
@@ -564,6 +616,11 @@ public class dbClass {
 
     }
 
+    /**
+     *
+     * @param cvImageData
+     * @param pdImageData
+     */
     public void ImageUploadToServerFunction(String cvImageData, String pdImageData) {
 
         ByteArrayOutputStream byteArrayOutputStreamObject;
@@ -599,7 +656,7 @@ public class dbClass {
 
                 new AlertDialog.Builder(((FragmentActivity) context))
                         .setTitle("Success")
-                        .setMessage("Your work application was send successfully. sooner you well get email with answer")
+                        .setMessage("Your work application was send successfully. Soon you well get email with an answer")
                         .setIcon(R.drawable.ic_baseline_check_circle_24)
                         .show();
                 ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
@@ -644,8 +701,9 @@ public class dbClass {
 
     /**
      * Function gets all the deals from the database.
+     *
      * @param historyOrRequests a string that indicates for what we are using th deal (for history, or for requests)
-     * @param progress the progress bar
+     * @param progress          the progress bar
      */
     public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
@@ -917,8 +975,9 @@ public class dbClass {
 
     /**
      * Function changes the current user phone number.
+     *
      * @param newPhoneNum the new phone number.
-     * @param dialog The dialog
+     * @param dialog      The dialog
      * @param phoneNumber the textView that holds the phone number
      */
     public void changePhoneOfCurrentUser(String newPhoneNum, Dialog dialog, TextView phoneNumber) {
@@ -975,9 +1034,10 @@ public class dbClass {
 
     /**
      * Function changes the current user email.
+     *
      * @param newEmail the new email.
-     * @param dialog The dialog to show/dismiss
-     * @param email the textView that holds the email.
+     * @param dialog   The dialog to show/dismiss
+     * @param email    the textView that holds the email.
      */
     public void changeEmailOfCurrentUser(String newEmail, Dialog dialog, TextView email) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeEmailForCurrentUser", new Response.Listener<String>() {
@@ -1034,9 +1094,10 @@ public class dbClass {
 
     /**
      * Function changes the address of current user.
+     *
      * @param newAddress the new address.
-     * @param dialog The dialog to show/dismiss
-     * @param address the textView that holds the address.
+     * @param dialog     The dialog to show/dismiss
+     * @param address    the textView that holds the address.
      */
     public void changeAddressOfCurrentUser(String[] newAddress, Dialog dialog, TextView address) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=changeAddressForCurrentUser", new Response.Listener<String>() {
@@ -1130,8 +1191,9 @@ public class dbClass {
 
     /**
      * Function deletes a user (only changes the status in the database)
+     *
      * @param uid The id of user to delete.
-     * @param fg The fragment activity.
+     * @param fg  The fragment activity.
      */
     public void deleteUser(String uid, FragmentActivity fg) {
         dialogLoading = ProgressDialog.show(context, "",
@@ -1185,22 +1247,22 @@ public class dbClass {
 
     /**
      * Function gets a report and adds it to the database.
+     *
      * @param reportToAddFor The report to add.
      */
-    public void addReport (Report reportToAddFor)
-    {
+    public void addReport(Report reportToAddFor) {
         StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=addReport", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                   JSONObject result = new JSONObject(response);
+                    JSONObject result = new JSONObject(response);
                     String success = result.getString("success");
                     if (success.equals("true")) {
                         // if the adding to the database was successful, we inform the user
                         Toast.makeText(context, "Report was sent successfully", Toast.LENGTH_LONG).show();
 
                     } else {
-                       new AlertDialog.Builder(context)
+                        new AlertDialog.Builder(context)
                                 .setTitle("Sending the report failed..")
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
@@ -1227,18 +1289,19 @@ public class dbClass {
                 map.put("date_of_accident", reportToAddFor.getDateOfAccident().toString());
                 map.put("accident_details", reportToAddFor.getAccidentDetails());
                 return map;
-              }
+            }
 
-          };
+        };
 
-          RequestQueue queue = Volley.newRequestQueue(context);
-          queue.add(request);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
     }
 
     /**
      * Function removes a deal.
-      * @param dealId The id of the deal to remove.
-     * @param fg The fragment activity.
+     *
+     * @param dealId The id of the deal to remove.
+     * @param fg     The fragment activity.
      */
     public void removeDeal(String dealId, FragmentActivity fg) {
         StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=removeJobRequest", new Response.Listener<String>() {
@@ -1287,6 +1350,7 @@ public class dbClass {
 
     /**
      * Function edits the user's details.
+     *
      * @param user The user to change his details.
      */
     public void editUser(User user) {

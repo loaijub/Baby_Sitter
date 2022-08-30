@@ -65,9 +65,6 @@ public class adminAddEmployee extends Fragment {
     }
 
 
-
-
-
     public static void showListViewItems(WorkApplication[] allApplicationArr, Context context) { // function gets an array of WorkApplication objects and shows the information in it in ListView
 
         List<WorkApplication> onlyUncheckedApps = new ArrayList<>();
@@ -87,7 +84,6 @@ public class adminAddEmployee extends Fragment {
         list.setAdapter(myAdapter);
 
     }
-
 
 
 }
@@ -173,7 +169,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 String url = login.dbClass.getUrl();
-                intent.setDataAndType(Uri.parse(url.substring(0,url.length()-10)+employeeId+"/cvimage.png"), "image/*");
+                intent.setDataAndType(Uri.parse(url.substring(0, url.length() - 10) + employeeId + "/cvimage.png"), "image/*");
                 context.startActivity(intent);
             }
         });
@@ -183,7 +179,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 String url = login.dbClass.getUrl();
-                intent.setDataAndType(Uri.parse(url.substring(0,url.length()-10)+employeeId+"/pdimage.png"), "image/*");
+                intent.setDataAndType(Uri.parse(url.substring(0, url.length() - 10) + employeeId + "/pdimage.png"), "image/*");
                 context.startActivity(intent);
             }
         });
@@ -227,25 +223,47 @@ class ListAdapterForAddEmployee extends BaseAdapter {
 
                 try {
                     JSONObject result = new JSONObject(response);
-                    String success = result.getString("success");
+                    String success = result.getString("success"); // if adding was successful
+                    String msg = result.getString("message"); // if user is already in the system but as a parent
                     if (success.equals("true")) {
-                        String bodyOfText = "Dear babysitter, we are glad to inform you that your work application has been approved! \nYour temporary password is: " + password + "\nPlease make sure to change it the moment you log in.\nWelcome to our community! \n\n\nBabysitterFinder team";
+                        // user is new in the system
+                        if (msg.equals("")) {
+                            String bodyOfText = "Dear babysitter, we are glad to inform you that your work application has been approved! \nYour temporary password is: " + password + "\nPlease make sure to change it the moment you log in.\nWelcome to our community! \n\n\nBabysitterFinder team";
 
-                        // we send the user his temporary password
-                        // via email
-                        Intent sendEmail = new Intent(Intent.ACTION_SEND);
-                        sendEmail.setData(Uri.parse("mailto:"));
-                        sendEmail.setType("message/rfc822");
-                        sendEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{
-                                email
-                        });
-                        sendEmail.putExtra(Intent.EXTRA_SUBJECT, "Congratulations! Your work application has been approved!");
-                        sendEmail.putExtra(Intent.EXTRA_TEXT, bodyOfText);
-                        context.startActivity(sendEmail);
-                        Toast.makeText(context, "User was added successfully!", Toast.LENGTH_SHORT).show();
+                            // we send the user his temporary password
+                            // via email
+                            Intent sendEmail = new Intent(Intent.ACTION_SEND);
+                            sendEmail.setData(Uri.parse("mailto:"));
+                            sendEmail.setType("message/rfc822");
+                            sendEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{
+                                    email
+                            });
+                            sendEmail.putExtra(Intent.EXTRA_SUBJECT, "Congratulations! Your work application has been approved!");
+                            sendEmail.putExtra(Intent.EXTRA_TEXT, bodyOfText);
+                            context.startActivity(sendEmail);
+                            Toast.makeText(context, "User was added successfully!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // user is already in the system as a parent and signed up as an employee
+                        if (msg.equals("employee_is_parent")) {
+                            String bodyOfText = "Dear babysitter, we are glad to inform you that your work application has been approved! \nWe are glad that you joined also our babysitter community!\nWelcome to our community! \n\n\nBabysitterFinder team";
+
+                            // via email
+                            Intent sendEmail = new Intent(Intent.ACTION_SEND);
+                            sendEmail.setData(Uri.parse("mailto:"));
+                            sendEmail.setType("message/rfc822");
+                            sendEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{
+                                    email
+                            });
+                            sendEmail.putExtra(Intent.EXTRA_SUBJECT, "Congratulations! Your work application has been approved!");
+                            sendEmail.putExtra(Intent.EXTRA_TEXT, bodyOfText);
+                            context.startActivity(sendEmail);
+                            Toast.makeText(context, "User was added successfully!", Toast.LENGTH_SHORT).show();
+                        }
 
                         // now we delete the work application from the array, so it only shows the unchecked applications only
                         deleteApprovedWorkApplication(applicationsArr, idOfEmployeeToAdd);
+
 
                         // now we refresh the page so the admin wouldn't see the employee he added
                         // Reload current fragment
@@ -366,7 +384,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                                 .show();
                     }
                 } catch (Exception e) {
-                   // Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
