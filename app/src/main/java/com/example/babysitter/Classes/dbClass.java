@@ -619,7 +619,6 @@ public class dbClass {
     }
 
     /**
-     *
      * @param cvImageData
      * @param pdImageData
      */
@@ -659,26 +658,24 @@ public class dbClass {
                     JSONObject result = new JSONObject(string1);
                     String success = result.getString("success");
                     String cause = result.getString("cause");
-                    if(success.equals("true")) {
+                    if (success.equals("true")) {
                         new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Success")
                                 .setMessage("Your work application was send successfully. sooner you well get email with answer")
                                 .setIcon(R.drawable.ic_baseline_check_circle_24)
                                 .show();
                         ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
-                    }
-                    else{
+                    } else {
 
                         new AlertDialog.Builder(((FragmentActivity) context))
                                 .setTitle("Failed!")
-                                .setMessage("Failed to send the work application ("+cause+")")
+                                .setMessage("Failed to send the work application (" + cause + ")")
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
 
             }
@@ -721,7 +718,7 @@ public class dbClass {
      * @param historyOrRequests a string that indicates for what we are using th deal (for history, or for requests)
      * @param progress          the progress bar
      */
-        public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
+    public Void getAllDeals(String historyOrRequests, ProgressBar progress) {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
 
             @Override
@@ -758,12 +755,11 @@ public class dbClass {
                         if (historyOrRequests.equals("history")) {
                             if (!dealParentId.equals(currentUser.getId()))
                                 History.allDeals.add(tempDeal);
-                        } else if(historyOrRequests.equals("job1")) {
+                        } else if (historyOrRequests.equals("job1")) {
                             if (!dealParentId.equals(currentUser.getId()))
                                 JobRequestList.allJobs.add(tempDeal);
-                        }
-                        else {
-                                JobRequest.allJobs.add(tempDeal);
+                        } else {
+                            JobRequest.allJobs.add(tempDeal);
                         }
 
                     }
@@ -1430,4 +1426,62 @@ public class dbClass {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
     }
+
+
+    /**
+     * Function edits the report and saves changes in the database
+     * @param outcome the result from admin
+     */
+    public void editReport(String outcome) {
+        dialogLoading = ProgressDialog.show(context, "",
+                "Saving... Please wait", true);
+        StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=editReport", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                dialogLoading.dismiss();
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        new AlertDialog.Builder(((FragmentActivity) context))
+                                .setTitle("Successfully updated")
+                                .setMessage("The report details are updated successfully")
+                                .setIcon(R.drawable.ic_baseline_check_circle_24)
+                                .show();
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Sending the data failed..")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("outcome", outcome);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
+
+
+
 }
