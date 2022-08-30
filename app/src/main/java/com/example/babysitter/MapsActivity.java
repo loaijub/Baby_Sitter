@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView title;
     Employee[] allLocationsForEmp;
     Context context = this;
+    public static TextView dealsMade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +190,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(String response) {
                 try {
+
                     JSONArray allUsersPhotos = new JSONArray(response);
                     ProfilePhoto[] profilePhoto = new ProfilePhoto[allUsersPhotos.length()];
                     for (int i = 0; i < allUsersPhotos.length(); i++) {
@@ -195,38 +199,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
 
+
                     //adding marker on the map for all locations from db
 
                     for (int i = 0; i < allLocationsForEmp.length; i++) {
-                        double[] cordinates = new double[2];
-                        LatLng adjustedLocation;
-                        try {
-                            cordinates = getLocationFromAddress(allLocationsForEmp[i].getAddress().getCity());
-                            LatLng location = new LatLng(cordinates[0], cordinates[1]);
-                            adjustedLocation = adjustLocation(location);
-                            markerCoordinates.add(adjustedLocation);
+                        if(allLocationsForEmp[i].getId().equals(login.dbClass.getCurrentUser().getId())) {
+                            double[] cordinates = new double[2];
+                            LatLng adjustedLocation;
+                            try {
+                                cordinates = getLocationFromAddress(allLocationsForEmp[i].getAddress().getCity());
+                                LatLng location = new LatLng(cordinates[0], cordinates[1]);
+                                adjustedLocation = adjustLocation(location);
+                                markerCoordinates.add(adjustedLocation);
 
-                        } catch (IOException e) {
-                            adjustedLocation = new LatLng(0, 0);
-                        }
-
-
-                        //searching for profile photo for employee "i" in the profilePhoto array and set it
-                        for (int j = 0; j < profilePhoto.length; j++) {
-                            if (allLocationsForEmp[i].getId().equals(profilePhoto[j].getUserId())) {
-                                allLocationsForEmp[i].setProfilePhoto(profilePhoto[j]);
-                                new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(profilePhoto[j].getImageUrl());
+                            } catch (IOException e) {
+                                adjustedLocation = new LatLng(0, 0);
                             }
-                        }
-                        if(allLocationsForEmp[i].getProfilePhoto() == null)
-                            new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(getString(R.string.default_profile_pic));
 
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(adjustedLocation, 16));
+
+                            //searching for profile photo for employee "i" in the profilePhoto array and set it
+                            for (int j = 0; j < profilePhoto.length; j++) {
+                                if (allLocationsForEmp[i].getId().equals(profilePhoto[j].getUserId())) {
+                                    allLocationsForEmp[i].setProfilePhoto(profilePhoto[j]);
+                                    new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(profilePhoto[j].getImageUrl());
+                                }
+                            }
+
+                            if (allLocationsForEmp[i].getProfilePhoto() == null)
+                                new GetImageFromUrl(adjustedLocation, allLocationsForEmp[i]).execute(getString(R.string.default_profile_pic));
+
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(adjustedLocation, 16));
+                        }
                     }
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Json parse error" + e.toString(), Toast.LENGTH_LONG).show();
-                }
+               }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -295,12 +303,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public double[] getLocationFromAddress(String strAddress) throws IOException {
         double[] point = new double[2]; //index 0 is latitude, 1 is longitude
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
 
         try {
+            Geocoder coder = new Geocoder(this);
+            List<Address> address;
             address = coder.getFromLocationName(strAddress, 5);
-            if (address == null) {
+            if (address == null || address.size() == 0) {
                 return null;
             }
             Address location = address.get(0);
@@ -369,9 +377,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Employee emp = (Employee) marker.getTag();
         marker.showInfoWindow();
-
+        login.dbClass.getAllDealsCountForUser(emp.getId());
         //Toast.makeText(context, ""+((Employee)marker.getTag()).toString(), Toast.LENGTH_SHORT).show();
-        TextView txtclose, fullName, city, rating, feedback, dealsMade;
+        TextView txtclose, fullName, city, rating;
         ImageView profilePhoto;
         Button btnRequest;
         Dialog myDialog = new Dialog(this);
@@ -383,14 +391,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnRequest = myDialog.findViewById(R.id.btnRequest);
         profilePhoto = myDialog.findViewById(R.id.profilePhoto);
         rating = myDialog.findViewById(R.id.rating);
-        feedback = myDialog.findViewById(R.id.feedback);
+        LinearLayout feedback = myDialog.findViewById(R.id.feedback);
         dealsMade = myDialog.findViewById(R.id.dealsMade);
 
         fullName.setText(emp.getFirstName() + " " + emp.getLastName());
         city.setText(emp.getAddress().getCity());
         rating.setText(emp.getRate());
 
-        dealsMade.setText("");
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "open feedback list", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // setting a listener on the "send request" button
         btnRequest.setOnClickListener(new View.OnClickListener() {

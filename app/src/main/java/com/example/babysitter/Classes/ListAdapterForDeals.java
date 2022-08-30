@@ -21,10 +21,12 @@ public class ListAdapterForDeals extends BaseAdapter {
     List<Deals> dealsArr;
     Context context;
     Button reportBtn;
+    String historyOrRequests;
 
-    public ListAdapterForDeals(List<Deals> dealsArr, Context context) {
+    public ListAdapterForDeals(List<Deals> dealsArr, Context context,String historyOrRequests) {
         this.dealsArr = dealsArr;
         this.context = context;
+        this.historyOrRequests = historyOrRequests;
     }
 
     @Override
@@ -50,13 +52,21 @@ public class ListAdapterForDeals extends BaseAdapter {
 
         User current_user = null;
         for (User user : dbClass.users) {
-            if(dealsArr.get(position).getEmployeeId().equals(user.getId())) {
-                current_user = user;
-                break;
+            if(historyOrRequests.equals("history")) {
+                if (dealsArr.get(position).getEmployeeId().equals(user.getId())) {
+                    current_user = user;
+                    break;
+                }
+            }else{
+                if (dealsArr.get(position).getParentId().equals(user.getId())) {
+                    current_user = user;
+                    break;
+                }
             }
         }
-        TextView employeeName = v.findViewById(R.id.employeeName);
-        TextView employeeAccepted = v.findViewById(R.id.acceptedOrNot);
+
+        TextView userName = v.findViewById(R.id.employeeName);
+        TextView userAccepted = v.findViewById(R.id.acceptedOrNot);
         TextView completingDate = v.findViewById(R.id.dateOfCompletingDate);
         ImageView profilePhoto = v.findViewById(R.id.ivDeals);
         String url = "";
@@ -68,11 +78,11 @@ public class ListAdapterForDeals extends BaseAdapter {
         if(!url.equals(""))
             new SetImageViewFromUrl(profilePhoto).execute(url);
 
-        employeeName.setText(current_user.getFirstName() + " " + current_user.getLastName() + " (Deal number: " + dealsArr.get(position).getDealId() + ")");
+        userName.setText(current_user.getFirstName() + " " + current_user.getLastName() + " (Deal number: " + dealsArr.get(position).getDealId() + ")");
         if(dealsArr.get(position).getEmployeeAccepted().equals("1"))
-            employeeAccepted.setText("Accepted");
+            userAccepted.setText("Accepted");
         else if(dealsArr.get(position).isHasDone().equals("1"))
-            employeeAccepted.setText("Declined");
+            userAccepted.setText("Declined");
 
         completingDate.setText(dealsArr.get(position).getCompletedDealDate().toString());
 

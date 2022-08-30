@@ -755,24 +755,29 @@ public class dbClass {
                         Deals tempDeal = new Deals(dealId, dealEmployeeId, dealParentId, dealEmployeeAccepted, dealHasDone, actualCompletedDealDate);
 
                         // we add the deal object to the listView
-                        if (historyOrRequests.equals("history")) {
-                            if (!dealParentId.equals(currentUser.getId()))
+                        if (historyOrRequests.equals("history1")) {
+                            if (!dealParentId.equals(currentUser.getId())) {
                                 History.allDeals.add(tempDeal);
+                            }
+                        }else if(historyOrRequests.equals("history")){
+                            if (!dealEmployeeId.equals(currentUser.getId())) {
+                                History.allDeals.add(tempDeal);
+                            }
                         } else if(historyOrRequests.equals("job1")) {
                             if (!dealParentId.equals(currentUser.getId()))
                                 JobRequestList.allJobs.add(tempDeal);
-                        }
-                        else {
+                        } else {
+                            if (!dealEmployeeId.equals(currentUser.getId()))
                                 JobRequest.allJobs.add(tempDeal);
                         }
 
                     }
                     // if the list is not empty, we show the deals for the user
                     if (History.list != null || JobRequestList.list != null) {
-                        if (historyOrRequests.equals("history")) {
+                        if (historyOrRequests.contains("history")) {
                             // we filter the array to show only the done deals
                             History.filterArray();
-                            ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context);
+                            ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context,historyOrRequests);
                             History.list.setAdapter(myAdapter);
                         } else {
                             // we filter the deals to show only the ones that don't have an answer yet
@@ -810,6 +815,45 @@ public class dbClass {
 
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("uid", currentUser.getId());
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+        return null;
+    }
+    public Void getAllDealsCountForUser(String uid) {
+        StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllDealsForUser", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    // we get all the deals that are related to the user in an array.
+                    JSONArray allDealsArr = new JSONArray(response);
+                    MapsActivity.dealsMade.setText("" + allDealsArr.length());
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("uid", uid);
                 return map;
             }
 

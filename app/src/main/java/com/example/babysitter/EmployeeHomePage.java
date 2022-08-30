@@ -57,7 +57,9 @@ public class EmployeeHomePage extends Fragment {
                         break;
 
                     case R.id.historyIcon:
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, new History()).commit();
+                        History h = new History();
+                        h.setHistoryOrhistory1("history1");
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.employeeMainFragment, h).commit();
                         view.findViewById(R.id.title).setVisibility(View.GONE);
                         break;
 

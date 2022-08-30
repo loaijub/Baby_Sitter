@@ -28,16 +28,15 @@ import java.util.List;
 public class History extends Fragment {
     View view;
     public static ListView list;
-
+    String historyOrhistory1 = "history";
     // array of all deals in database
     public static List<Deals> allDeals = new ArrayList<>();
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.history, container, false);
-        login.dbClass.getAllDeals("history",view.findViewById(R.id.progress));
+        login.dbClass.getAllDeals(historyOrhistory1,view.findViewById(R.id.progress));
         list = view.findViewById(R.id.listOfHistory);
         allDeals = new ArrayList<>();
 
@@ -74,8 +73,9 @@ public class History extends Fragment {
     }
 
 
-
-
+    public void setHistoryOrhistory1(String historyOrhistory1) {
+        this.historyOrhistory1 = historyOrhistory1;
+    }
 }
 
 
