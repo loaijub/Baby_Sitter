@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.Deals;
 import com.example.babysitter.Classes.Employee;
+import com.example.babysitter.Classes.Feedback;
+import com.example.babysitter.Classes.ListAdapterForFeedback;
 import com.example.babysitter.Classes.Parent;
 import com.example.babysitter.Classes.ProfilePhoto;
 import com.example.babysitter.Classes.SetImageViewFromUrl;
@@ -436,6 +439,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.feedback_list);
         ((TextView)myDialog.findViewById(R.id.feedbackTitle)).setText("All reviews about " + emp.getFirstName() + " " + emp.getLastName());
+        ListView feedbackList = myDialog.findViewById(R.id.feedbackList);
+        List<Feedback> feedbacks = new ArrayList<Feedback>();
+        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        feedbackList.setAdapter(new ListAdapterForFeedback(feedbacks, context));
+
         myDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         myDialog.show();
