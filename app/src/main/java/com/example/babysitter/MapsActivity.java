@@ -404,7 +404,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "open feedback list", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "open feedback list", Toast.LENGTH_SHORT).show();
                 myDialog.dismiss();
                 openFeedbackDialog(emp);
             }
@@ -419,8 +419,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        new SetImageViewFromUrl(profilePhoto).execute(emp.getProfilePhoto().getImageUrl());
-
+        if(emp.getProfilePhoto() != null)
+            new SetImageViewFromUrl(profilePhoto).execute(emp.getProfilePhoto().getImageUrl());
+        else
+            new SetImageViewFromUrl(profilePhoto).execute(getString(R.string.default_profile_pic));
 
         txtclose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,20 +436,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
-
     private void openFeedbackDialog(Employee emp) {
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.feedback_list);
         ((TextView)myDialog.findViewById(R.id.feedbackTitle)).setText("All reviews about " + emp.getFirstName() + " " + emp.getLastName());
         ListView feedbackList = myDialog.findViewById(R.id.feedbackList);
-        List<Feedback> feedbacks = new ArrayList<Feedback>();
-        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-        feedbacks.add(new Feedback(null, (float)4.5,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-        feedbackList.setAdapter(new ListAdapterForFeedback(feedbacks, context));
+
+        login.dbClass.getFeedbacksAboutEmployee(emp, feedbackList); //the function get from db all feedback about employee (emp object)
 
         myDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));

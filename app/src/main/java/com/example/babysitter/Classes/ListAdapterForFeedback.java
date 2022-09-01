@@ -52,11 +52,24 @@ public class ListAdapterForFeedback extends BaseAdapter {
 
         ((RatingBar)v.findViewById(R.id.singleRating)).setRating(feedbackList.get(position).getRating());
         ((TextView)v.findViewById(R.id.singleFeedback)).setText(feedbackList.get(position).getFeedback());
-        //((TextView)v.findViewById(R.id.username)).setText(feedbackList.get(position).getUser().getFirstName() + " " + feedbackList.get(position).getUser().getLastName());
+        ((TextView)v.findViewById(R.id.username)).setText(feedbackList.get(position).getUser().getFirstName() + " " + feedbackList.get(position).getUser().getLastName());
+        String profilePhotoUrl = getProfilePhoto(feedbackList.get(position).getUser().getId());
+
         ImageView profilePhoto = v.findViewById(R.id.profilePhotoSingle);
-        new SetImageViewFromUrl(profilePhoto).execute(context.getString(R.string.default_profile_pic));
+        if(profilePhotoUrl.equals(""))
+            new SetImageViewFromUrl(profilePhoto).execute(context.getString(R.string.default_profile_pic));
+        else
+            new SetImageViewFromUrl(profilePhoto).execute(profilePhotoUrl);
 
         return v;
+    }
+
+    private String getProfilePhoto(String id) {
+        for (ProfilePhoto pf : dbClass.profilePhoto) {
+            if(pf.getUserId().equals(id))
+                return pf.getImageUrl();
+        }
+        return "";
     }
 
 }

@@ -115,13 +115,15 @@
 
 
     </RelativeLayout>
+
     <com.google.android.material.imageview.ShapeableImageView
-        android:src="@drawable/profile_photo_default"
-        app:shapeAppearanceOverlay="@style/Circular"
         android:id="@+id/userProfilePicture"
+        android:layout_width="98dp"
+        android:scaleType="centerCrop"
+        android:layout_height="98dp"
+        android:layout_centerHorizontal="true"
         android:elevation="15dp"
         android:padding="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="98dp"
-        android:layout_height="98dp"/>
+        android:src="@drawable/profile_photo_default"
+        app:shapeAppearanceOverlay="@style/Circular" />
 </RelativeLayout>

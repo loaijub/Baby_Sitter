@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,8 +61,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    //private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
-    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
+    //private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser; // to save the current user.
     public static List<User> users; // to list the list of users from database.
@@ -1586,5 +1587,63 @@ public class dbClass {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
+    }
+
+    public void getFeedbacksAboutEmployee(Employee emp, ListView feedbackList) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=getFeedbacksAboutEmployee", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                List<Feedback> feedbacks = new ArrayList<>();
+                try {
+                    JSONArray result = new JSONArray(response);
+                    for(int i=0; i<result.length();i++) {
+                        JSONObject feedbacksFromDB = result.getJSONObject(i);
+                        if(!feedbacksFromDB.getString("parent_rate").equals("")) {
+                            Feedback fb = new Feedback(getUserDetails(feedbacksFromDB.getString("parent_id")), Float.parseFloat(feedbacksFromDB.getString("parent_rate")), feedbacksFromDB.getString("feedback_about_employee"));
+                            feedbacks.add(fb);
+                        }
+                    }
+                    feedbackList.setAdapter(new ListAdapterForFeedback(feedbacks, context));
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("emp_id", emp.getId());
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+
+
+
+
+
+    }
+
+    public User getUserDetails(String parent_id) {
+        User result_user = null;
+        for (User user : users)
+            if(user.getId().equals(parent_id))
+                result_user = user;
+
+        return result_user;
     }
 }
