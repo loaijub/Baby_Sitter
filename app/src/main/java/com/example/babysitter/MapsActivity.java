@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -201,9 +202,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                     //adding marker on the map for all locations from db
-
                     for (int i = 0; i < allLocationsForEmp.length; i++) {
-                        if(allLocationsForEmp[i].getId().equals(login.dbClass.getCurrentUser().getId())) {
+                        if(!allLocationsForEmp[i].getId().equals(login.dbClass.getCurrentUser().getId())) {
                             double[] cordinates = new double[2];
                             LatLng adjustedLocation;
                             try {
@@ -402,6 +402,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "open feedback list", Toast.LENGTH_SHORT).show();
+                myDialog.dismiss();
+                openFeedbackDialog(emp);
             }
         });
 
@@ -427,6 +429,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         myDialog.show();
 
         return true;
+    }
+
+    private void openFeedbackDialog(Employee emp) {
+        Dialog myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.feedback_list);
+        ((TextView)myDialog.findViewById(R.id.feedbackTitle)).setText("All reviews about " + emp.getFirstName() + " " + emp.getLastName());
+        myDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        myDialog.show();
     }
 
     /**

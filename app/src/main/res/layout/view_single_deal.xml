@@ -51,7 +51,13 @@
             android:text="Report"
             android:textColor="#ff0000"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/rateTheUser"
+            android:layout_width="match_parent"
+            android:text="Rate the user"
+            android:textColor="#2A7502"
+            android:layout_marginRight="10dp"
             android:layout_height="match_parent"/>
     </LinearLayout>
 

@@ -60,8 +60,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
-    //private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    //private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
+    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser; // to save the current user.
     public static List<User> users; // to list the list of users from database.
@@ -1531,5 +1531,60 @@ public class dbClass {
     }
 
 
+    public void updateRatingInDB(float rating,String feedback, Deals dealToAddRating, String fromParentOrEmployee) {
+        dialogLoading = ProgressDialog.show(History.list.getContext(), "",
+                "Sending... Please wait", true);
+        StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=addRatingToDeal", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(dialogLoading != null)
+                    dialogLoading.dismiss();
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        new AlertDialog.Builder(History.list.getContext())
+                                .setTitle("Rating successfully sent")
+                                .setMessage("The rating added to the employee successfully")
+                                .setIcon(R.drawable.ic_baseline_check_circle_24)
+                                .show();
+                    } else {
+                        new AlertDialog.Builder(History.list.getContext())
+                                .setTitle("Sending the rating failed..")
+                                .setMessage(result.getString("message"))
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("rate", ""+rating);
+                map.put("deal_id", dealToAddRating.getDealId());
+                map.put("employee_id", dealToAddRating.getEmployeeId());
+                map.put("parent_id", dealToAddRating.getParentId());
+                map.put("fromParentOrEmployee", fromParentOrEmployee);
+                map.put("feedback", feedback);
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
+    }
 }

@@ -2,12 +2,16 @@ package com.example.babysitter.Classes;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +73,10 @@ public class ListAdapterForDeals extends BaseAdapter {
         TextView userAccepted = v.findViewById(R.id.acceptedOrNot);
         TextView completingDate = v.findViewById(R.id.dateOfCompletingDate);
         ImageView profilePhoto = v.findViewById(R.id.ivDeals);
+        Button rateTheUser = v.findViewById(R.id.rateTheUser);
+
+
+
         String url = "";
         for (ProfilePhoto pf :
                 dbClass.profilePhoto) {
@@ -84,7 +92,8 @@ public class ListAdapterForDeals extends BaseAdapter {
         else if(dealsArr.get(position).isHasDone().equals("1"))
             userAccepted.setText("Declined");
 
-        completingDate.setText(dealsArr.get(position).getCompletedDealDate().toString());
+        if(dealsArr.get(position).getCompletedDealDate() != null)
+            completingDate.setText(dealsArr.get(position).getCompletedDealDate().toString());
 
         Button report = v.findViewById(R.id.reportDeal);
         report.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +102,31 @@ public class ListAdapterForDeals extends BaseAdapter {
                 History.showReport(dealsArr.get(position));
             }
         });
+
+        final User current_user_final = current_user;
+        Dialog ratingDialog = new Dialog(History.list.getContext());
+        ratingDialog.setContentView(R.layout.rate_user);
+        Button sendRating = ratingDialog.findViewById(R.id.sendRating);
+
+        rateTheUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ((TextView)ratingDialog.findViewById(R.id.rateTitle)).setText("Rate " + current_user_final.getFirstName() + " " + current_user_final.getLastName());
+                ratingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                ratingDialog.show();
+            }
+        });
+        sendRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float rating = ((RatingBar)ratingDialog.findViewById(R.id.ratingBar)).getRating();
+                EditText feedbackToSend = ratingDialog.findViewById(R.id.feedbackToSend);
+                login.dbClass.updateRatingInDB(rating,feedbackToSend.getText().toString(),dealsArr.get(position),historyOrRequests.equals("history") ? "parent": "employee");
+                ratingDialog.dismiss();
+            }
+        });
+
 
         return v;
     }
