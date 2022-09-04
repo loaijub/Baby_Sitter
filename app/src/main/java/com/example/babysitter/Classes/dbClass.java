@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -61,8 +62,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
-    //private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    //private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
+    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser; // to save the current user.
     public static List<User> users; // to list the list of users from database.
@@ -777,6 +778,7 @@ public class dbClass {
                             History.filterArray();
                             ListAdapterForDeals myAdapter = new ListAdapterForDeals(History.allDeals, context,historyOrRequests);
                             History.list.setAdapter(myAdapter);
+
                         } else {
                             // we filter the deals to show only the ones that don't have an answer yet
 

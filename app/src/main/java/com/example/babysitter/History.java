@@ -32,6 +32,11 @@ public class History extends Fragment {
     // array of all deals in database
     public static List<Deals> allDeals = new ArrayList<>();
 
+    public static void setListener() {
+        Toast.makeText(list.getContext(), "hi", Toast.LENGTH_SHORT).show();
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
