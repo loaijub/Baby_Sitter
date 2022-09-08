@@ -502,7 +502,7 @@ public class dbClass {
                         String[] dateOfSubAsString = report.get("date_of_sub").toString().split("-");
                         Date dateOfSub = new Date(dateOfSubAsString[2], dateOfSubAsString[1], dateOfSubAsString[0]);
 
-                        String[] dateOfAccidentAsString = report.get("date_of_sub").toString().split("-");
+                        String[] dateOfAccidentAsString = report.get("date_of_accident").toString().split("-");
                         Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
 
                         // adding the report to the list

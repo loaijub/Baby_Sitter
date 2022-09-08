@@ -1,9 +1,13 @@
 package com.example.babysitter.Classes;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.babysitter.History;
+import com.example.babysitter.MapsActivity;
 import com.example.babysitter.R;
 import com.example.babysitter.login;
 
@@ -94,8 +99,20 @@ public class ListAdapterForDeals extends BaseAdapter {
 
         if(dealsArr.get(position).getCompletedDealDate() != null)
             completingDate.setText(dealsArr.get(position).getCompletedDealDate().toString());
-
         Button report = v.findViewById(R.id.reportDeal);
+
+        if(userAccepted.getText().toString().equals("Declined"))
+            v.findViewById(R.id.linearForButton).setVisibility(View.GONE);
+
+        Button contactInfo = v.findViewById(R.id.contactInfo);
+
+        final User curr_user = current_user;
+        contactInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showContactInfo(curr_user);
+            }
+        });
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +146,36 @@ public class ListAdapterForDeals extends BaseAdapter {
 
 
         return v;
+    }
+
+    private void showContactInfo(User usr) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(History.list.getContext());
+        builder.setTitle("Contact info");
+
+        String contact_info = "First name: " + usr.getFirstName() + "\n" +
+                "Last name: " + usr.getLastName() + "\n" +
+                "Phone number: " + usr.getPhoneNumber() + "\n";
+
+        builder.setMessage(contact_info);
+        builder.setPositiveButton("Send message", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Uri uri = Uri.parse("smsto:" + "+972545610220");
+                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                intent.setPackage("com.whatsapp");
+                context.startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

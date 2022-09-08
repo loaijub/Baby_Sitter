@@ -1,5 +1,7 @@
 package com.example.babysitter;
 
+import static java.lang.Integer.parseInt;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -71,6 +73,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -382,7 +385,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.showInfoWindow();
         login.dbClass.getAllDealsCountForUser(emp.getId());
         //Toast.makeText(context, ""+((Employee)marker.getTag()).toString(), Toast.LENGTH_SHORT).show();
-        TextView txtclose, fullName, city, rating;
+        TextView txtclose, fullName, city, rating, age;
         ImageView profilePhoto;
         Button btnRequest;
         Dialog myDialog = new Dialog(this);
@@ -391,6 +394,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         txtclose = myDialog.findViewById(R.id.txtclose);
         fullName = myDialog.findViewById(R.id.fullName);
         city = myDialog.findViewById(R.id.city);
+        age = myDialog.findViewById(R.id.age);
         btnRequest = myDialog.findViewById(R.id.btnRequest);
         profilePhoto = myDialog.findViewById(R.id.profilePhoto);
         rating = myDialog.findViewById(R.id.rating);
@@ -400,6 +404,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fullName.setText(emp.getFirstName() + " " + emp.getLastName());
         city.setText(emp.getAddress().getCity());
         rating.setText(emp.getRate());
+        int current_year = Calendar.getInstance().get(Calendar.YEAR);
+        age.setText((current_year - parseInt(emp.getBirthDate().getYear())) + " Years old");
 
         feedback.setOnClickListener(new View.OnClickListener() {
             @Override

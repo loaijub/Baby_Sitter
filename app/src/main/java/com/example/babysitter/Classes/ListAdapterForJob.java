@@ -80,6 +80,9 @@ public class ListAdapterForJob extends BaseAdapter {
                 JobRequest.cancelRequest(jobsArr.get(position));
             }
         });
+        v.findViewById(R.id.rateTheUser).setVisibility(View.GONE);
+        v.findViewById(R.id.contactInfo).setVisibility(View.GONE);
+
 
         return v;
     }
