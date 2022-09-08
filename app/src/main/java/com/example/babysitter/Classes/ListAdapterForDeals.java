@@ -157,15 +157,7 @@ public class ListAdapterForDeals extends BaseAdapter {
                 "Phone number: " + usr.getPhoneNumber() + "\n";
 
         builder.setMessage(contact_info);
-        builder.setPositiveButton("Send message", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Uri uri = Uri.parse("smsto:" + "+972545610220");
-                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-                intent.setPackage("com.whatsapp");
-                context.startActivity(intent);
-            }
-        });
+
         builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
 
             @Override
