@@ -81,8 +81,6 @@ public class Report {
     @Override
     public String toString() {
 
-        // admin already checked the report
-        if (hasChecked)
             return "Report id: " + reportId + "\n"
                     + "Applicant id: " + applicantId + "\n"
                     + "Reported user id: " + reportedUserId + "\n"
@@ -92,14 +90,5 @@ public class Report {
                     + "Has been checked: " + hasChecked + "\n"
                     + "Date of check: " + dateOfCheck + "\n"
                     + "Outcome: " + outcome;
-
-        // admin didn't check the report yet
-        return "Report id: " + reportId + "\n"
-                + "Applicant id: " + applicantId + "\n"
-                + "Reported user id: " + reportedUserId + "\n"
-                + "Date of submission: " + dateOfSub + "\n"
-                + "Date of accident: " + dateOfAccident + "\n"
-                + "Accident Details: " + accidentDetails + "\n"
-                + "Has been checked: " + hasChecked + "\n";
     }
 }
