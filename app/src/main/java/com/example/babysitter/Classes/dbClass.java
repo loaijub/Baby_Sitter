@@ -62,8 +62,8 @@ import java.util.Map;
 
 public class dbClass {
     private ProgressDialog dialogLoading;
-    //private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
-    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
+//    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser; // to save the current user.
     public static List<User> users; // to list the list of users from database.

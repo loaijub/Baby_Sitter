@@ -115,10 +115,23 @@ public class ViewAllReports extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!outcomeFromAdmin.getText().toString().equals(""))
+                if(!outcomeFromAdmin.getText().toString().equals("")) {
                     login.dbClass.editReport(outcomeFromAdmin.getText().toString(), r.getReportId());
+                    r.setHasChecked(true);
+                    r.setOutcome(outcomeFromAdmin.getText().toString());
+                    Date dateOfCheckUpdated = new Date(Integer.toString(Calendar.getInstance().get(Calendar.DATE)),  Integer.toString(Calendar.getInstance().get(Calendar.MONTH)+1) , Integer.toString(Calendar.getInstance().get(Calendar.YEAR))) ;
+                    r.setDateOfCheck(dateOfCheckUpdated);
+                }
                 else
                     Toast.makeText(dialog.getContext(), "Please fill the outcome", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button cancel = dialog.findViewById(R.id.cancelBtnReport);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 

@@ -57,7 +57,7 @@ public class History extends Fragment {
         dialog.findViewById(R.id.report_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date dateOfAccident = new Date(dp.getDayOfMonth()+"",dp.getMonth()+"",dp.getYear()+"");
+                Date dateOfAccident = new Date(dp.getDayOfMonth()+"",dp.getMonth()+1+"",dp.getYear()+"");
                 Report r = new Report("",deal.getParentId(),deal.getEmployeeId(),null,dateOfAccident,accidentDetails.getText().toString());
                 login.dbClass.addReport(r);
                 dialog.dismiss();
