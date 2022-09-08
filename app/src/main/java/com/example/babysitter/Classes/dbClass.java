@@ -492,6 +492,7 @@ public class dbClass {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllReports", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 dialogLoading.dismiss();
                 try {
                     JSONArray all_reports = new JSONArray(response);
@@ -506,7 +507,17 @@ public class dbClass {
                         Date dateOfAccident = new Date(dateOfAccidentAsString[2], dateOfAccidentAsString[1], dateOfAccidentAsString[0]);
 
                         // adding the report to the list
-                        allReports.add(new Report(report.getString("report_id"), report.getString("applicant_id"), report.getString("reported_user_id"), dateOfSub, dateOfAccident, report.getString("accident_details")));
+                        Report r = new Report(report.getString("report_id"), report.getString("applicant_id"), report.getString("reported_user_id"), dateOfSub, dateOfAccident, report.getString("accident_details"));
+
+                        if(report.getString("has_checked").equals("1")) {
+                            String[] dateOfCheckAsString = report.get("date_of_check").toString().split("-");
+                            Date dateOfCheck = new Date(dateOfCheckAsString[2], dateOfCheckAsString[1], dateOfCheckAsString[0]);
+                            r.setHasChecked(true);
+                            r.setOutcome(report.getString("outcome"));
+                            r.setDateOfCheck(dateOfCheck);
+                        }
+
+                        allReports.add(r);
                     }
 
                     showListViewForReports(allReports, context);
