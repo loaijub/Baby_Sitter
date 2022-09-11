@@ -4,6 +4,7 @@ This class is to connect with the database and to create and to use different qu
 
 package com.example.babysitter.Classes;
 
+import static com.example.babysitter.EmployeeHomePage.navigationView;
 import static com.example.babysitter.ViewAllReports.showListViewForReports;
 import static com.example.babysitter.ViewAllUsers.showListView;
 import static com.example.babysitter.ViewAllWorkApplications.showAllWorkApplicationsInList;
@@ -63,7 +64,7 @@ import java.util.Map;
 public class dbClass {
     private ProgressDialog dialogLoading;
     private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
-//    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    //private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser; // to save the current user.
     public static List<User> users; // to list the list of users from database.
@@ -1658,5 +1659,59 @@ public class dbClass {
                 result_user = user;
 
         return result_user;
+    }
+
+    public void acceptDeal(Deals deal) {
+        dialogLoading = ProgressDialog.show(context, "",
+                "Sending... Please wait", true);
+        StringRequest request = new StringRequest(Request.Method.POST, getUrl() + "?action=acceptDeal", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(dialogLoading != null)
+                    dialogLoading.dismiss();
+                try {
+                    JSONObject result = new JSONObject(response);
+                    String success = result.getString("success");
+                    if (success.equals("true")) {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Deal accepted successfully")
+                                .setMessage("The deal accepted, Wait for the parents to contact you")
+                                .setIcon(R.drawable.ic_baseline_check_circle_24)
+                                .show();
+                        navigationView.setSelectedItemId(R.id.homeIcon);
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Accepting the deal failed!")
+                                .setMessage("Error communicate with the database")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, "Json parse error " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogLoading.dismiss();
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("deal_id", deal.getDealId());
+
+                return map;
+            }
+
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(request);
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public class EmployeeHomePage extends Fragment {
     View view;
 
-    BottomNavigationView navigationView;
+    public static BottomNavigationView navigationView;
 
     @Nullable
     @Override

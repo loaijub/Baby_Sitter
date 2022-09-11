@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.babysitter.R;
+import com.example.babysitter.login;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,12 @@ public class ListAdapterForJobEmployee extends BaseAdapter {
                 new SetImageViewFromUrl(profileImage).execute(context.getString(R.string.default_profile_pic));
 
         }
+        acceptDeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login.dbClass.acceptDeal(jobsArr.get(position));
+            }
+        });
         return v;
     }
 }
