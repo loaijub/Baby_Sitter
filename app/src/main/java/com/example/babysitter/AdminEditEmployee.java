@@ -1,4 +1,4 @@
-package com.example.babysitter.Classes;
+package com.example.babysitter;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -15,6 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.babysitter.Classes.ProfilePhoto;
+import com.example.babysitter.Classes.SetImageViewFromUrl;
+import com.example.babysitter.Classes.User;
+import com.example.babysitter.Classes.dbClass;
 import com.example.babysitter.R;
 import com.example.babysitter.login;
 

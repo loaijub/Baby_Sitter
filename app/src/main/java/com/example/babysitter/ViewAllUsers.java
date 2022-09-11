@@ -14,33 +14,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.babysitter.Classes.AdminEditEmployee;
-import com.example.babysitter.Classes.Date;
 import com.example.babysitter.Classes.ProfilePhoto;
 import com.example.babysitter.Classes.SetImageViewFromUrl;
 import com.example.babysitter.Classes.User;
 import com.example.babysitter.Classes.dbClass;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ViewAllUsers extends Fragment {
 

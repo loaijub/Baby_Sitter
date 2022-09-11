@@ -493,7 +493,6 @@ public class dbClass {
         StringRequest request = new StringRequest(Request.Method.POST, url + "?action=getAllReports", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 dialogLoading.dismiss();
                 try {
                     JSONArray all_reports = new JSONArray(response);
