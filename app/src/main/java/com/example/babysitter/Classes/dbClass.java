@@ -64,7 +64,7 @@ import java.util.Map;
 public class dbClass {
     private ProgressDialog dialogLoading;
     //private String url = "http://37.142.233.102:131/babysitter/dbMain.php";
-    private String url = "http://192.168.1.10:131/babysitter/dbMain.php";
+    private String url = "http://192.168.2.10:131/babysitter/dbMain.php";
     private Context context;
     public User currentUser; // to save the current user.
     public static List<User> users; // to list the list of users from database.
@@ -662,7 +662,7 @@ public class dbClass {
 
             @Override
             protected void onPostExecute(String string1) {
-                Toast.makeText(context, string1, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, string1, Toast.LENGTH_SHORT).show();
                 super.onPostExecute(string1);
 
                 // Dismiss the progress dialog after done uploading.

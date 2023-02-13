@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                     signUpEmployee.isCVLoaded = true;
 
                 } catch (IOException e) {
-                    Toast.makeText(this, "catch", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                     signUpEmployee.isCVLoaded = false;
                 }
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     signUpEmployee.isPoliceDocLoaded = true;
 
                 } catch (IOException e) {
-                    Toast.makeText(this, "catch", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "catch", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                     signUpEmployee.isPoliceDocLoaded = false;
                 }

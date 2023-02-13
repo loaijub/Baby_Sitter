@@ -3,10 +3,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/NoRequests"
+        android:visibility="invisible"
+        android:text="No Requests found"
+        />
     <ListView
         android:id="@+id/jobRequestsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/nav1"
         android:layout_below="@+id/title" />
+
 </LinearLayout>

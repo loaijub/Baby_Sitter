@@ -218,7 +218,7 @@ class ListAdapterForAddEmployee extends BaseAdapter {
             @Override
             public void onResponse(String response) {
                 System.out.println(response);
-                Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, response, Toast.LENGTH_LONG).show();
                 dialogLoading.dismiss();
 
                 try {

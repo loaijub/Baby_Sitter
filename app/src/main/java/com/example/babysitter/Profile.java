@@ -28,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,6 @@ public class Profile extends Fragment {
     Button btnLogout;
     LinearLayout btnEditAddress, btnEditPhone, btnEditEmail;
     Dialog dialog;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,12 +85,17 @@ public class Profile extends Fragment {
 
             //specialDemands.setText("Special demands: " + ((Employee) currentUser).getSpecialDemands());
             rate.setText(((Employee) currentUser).getRate());
+            role.setText("Employee");
             //experience.setText("Experience: " + ((Employee) currentUser).getExperience());
             //workingHoursInMonth.setText("Working hours in a month: " + ((Employee) currentUser).getWorkingHoursInMonth());
 
         }
         // current user is a parent
-        else {
+        else{
+            if(login.dbClass.getCurrentUser().getRole().equals("2"))
+                role.setText("Parent");
+            else
+                role.setText("Parent and Employee");
             userAddress.setText(((Parent) currentUser).getAddress().toString());
             //specialDemands.setText("Special demands: " + ((Parent) currentUser).getSpecialDemands());
             //numberOfChildren.setText("Number of children: " + ((Parent) currentUser).getNumberOfChildren());
@@ -100,6 +105,7 @@ public class Profile extends Fragment {
             //workingHoursInMonth.setText("");
             //experience.setText("");
         }
+
 
 
         // if user clicked on "change my password" button

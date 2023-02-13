@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ public class JobRequestList extends Fragment {
 
     View view;
     public static ListView list;
+    public static TextView noRequests;
     public static List<Deals> allJobs;
     // array of all jobs in database for current user
 
@@ -30,12 +33,13 @@ public class JobRequestList extends Fragment {
         allJobs = new ArrayList<>();
         list = view.findViewById(R.id.jobRequestsList);
         login.dbClass.getAllDeals("job1",view.findViewById(R.id.progress));
-
+        noRequests = view.findViewById(R.id.NoRequests);
         return view;
     }
     public static void filterList() {
 
         List<Deals> res = new ArrayList<>(); // the result (filtered array)
+
             for (Deals job : allJobs) {
                 // we check if the employee answered the job request, only if he didn't we add to the result array.
                 if (job.isHasDone().equals("0"))
@@ -43,5 +47,12 @@ public class JobRequestList extends Fragment {
             }
         allJobs = res;
 
+        if(allJobs.isEmpty()){
+            noRequests.setVisibility(View.VISIBLE);
+        }
+        else{
+            noRequests.setVisibility(View.INVISIBLE);
+        }
     }
+
 }

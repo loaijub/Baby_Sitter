@@ -33,7 +33,7 @@ public class History extends Fragment {
     public static List<Deals> allDeals = new ArrayList<>();
 
     public static void setListener() {
-        Toast.makeText(list.getContext(), "hi", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(list.getContext(), "hi", Toast.LENGTH_SHORT).show();
 
     }
 
