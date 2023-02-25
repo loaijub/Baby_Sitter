@@ -35,12 +35,14 @@
             android:id="@+id/saveBtnReport"
             android:layout_width="80dp"
             android:layout_height="50dp"
+            android:textSize="10sp"
             android:layout_marginRight="20dp"
             android:text="save" />
 
         <Button
             android:id="@+id/cancelBtnReport"
             android:layout_width="80dp"
+            android:textSize="10sp"
             android:layout_height="50dp"
             android:text="cancel"
             android:textColor="@android:color/holo_red_dark" />

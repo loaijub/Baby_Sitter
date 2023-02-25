@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:background="#0A5DDF"
             android:text="deny"
+            android:textSize="10sp"
             android:layout_marginTop="10dp"
             android:textColor="@color/white" />
 
@@ -32,11 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textSize="10sp"
             android:background="#0A5DDF"
             android:text="approve"
             android:textColor="@color/white" />
         <Button
             android:id="@+id/ShowSubmittedFiles"
+            android:textSize="10sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

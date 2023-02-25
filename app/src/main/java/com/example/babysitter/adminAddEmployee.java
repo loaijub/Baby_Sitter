@@ -303,9 +303,11 @@ class ListAdapterForAddEmployee extends BaseAdapter {
                 map.put("birthDate", birthdate.toString());
                 map.put("email", email);
                 map.put("pass", password);
-                map.put("city_name", address);
-                map.put("street_name", address);
-                map.put("house_number", address);
+                String[] addressAsParts = address.split(",");
+
+                map.put("city_name", addressAsParts[0]);
+                map.put("street_name", addressAsParts[1]);
+                map.put("house_number", addressAsParts[2]);
                 map.put("experience", experience);
                 map.put("demands", specialDemands);
                 return map;

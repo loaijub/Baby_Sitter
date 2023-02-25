@@ -105,7 +105,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="View all work applications"
+                        android:text="View all work \napplications"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
